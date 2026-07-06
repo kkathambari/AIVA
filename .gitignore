@@ -1,0 +1,36 @@
+# Frontend
+vivaforge_frontend/node_modules/
+vivaforge_frontend/.next/
+vivaforge_frontend/out/
+vivaforge_frontend/build/
+
+# Backend
+vivaforge_backend/venv/
+vivaforge_backend/.venv/
+vivaforge_backend/chroma_db/
+vivaforge_backend/temp_*
+vivaforge_backend/*.log
+vivaforge_backend/bm25_chunks.json
+vivaforge_backend/kg_visualization.html
+vivaforge_backend/graph_metadata.json
+vivaforge_backend/kg_data.json
+vivaforge_backend/test_embeddings.py
+vivaforge_backend/test_upload_api.py
+vivaforge_backend/response_audio.mp3
+
+# Environments & Keys (Recursive)
+**/.env*
+
+# Python Caches (Recursive)
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+
+# VS Code & IDEs
+.vscode/
+**/.vscode/
+
+# General
+.DS_Store
+Thumbs.db
