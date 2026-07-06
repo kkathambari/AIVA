@@ -1,22 +1,22 @@
 # Frontend
-vivaforge_frontend/node_modules/
-vivaforge_frontend/.next/
-vivaforge_frontend/out/
-vivaforge_frontend/build/
+AIVA_frontend/node_modules/
+AIVA_frontend/.next/
+AIVA_frontend/out/
+AIVA_frontend/build/
 
 # Backend
-vivaforge_backend/venv/
-vivaforge_backend/.venv/
-vivaforge_backend/chroma_db/
-vivaforge_backend/temp_*
-vivaforge_backend/*.log
-vivaforge_backend/bm25_chunks.json
-vivaforge_backend/kg_visualization.html
-vivaforge_backend/graph_metadata.json
-vivaforge_backend/kg_data.json
-vivaforge_backend/test_embeddings.py
-vivaforge_backend/test_upload_api.py
-vivaforge_backend/response_audio.mp3
+AIVA_backend/venv/
+AIVA_backend/.venv/
+AIVA_backend/chroma_db/
+AIVA_backend/temp_*
+AIVA_backend/*.log
+AIVA_backend/bm25_chunks.json
+AIVA_backend/kg_visualization.html
+AIVA_backend/graph_metadata.json
+AIVA_backend/kg_data.json
+AIVA_backend/test_embeddings.py
+AIVA_backend/test_upload_api.py
+AIVA_backend/response_audio.mp3
 
 # Environments & Keys (Recursive)
 **/.env*
