@@ -60,7 +60,7 @@ export default function Home() {
           <div className="flex items-center gap-2.5 text-indigo-600 dark:text-indigo-400">
             <BrainCircuit size={28} className="animate-pulse" />
             <h1 className="text-lg font-black tracking-tight">
-              VivaForge <span className="text-xs font-semibold px-2 py-0.5 rounded bg-indigo-100 dark:bg-indigo-900/40 text-slate-500 dark:text-indigo-300 ml-1">V2 Research</span>
+              AIVA <span className="text-xs font-semibold px-2 py-0.5 rounded bg-indigo-100 dark:bg-indigo-900/40 text-slate-500 dark:text-indigo-300 ml-1">Research Project</span>
             </h1>
           </div>
           

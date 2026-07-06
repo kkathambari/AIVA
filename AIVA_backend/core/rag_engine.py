@@ -14,7 +14,7 @@ class RAGEngine:
         self.chroma_client = chromadb.PersistentClient(path=db_path)
         
         self.collection = self.chroma_client.get_or_create_collection(
-            name="vivaforge_docs",
+            name="aiva_docs",
             metadata={"hnsw:space": "cosine"}
         )
         

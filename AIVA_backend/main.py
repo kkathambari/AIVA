@@ -18,7 +18,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 
-app = FastAPI(title="VivaForge V2 Backend")
+app = FastAPI(title="AIVA Backend")
 
 app.add_middleware(
     CORSMiddleware,
@@ -55,7 +55,7 @@ def startup_event():
     from langchain_google_genai import ChatGoogleGenerativeAI
     evaluator_llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.0).with_structured_output(AnswerEvaluation)
     tutor_llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.7)
-    print("VivaForge Backend: All services and ML models loaded successfully.")
+    print("AIVA Backend: All services and ML models loaded successfully.")
 
 class VivaSession:
     def __init__(self):
@@ -76,7 +76,7 @@ session = VivaSession()
 
 @app.get("/")
 def read_root():
-    return {"message": "VivaForge Backend is running!"}
+    return {"message": "AIVA Backend is running!"}
 
 @app.post("/upload_and_build_kg")
 async def upload_and_build_kg(file: UploadFile = File(...)):

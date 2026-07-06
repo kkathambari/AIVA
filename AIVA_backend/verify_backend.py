@@ -107,7 +107,7 @@ def test_multi_agent_panel():
 
 if __name__ == "__main__":
     print("==================================================")
-    print("          VIVAFORGE V2 BACKEND TEST SUITE         ")
+    print("               AIVA BACKEND TEST SUITE            ")
     print("==================================================")
     
     # Ensure GEMINI_API_KEY is dummy-populated for RAG testing if not present

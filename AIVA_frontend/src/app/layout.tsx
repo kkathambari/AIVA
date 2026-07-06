@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "VivaForge M.Tech",
+  title: "AIVA",
   description: "Adaptive Multi-Agent Viva Assessment Framework",
 };
 
