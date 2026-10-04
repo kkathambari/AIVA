@@ -79,3 +79,9 @@ export const fetchRAGResults = async (query: string) => {
   const response = await api.post("/rag_query", { query });
   return response.data;
 };
+
+export const fetchSession = async () => {
+  const response = await api.get("/session");
+  return response.data;
+};
+

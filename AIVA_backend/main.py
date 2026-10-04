@@ -55,7 +55,20 @@ def startup_event():
     from langchain_google_genai import ChatGoogleGenerativeAI
     evaluator_llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.0).with_structured_output(AnswerEvaluation)
     tutor_llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.7)
+    
+    # Load existing KG data from file if present to restore session
+    if os.path.exists("kg_data.json"):
+        try:
+            with open("kg_data.json", "r", encoding="utf-8") as f:
+                data = json.load(f)
+                session.graph_nodes = data.get("nodes", [])
+                session.graph_relationships = data.get("relationships", [])
+            print(f"AIVA Backend: Restored {len(session.graph_nodes)} nodes from kg_data.json")
+        except Exception as e:
+            print(f"Error loading kg_data.json on startup: {e}")
+            
     print("AIVA Backend: All services and ML models loaded successfully.")
+
 
 class VivaSession:
     def __init__(self):
@@ -71,6 +84,7 @@ class VivaSession:
         self.graph_nodes = []
         self.graph_relationships = []
         self.overall_coverage = 0.0
+        self.last_fluency_report = None
 
 session = VivaSession()
 
@@ -143,7 +157,42 @@ async def get_kg_visualization():
             return HTMLResponse(content=f.read())
     return HTMLResponse(content="<h1>No visualization found. Please upload a document first.</h1>", status_code=404)
 
+@app.get("/session")
+async def get_session():
+    # Read graph metadata from file if exists
+    graph_metadata = {}
+    if os.path.exists("graph_metadata.json"):
+        try:
+            with open("graph_metadata.json", "r", encoding="utf-8") as f:
+                graph_metadata = json.load(f)
+        except Exception:
+            pass
+            
+    # Count chunks indexed
+    chunks_count = 0
+    if os.path.exists("chroma_db/bm25_chunks.json"):
+        try:
+            with open("chroma_db/bm25_chunks.json", "r", encoding="utf-8") as f:
+                chunks = json.load(f)
+                chunks_count = len(chunks)
+        except Exception:
+            pass
+            
+    return {
+        "active": len(session.graph_nodes) > 0,
+        "nodes": session.graph_nodes,
+        "relationships": session.graph_relationships,
+        "chunks_indexed": chunks_count if chunks_count > 0 else (len(session.graph_nodes) * 2 if session.graph_nodes else 0),
+        "metadata": graph_metadata,
+        "chat_history": session.conversation_history,
+        "current_difficulty": session.current_difficulty,
+        "difficulty_history": session.difficulty_history,
+        "performance_data": session.performance_data,
+        "last_fluency_report": session.last_fluency_report
+    }
+
 class DifficultyRequest(BaseModel):
+
     current_difficulty: int
     last_score: float
 
@@ -223,6 +272,9 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
         if len(student_answers) > 0:
             last_student_answer = student_answers[-1]["content"]
             
+            # 2.5 Calculate fluency of the answer
+            session.last_fluency_report = analytics_engine.analyze_fluency(last_student_answer)
+            
             # Find the previous question asked by the agent
             agent_questions = [m for m in request.conversation_history[:-1] if m["role"] != "user"]
             prev_question = agent_questions[-1]["content"] if agent_questions else "Introduction"
@@ -245,7 +297,7 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
                     "concept": eval_result.concept
                 }
             except Exception as e:
-                print(f"Error in LLM evaluation: {e}")
+                print(f"Error in LLM evaluation: {repr(e)}")
                 # Fallback evaluation
                 evaluation = {
                     "score": 0.5,
@@ -293,15 +345,18 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
         difficulty_name = difficulty_mapping[session.current_difficulty]
         
         # Run Multi Agent Panel
-        panel_result = multi_agent_panel.run_panel(
-            context=next_context,
-            chat_history=session.chat_history,
-            difficulty=difficulty_name,
-            agent_type=request.agent_type,
-            asked_questions=session.asked_questions
-        )
-        
-        next_question = panel_result["question"]
+        try:
+            panel_result = multi_agent_panel.run_panel(
+                context=next_context,
+                chat_history=session.chat_history,
+                difficulty=difficulty_name,
+                agent_type=request.agent_type,
+                asked_questions=session.asked_questions
+            )
+            next_question = panel_result["question"]
+        except Exception as e:
+            print(f"Error in Multi-Agent Panel: {repr(e)}")
+            next_question = "I apologize, but I am having trouble generating the next question. Could you please elaborate on your previous point?"
         session.asked_questions.append(next_question)
         
         # Determine actual agent type in case of Auto routing
@@ -344,7 +399,8 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
                     "weaknesses": weaknesses
                 },
                 "readiness_prediction": readiness_data,
-                "difficulty_history": session.difficulty_history
+                "difficulty_history": session.difficulty_history,
+                "fluency": session.last_fluency_report
             }
         }
     except Exception as e:
@@ -380,7 +436,8 @@ async def get_analytics_post(request: AnalyticsRequest = None):
                 "weaknesses": weaknesses
             },
             "readiness_prediction": readiness_data,
-            "difficulty_history": session.difficulty_history
+            "difficulty_history": session.difficulty_history,
+            "fluency": session.last_fluency_report
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

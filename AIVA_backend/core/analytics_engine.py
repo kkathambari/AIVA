@@ -87,7 +87,7 @@ class AnalyticsEngine:
                     coverage_map[node['id']] = 0
                     
         except Exception as e:
-            print(f"Error in TF-IDF Coverage calculation: {e}")
+            print(f"Error in TF-IDF Coverage calculation: {repr(e)}")
             # Fallback to string matching
             history_lower = chat_history.lower()
             for node in graph_nodes:
@@ -144,7 +144,7 @@ class AnalyticsEngine:
                     if is_weak == 1:
                         weaknesses.append(concept)
                 except Exception as e:
-                    print(f"XGBoost weakness prediction error: {e}")
+                    print(f"XGBoost weakness prediction error: {repr(e)}")
                     # Rule-based fallback
                     if avg_score < 0.6:
                         weaknesses.append(concept)
@@ -154,6 +154,52 @@ class AnalyticsEngine:
                     weaknesses.append(concept)
                     
         return weaknesses
+
+    def analyze_fluency(self, answer_text: str) -> dict:
+        """
+        Module 8: Fluency & Filler-Word Analyzer
+        Counts occurrences of unwanted filler words to compute a fluency score.
+        """
+        if not answer_text or not answer_text.strip():
+            return {"fluency_score": 100.0, "filler_words_used": {}, "feedback": "No answer provided."}
+            
+        filler_words = ["like", "so", "basically", "literally", "umm", "uh", "you know", "i mean", "actually", "just"]
+        text_lower = answer_text.lower()
+        words = text_lower.split()
+        
+        filler_counts = {}
+        total_filler_count = 0
+        
+        for fw in filler_words:
+            if " " in fw:
+                count = text_lower.count(fw)
+            else:
+                count = words.count(fw)
+                
+            if count > 0:
+                filler_counts[fw] = count
+                total_filler_count += count
+                
+        total_words = len(words)
+        if total_words == 0:
+            return {"fluency_score": 100.0, "filler_words_used": {}, "feedback": "No answer provided."}
+            
+        # Calculate penalty: e.g., 2 points for every 1% of filler words.
+        filler_ratio = total_filler_count / total_words
+        penalty = (filler_ratio * 100) * 2
+        fluency_score = max(0.0, 100.0 - penalty)
+        
+        feedback = "Excellent fluency. Clear communication."
+        if fluency_score < 70:
+            feedback = f"Try to avoid filler words. You used {total_filler_count} filler words, which makes you sound unsure."
+        elif fluency_score < 90:
+            feedback = f"Good, but some hesitation detected. You used {total_filler_count} filler words."
+            
+        return {
+            "fluency_score": round(fluency_score, 2),
+            "filler_words_used": filler_counts,
+            "feedback": feedback
+        }
 
     def predict_readiness(self, coverage: float, avg_score: float, difficulty_trend: float, weakness_count: int) -> dict:
         """
@@ -169,7 +215,7 @@ class AnalyticsEngine:
                 prob_pass = self.lr_model.predict_proba(features)[0][1]
                 probability = float(prob_pass)
             except Exception as e:
-                print(f"Logistic Regression readiness prediction error: {e}")
+                print(f"Logistic Regression readiness prediction error: {repr(e)}")
                 # Fallback to analytical calculation
                 probability = avg_score * 0.45 + (coverage / 100.0) * 0.30 + (difficulty_trend + 1) * 0.08 - (weakness_count * 0.05)
                 probability = float(np.clip(probability, 0.0, 1.0))

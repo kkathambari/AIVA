@@ -24,6 +24,7 @@ export function AnalyticsDashboard({ analytics, history }: AnalyticsDashboardPro
   };
   
   const difficultyHistory = analytics.difficulty_history || [1];
+  const fluency = analytics.fluency || null;
 
   // SVG dimensions for the difficulty timeline
   const svgWidth = 400;
@@ -120,6 +121,36 @@ export function AnalyticsDashboard({ analytics, history }: AnalyticsDashboardPro
             </div>
           </div>
         </div>
+
+        {/* Fluency Score Card */}
+        {fluency && (
+          <div className="p-6 rounded-2xl bg-white/10 dark:bg-slate-900/40 backdrop-blur-md border border-white/20 dark:border-white/10 shadow-xl">
+            <h3 className="text-base font-bold flex items-center gap-2 mb-4 text-slate-800 dark:text-slate-200">
+              <Activity className="text-indigo-500" size={18} />
+              Communication Fluency
+            </h3>
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center bg-indigo-500/10 text-indigo-500 font-bold text-xl border-4 border-indigo-500/20 shrink-0">
+                {fluency.fluency_score}%
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                  {fluency.feedback}
+                </p>
+                {Object.keys(fluency.filler_words_used || {}).length > 0 && (
+                  <div className="mt-2 text-xs text-slate-500 flex flex-wrap gap-1 items-center">
+                    Fillers: 
+                    {Object.entries(fluency.filler_words_used).map(([word, count]: any) => (
+                      <span key={word} className="bg-red-500/10 text-red-500 px-1.5 py-0.5 rounded font-mono">
+                        "{word}" ({count})
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* RL Difficulty Timeline */}
         <div className="p-6 rounded-2xl bg-white/10 dark:bg-slate-900/40 backdrop-blur-md border border-white/20 dark:border-white/10 shadow-xl">

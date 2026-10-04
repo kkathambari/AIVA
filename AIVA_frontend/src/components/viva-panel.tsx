@@ -5,17 +5,25 @@ import { Mic, Send, Bot, User, Loader2, Sparkles, TrendingUp } from "lucide-reac
 import { sendVivaQuestion, transcribeAudio, generateTTS } from "@/lib/api";
 
 interface VivaPanelProps {
-  onTurnComplete?: (analytics: any) => void;
-  activeDifficulty?: number;
-}
-
-export function VivaPanel({ onTurnComplete, activeDifficulty = 1 }: VivaPanelProps) {
-  const [messages, setMessages] = useState<{ 
+  messages: { 
     role: string; 
     content: string; 
     agent?: string;
     evaluation?: any; 
-  }[]>([]);
+  }[];
+  setMessages: React.Dispatch<React.SetStateAction<any[]>>;
+  onTurnComplete?: (analytics: any) => void;
+  activeDifficulty?: number;
+  loudspeakerEnabled: boolean;
+}
+
+export function VivaPanel({ 
+  messages, 
+  setMessages, 
+  onTurnComplete, 
+  activeDifficulty = 1, 
+  loudspeakerEnabled 
+}: VivaPanelProps) {
   const [input, setInput] = useState("");
   const [agentType, setAgentType] = useState("Auto (Panel)");
   const [loading, setLoading] = useState(false);
@@ -78,10 +86,16 @@ export function VivaPanel({ onTurnComplete, activeDifficulty = 1 }: VivaPanelPro
         onTurnComplete(analytics);
       }
 
-      // Automatically generate TTS for AI response
-      const audioUrl = await generateTTS(aiResponse);
-      const audio = new Audio(audioUrl);
-      audio.play();
+      // Automatically generate TTS for AI response if loudspeaker is enabled
+      if (loudspeakerEnabled) {
+        try {
+          const audioUrl = await generateTTS(aiResponse);
+          const audio = new Audio(audioUrl);
+          audio.play();
+        } catch (ttsErr) {
+          console.error("TTS generation failed:", ttsErr);
+        }
+      }
 
     } catch (error) {
       console.error(error);

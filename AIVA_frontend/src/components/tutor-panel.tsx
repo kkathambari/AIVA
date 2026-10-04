@@ -4,8 +4,13 @@ import { useState, useRef } from "react";
 import { Bot, Mic, Send, Trash2, User, Loader2 } from "lucide-react";
 import { getTutorAnswer, transcribeAudio, generateTTS } from "@/lib/api";
 
-export function TutorPanel() {
-  const [messages, setMessages] = useState<any[]>([]);
+interface TutorPanelProps {
+  messages: any[];
+  setMessages: React.Dispatch<React.SetStateAction<any[]>>;
+  loudspeakerEnabled: boolean;
+}
+
+export function TutorPanel({ messages, setMessages, loudspeakerEnabled }: TutorPanelProps) {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [recording, setRecording] = useState(false);
@@ -34,10 +39,16 @@ export function TutorPanel() {
       // Add Tutor response
       setMessages([...newMessages, { role: "tutor", content: tutorAnswer }]);
 
-      // Automatically generate TTS for Tutor response
-      const audioUrl = await generateTTS(tutorAnswer);
-      const audio = new Audio(audioUrl);
-      audio.play();
+      // Automatically generate TTS for Tutor response if loudspeaker is enabled
+      if (loudspeakerEnabled) {
+        try {
+          const audioUrl = await generateTTS(tutorAnswer);
+          const audio = new Audio(audioUrl);
+          audio.play();
+        } catch (ttsErr) {
+          console.error("TTS generation failed:", ttsErr);
+        }
+      }
 
     } catch (error) {
       console.error(error);

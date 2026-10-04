@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { UploadSection } from "@/components/upload-section";
 import { VivaPanel } from "@/components/viva-panel";
 import { TutorPanel } from "@/components/tutor-panel";
 import { AnalyticsDashboard } from "@/components/analytics-dashboard";
-import { BrainCircuit, MessageSquare, BarChart3, Network, History, Sparkles, Database, FileText, BookOpen } from "lucide-react";
+import { BrainCircuit, MessageSquare, BarChart3, Network, History, Sparkles, Database, FileText, BookOpen, Volume2, VolumeX } from "lucide-react";
+import { fetchSession, fetchCoverageAnalytics } from "@/lib/api";
 
 export default function Home() {
   const [kgData, setKgData] = useState<any>(null);
@@ -18,6 +19,54 @@ export default function Home() {
     difficulty_history: [1]
   });
   const [sessionHistory, setSessionHistory] = useState<any[]>([]);
+  const [vivaMessages, setVivaMessages] = useState<any[]>([]);
+  const [tutorMessages, setTutorMessages] = useState<any[]>([]);
+  const [loudspeakerEnabled, setLoudspeakerEnabled] = useState(false);
+
+  // Load session from backend on mount
+  useEffect(() => {
+    const loadSession = async () => {
+      try {
+        const data = await fetchSession();
+        if (data.active) {
+          setKgData({
+            nodes: data.nodes,
+            relationships: data.relationships,
+            chunks_indexed: data.chunks_indexed,
+            metadata: data.metadata
+          });
+          
+          if (data.chat_history && data.chat_history.length > 0) {
+            const restoredMessages = data.chat_history.map((m: any) => ({
+              role: m.role,
+              content: m.content,
+              agent: m.role === "user" ? undefined : "Examiner"
+            }));
+            setVivaMessages(restoredMessages);
+          }
+          
+          const analyticsData = await fetchCoverageAnalytics();
+          setAnalytics(analyticsData);
+          
+          if (data.performance_data && data.performance_data.length > 0) {
+            const history = data.performance_data.map((p: any, idx: number) => ({
+              turn: idx + 1,
+              concept: p.concept,
+              score: p.score,
+              feedback: "Restored from session.",
+              question: "N/A (Historical turn)",
+              agent: "Examiner"
+            }));
+            setSessionHistory(history);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load active session:", error);
+      }
+    };
+    loadSession();
+  }, []);
+
 
   // Callback when a turn is finished in VivaPanel
   const handleTurnComplete = (data: any) => {
@@ -92,7 +141,21 @@ export default function Home() {
             })}
           </nav>
           
-          <ThemeToggle />
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setLoudspeakerEnabled(!loudspeakerEnabled)}
+              className={`p-2 rounded-full transition-all duration-300 border backdrop-blur-md flex items-center justify-center ${
+                loudspeakerEnabled
+                  ? "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 shadow-md shadow-emerald-500/10 hover:bg-emerald-500/35"
+                  : "bg-slate-200/80 dark:bg-slate-800/80 text-slate-500 dark:text-slate-450 border-slate-300 dark:border-slate-800/60 hover:bg-slate-300 dark:hover:bg-slate-700"
+              }`}
+              title={loudspeakerEnabled ? "Mute Voice Assessment" : "Enable Voice Assessment"}
+              aria-label="Toggle loudspeaker"
+            >
+              {loudspeakerEnabled ? <Volume2 size={20} className="animate-pulse" /> : <VolumeX size={20} />}
+            </button>
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 
@@ -127,7 +190,11 @@ export default function Home() {
             </div>
             
             <div className="lg:col-span-2">
-              <TutorPanel />
+              <TutorPanel
+                messages={tutorMessages}
+                setMessages={setTutorMessages}
+                loudspeakerEnabled={loudspeakerEnabled}
+              />
             </div>
           </div>
         )}
@@ -160,7 +227,13 @@ export default function Home() {
             </div>
             
             <div className="lg:col-span-2">
-              <VivaPanel onTurnComplete={handleTurnComplete} activeDifficulty={activeDifficulty} />
+              <VivaPanel
+                messages={vivaMessages}
+                setMessages={setVivaMessages}
+                onTurnComplete={handleTurnComplete}
+                activeDifficulty={activeDifficulty}
+                loudspeakerEnabled={loudspeakerEnabled}
+              />
             </div>
           </div>
         )}
