@@ -63,6 +63,7 @@ def startup_event():
                 data = json.load(f)
                 session.graph_nodes = data.get("nodes", [])
                 session.graph_relationships = data.get("relationships", [])
+                session.document_name = data.get("document_name", "")
             print(f"AIVA Backend: Restored {len(session.graph_nodes)} nodes from kg_data.json")
         except Exception as e:
             print(f"Error loading kg_data.json on startup: {e}")
@@ -85,6 +86,7 @@ class VivaSession:
         self.graph_relationships = []
         self.overall_coverage = 0.0
         self.last_fluency_report = None
+        self.document_name = ""
 
 session = VivaSession()
 
@@ -101,6 +103,7 @@ async def upload_and_build_kg(file: UploadFile = File(...)):
     try:
         # Reset session for a new examination
         session.reset()
+        session.document_name = file.filename
         
         # Extract Text
         parser = DocumentParser()
@@ -108,6 +111,9 @@ async def upload_and_build_kg(file: UploadFile = File(...)):
         
         if not text.strip():
             raise HTTPException(status_code=400, detail="Could not extract text from the document.")
+
+        # Clear old embeddings from vector store
+        rag_engine.clear()
 
         # Build Knowledge Graph
         kg_builder = KGBuilder()
@@ -124,6 +130,17 @@ async def upload_and_build_kg(file: UploadFile = File(...)):
         session.graph_nodes = [node.model_dump() for node in extraction.nodes]
         session.graph_relationships = [rel.model_dump() for rel in extraction.relationships]
         
+        # Save kg_data.json with document_name for persistence across restarts
+        try:
+            with open("kg_data.json", "w", encoding="utf-8") as f:
+                json.dump({
+                    "document_name": session.document_name,
+                    "nodes": session.graph_nodes,
+                    "relationships": session.graph_relationships
+                }, f, ensure_ascii=False, indent=2)
+        except Exception as err:
+            print(f"Error persisting kg_data.json: {err}")
+
         # Index document into Vector DB
         chunks_indexed = rag_engine.index_document(text, document_id=file.filename)
         
@@ -135,6 +152,7 @@ async def upload_and_build_kg(file: UploadFile = File(...)):
                 
         return {
             "message": "Knowledge Graph built and document indexed successfully!",
+            "document_name": session.document_name,
             "nodes": session.graph_nodes,
             "relationships": session.graph_relationships,
             "visualization_path": output_html,
@@ -180,6 +198,7 @@ async def get_session():
             
     return {
         "active": len(session.graph_nodes) > 0,
+        "document_name": session.document_name,
         "nodes": session.graph_nodes,
         "relationships": session.graph_relationships,
         "chunks_indexed": chunks_count if chunks_count > 0 else (len(session.graph_nodes) * 2 if session.graph_nodes else 0),
@@ -190,6 +209,18 @@ async def get_session():
         "performance_data": session.performance_data,
         "last_fluency_report": session.last_fluency_report
     }
+
+@app.post("/reset_examination")
+async def reset_examination():
+    session.chat_history = ""
+    session.conversation_history = []
+    session.difficulty_history = [1]
+    session.performance_data = []
+    session.asked_questions = []
+    session.current_difficulty = 1
+    session.overall_coverage = 0.0
+    session.last_fluency_report = None
+    return {"message": "Examination reset successfully."}
 
 class DifficultyRequest(BaseModel):
 
@@ -208,6 +239,7 @@ class MultiAgentRequest(BaseModel):
     conversation_history: List[dict]
     agent_type: str
     difficulty: int = 5
+    is_final_turn: bool = False
 
 def determine_agent_spoke(chat_history: str) -> str:
     # Extract last student message
@@ -261,11 +293,7 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
         # 2. Check if this is the start of the session (no student answers yet)
         student_answers = [m for m in request.conversation_history if m["role"] == "user"]
         
-        evaluation = {
-            "score": 0.5,
-            "feedback": "Initial question of the session.",
-            "concept": "Introduction"
-        }
+        evaluation = None
         action_taken = "KEEP"
         
         # If student has answered, evaluate their last answer
@@ -351,7 +379,8 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
                 chat_history=session.chat_history,
                 difficulty=difficulty_name,
                 agent_type=request.agent_type,
-                asked_questions=session.asked_questions
+                asked_questions=session.asked_questions,
+                is_final_turn=request.is_final_turn
             )
             next_question = panel_result["question"]
         except Exception as e:
@@ -380,11 +409,13 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
             
         # Readiness (Logistic Regression)
         avg_score = sum(p["score"] for p in session.performance_data) / len(session.performance_data) if session.performance_data else 0.5
+        fluency_val = session.last_fluency_report.get("fluency_score", 100.0) if session.last_fluency_report else 100.0
         readiness_data = analytics_engine.predict_readiness(
             coverage=session.overall_coverage,
             avg_score=avg_score,
             difficulty_trend=diff_trend,
-            weakness_count=len(weaknesses)
+            weakness_count=len(weaknesses),
+            fluency_score=fluency_val
         )
         
         return {
@@ -423,11 +454,13 @@ async def get_analytics_post(request: AnalyticsRequest = None):
             diff_trend = 0.0
             
         avg_score = sum(p["score"] for p in session.performance_data) / len(session.performance_data) if session.performance_data else 0.5
+        fluency_val = session.last_fluency_report.get("fluency_score", 100.0) if session.last_fluency_report else 100.0
         readiness_data = analytics_engine.predict_readiness(
             coverage=session.overall_coverage,
             avg_score=avg_score,
             difficulty_trend=diff_trend,
-            weakness_count=len(weaknesses)
+            weakness_count=len(weaknesses),
+            fluency_score=fluency_val
         )
         
         return {

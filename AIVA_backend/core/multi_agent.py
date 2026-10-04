@@ -111,14 +111,27 @@ class MultiAgentPanel:
         {state['chat_history']}
         
         Difficulty Level: {state['difficulty']}
-        
-        CRITICAL RULE:
-        - Do NOT repeat questions or cover topics already asked.
-        - Previously asked questions/topics: [{asked_str}]
-        - Generate a NEW, distinct viva question related to the project context.
-        
-        Output only the question. Do not add any greeting, intro, or wrap-up text.
         """
+
+        if state.get("is_final_turn"):
+            prompt += """
+            *** URGENT CRITICAL RULE ***
+            - THIS IS THE VERY LAST TURN OF THE ENTIRE EXAM.
+            - YOU ABSOLUTELY MUST NOT ASK ANOTHER QUESTION. NO MORE QUESTIONS.
+            - YOUR ONLY JOB RIGHT NOW IS TO CONCLUDE THE SESSION.
+            - Read the student's final answer, give brief feedback on it, and then write a comprehensive, friendly final summary of their performance throughout this chat history.
+            - Say "This concludes your Viva test!" at the end.
+            """
+        else:
+            prompt += f"""
+            CRITICAL RULE:
+            - Do NOT repeat questions or cover topics already asked.
+            - Previously asked questions/topics: [{asked_str}]
+            - Generate a NEW, distinct viva question related to the project context.
+            
+            Output only the question. Do not add any greeting, intro, or wrap-up text.
+            """
+            
         response = self.llm.invoke([HumanMessage(content=prompt)])
         return {"generated_question": response.content.strip()}
 
@@ -138,7 +151,7 @@ class MultiAgentPanel:
         prompt = "You are a University Professor. Focus heavily on underlying theory, mathematical formulas, algorithms, time complexity, and academic research foundations of their system."
         return self._generate_response(prompt, state)
 
-    def run_panel(self, context: str, chat_history: str, difficulty: str, agent_type: str, asked_questions: List[str] = None) -> dict:
+    def run_panel(self, context: str, chat_history: str, difficulty: str, agent_type: str, asked_questions: List[str] = None, is_final_turn: bool = False) -> dict:
         if asked_questions is None:
             asked_questions = []
             
@@ -148,7 +161,8 @@ class MultiAgentPanel:
             "difficulty": difficulty,
             "agent_type": agent_type,
             "generated_question": "",
-            "asked_questions": asked_questions
+            "asked_questions": asked_questions,
+            "is_final_turn": is_final_turn
         }
         
         # We want to trace which agent actually spoke!

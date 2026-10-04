@@ -6,10 +6,11 @@ import { UploadSection } from "@/components/upload-section";
 import { VivaPanel } from "@/components/viva-panel";
 import { TutorPanel } from "@/components/tutor-panel";
 import { AnalyticsDashboard } from "@/components/analytics-dashboard";
-import { BrainCircuit, MessageSquare, BarChart3, Network, History, Sparkles, Database, FileText, BookOpen, Volume2, VolumeX } from "lucide-react";
+import { BrainCircuit, MessageSquare, BarChart3, Network, History, Sparkles, Database, FileText, BookOpen, Volume2, VolumeX, CheckCircle } from "lucide-react";
 import { fetchSession, fetchCoverageAnalytics } from "@/lib/api";
 
 export default function Home() {
+  const [currentDocumentName, setCurrentDocumentName] = useState<string>("");
   const [kgData, setKgData] = useState<any>(null);
   const [activeTab, setActiveTab] = useState("viva");
   const [analytics, setAnalytics] = useState<any>({
@@ -29,11 +30,15 @@ export default function Home() {
       try {
         const data = await fetchSession();
         if (data.active) {
+          if (data.document_name) {
+            setCurrentDocumentName(data.document_name);
+          }
           setKgData({
             nodes: data.nodes,
             relationships: data.relationships,
             chunks_indexed: data.chunks_indexed,
-            metadata: data.metadata
+            metadata: data.metadata,
+            document_name: data.document_name
           });
           
           if (data.chat_history && data.chat_history.length > 0) {
@@ -67,7 +72,6 @@ export default function Home() {
     loadSession();
   }, []);
 
-
   // Callback when a turn is finished in VivaPanel
   const handleTurnComplete = (data: any) => {
     if (data.analytics) {
@@ -88,11 +92,43 @@ export default function Home() {
     }
   };
 
-  const handleUploadComplete = (data: any) => {
+  const handleUploadComplete = async (data: any) => {
+    const docName = data.document_name || "Project Document";
+    setCurrentDocumentName(docName);
     setKgData(data);
-    // If analytics are returned from upload, populate them
-    if (data.metadata) {
-      // Sync initial KG metadata metrics if desired
+    
+    // Completely reset UI states for the new document
+    setVivaMessages([]);
+    setTutorMessages([]);
+    setSessionHistory([]);
+    
+    // Fetch fresh analytics calculated specifically for the new document's nodes
+    try {
+      const analyticsData = await fetchCoverageAnalytics();
+      setAnalytics(analyticsData);
+    } catch {
+      const initialMap: any = {};
+      const initialBreakdown: any = {};
+      (data.nodes || []).forEach((node: any) => {
+        initialMap[node.id] = 0;
+        initialBreakdown[node.id] = 0.0;
+      });
+      setAnalytics({
+        coverage: {
+          overall_coverage_percent: 0,
+          coverage_percentage: 0,
+          coverage_map: initialMap,
+          concept_breakdown: initialBreakdown
+        },
+        weaknesses: { weaknesses: [] },
+        readiness_prediction: { 
+          probability: 0, 
+          readiness_level: "Not Started", 
+          recommendation: "Start examination to assess readiness on this document." 
+        },
+        difficulty_history: [1],
+        fluency: null
+      });
     }
   };
 
@@ -166,14 +202,21 @@ export default function Home() {
         {activeTab === "learn" && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-1 space-y-6">
-              <UploadSection onUploadComplete={handleUploadComplete} />
+              <UploadSection onUploadComplete={handleUploadComplete} currentDocumentName={currentDocumentName} />
               
               {/* Document Overview Metadata */}
               {kgData && (
                 <div className="p-6 rounded-2xl bg-white/10 dark:bg-slate-900/40 backdrop-blur-md border border-white/20 dark:border-white/10 shadow-xl space-y-4">
-                  <h3 className="font-bold text-sm flex items-center gap-2 border-b border-white/10 pb-2">
-                    <FileText size={16} className="text-indigo-400" />
-                    Report Overview
+                  <h3 className="font-bold text-sm flex items-center justify-between border-b border-white/10 pb-2">
+                    <span className="flex items-center gap-2">
+                      <FileText size={16} className="text-indigo-400" />
+                      Report Overview
+                    </span>
+                    {currentDocumentName && (
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-500 dark:text-indigo-400 font-semibold truncate max-w-[140px]" title={currentDocumentName}>
+                        {currentDocumentName}
+                      </span>
+                    )}
                   </h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="p-3 rounded-xl bg-slate-100/40 dark:bg-slate-800/40 border border-slate-200/50 dark:border-slate-800">
@@ -203,14 +246,21 @@ export default function Home() {
         {activeTab === "viva" && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-1 space-y-6">
-              <UploadSection onUploadComplete={handleUploadComplete} />
+              <UploadSection onUploadComplete={handleUploadComplete} currentDocumentName={currentDocumentName} />
               
               {/* Document Overview Metadata */}
               {kgData && (
                 <div className="p-6 rounded-2xl bg-white/10 dark:bg-slate-900/40 backdrop-blur-md border border-white/20 dark:border-white/10 shadow-xl space-y-4">
-                  <h3 className="font-bold text-sm flex items-center gap-2 border-b border-white/10 pb-2">
-                    <FileText size={16} className="text-indigo-400" />
-                    Report Overview
+                  <h3 className="font-bold text-sm flex items-center justify-between border-b border-white/10 pb-2">
+                    <span className="flex items-center gap-2">
+                      <FileText size={16} className="text-indigo-400" />
+                      Report Overview
+                    </span>
+                    {currentDocumentName && (
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-500 dark:text-indigo-400 font-semibold truncate max-w-[140px]" title={currentDocumentName}>
+                        {currentDocumentName}
+                      </span>
+                    )}
                   </h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="p-3 rounded-xl bg-slate-100/40 dark:bg-slate-800/40 border border-slate-200/50 dark:border-slate-800">
@@ -233,6 +283,7 @@ export default function Home() {
                 onTurnComplete={handleTurnComplete}
                 activeDifficulty={activeDifficulty}
                 loudspeakerEnabled={loudspeakerEnabled}
+                currentDocumentName={currentDocumentName}
               />
             </div>
           </div>
@@ -241,11 +292,17 @@ export default function Home() {
         {/* Tab 2: Interactive Analytics */}
         {activeTab === "analytics" && (
           <div className="space-y-6">
-            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
               <div>
                 <h2 className="text-xl font-black">Viva Intelligence Analytics</h2>
                 <p className="text-xs text-slate-400 mt-0.5">Adaptive Reinforcement Learning decisions and synthetic ML predictions.</p>
               </div>
+              {currentDocumentName && (
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-xs font-semibold text-indigo-600 dark:text-indigo-400">
+                  <FileText size={14} />
+                  <span>Report: <strong>{currentDocumentName}</strong></span>
+                </div>
+              )}
             </div>
             <AnalyticsDashboard analytics={analytics} history={sessionHistory} />
           </div>
@@ -256,7 +313,14 @@ export default function Home() {
           <div className="space-y-6">
             <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center border-b border-white/10 pb-4">
               <div>
-                <h2 className="text-xl font-black">Interactive Knowledge Graph</h2>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-xl font-black">Interactive Knowledge Graph</h2>
+                  {currentDocumentName && (
+                    <span className="text-xs font-mono px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-500 dark:text-indigo-400 font-bold">
+                      {currentDocumentName}
+                    </span>
+                  )}
+                </div>
                 <p className="text-xs text-slate-400 mt-0.5">Semantic relationships and entities extracted using Gemini Pro.</p>
               </div>
               
@@ -291,9 +355,17 @@ export default function Home() {
         {/* Tab 4: Performance History Log */}
         {activeTab === "history" && (
           <div className="space-y-6">
-            <div className="border-b border-white/10 pb-4">
-              <h2 className="text-xl font-black">Examination Log & Transcript</h2>
-              <p className="text-xs text-slate-400 mt-0.5">Chronological record of evaluated concepts, scores, and feedback.</p>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+              <div>
+                <h2 className="text-xl font-black">Examination Log & Transcript</h2>
+                <p className="text-xs text-slate-400 mt-0.5">Chronological record of evaluated concepts, scores, and feedback.</p>
+              </div>
+              {currentDocumentName && (
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-xs font-semibold text-indigo-600 dark:text-indigo-400">
+                  <FileText size={14} />
+                  <span>Report: <strong>{currentDocumentName}</strong></span>
+                </div>
+              )}
             </div>
 
             {sessionHistory.length === 0 ? (
@@ -334,10 +406,12 @@ export default function Home() {
                         <p className="p-3 rounded-xl bg-slate-950/30 text-slate-200 leading-relaxed border border-white/5">{item.question}</p>
                       </div>
                       
-                      <div className="text-xs">
-                        <span className="text-slate-400 font-bold uppercase block mb-1">Evaluator Feedback:</span>
-                        <p className="p-3 rounded-xl bg-slate-950/20 text-slate-350 italic leading-relaxed border border-white/5">{item.feedback}</p>
-                      </div>
+                      {item.feedback && (
+                        <div className="text-xs">
+                          <span className="text-slate-400 font-bold uppercase block mb-1">Evaluator Feedback:</span>
+                          <p className="p-3 rounded-xl bg-slate-950/20 text-slate-350 italic leading-relaxed border border-white/5">{item.feedback}</p>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}

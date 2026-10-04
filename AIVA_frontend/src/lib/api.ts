@@ -25,12 +25,14 @@ export const fetchCoverageAnalytics = async () => {
 export const sendVivaQuestion = async (
   conversationHistory: any[],
   agentType: string,
-  difficulty: number
+  difficulty: number,
+  isFinalTurn: boolean = false
 ) => {
   const response = await api.post("/multi_agent_question", {
     conversation_history: conversationHistory,
     agent_type: agentType,
     difficulty: difficulty,
+    is_final_turn: isFinalTurn
   });
   return response.data;
 };
@@ -82,6 +84,11 @@ export const fetchRAGResults = async (query: string) => {
 
 export const fetchSession = async () => {
   const response = await api.get("/session");
+  return response.data;
+};
+
+export const resetExamination = async () => {
+  const response = await api.post("/reset_examination");
   return response.data;
 };
 

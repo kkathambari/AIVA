@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, Target, Activity, ShieldAlert, Award, ChevronRight } from "lucide-react";
+import { AlertTriangle, Target, Activity, ShieldAlert, Award, ChevronRight, Repeat, Sparkles, BookOpen } from "lucide-react";
 
 interface AnalyticsDashboardProps {
   analytics: any;
@@ -118,6 +118,12 @@ export function AnalyticsDashboard({ analytics, history }: AnalyticsDashboardPro
               <div className="mt-2 text-[10px] uppercase font-bold tracking-wider text-slate-400">
                 Confidence Interval: {(readiness.confidence_score * 100).toFixed(0)}% (Logistic Regression)
               </div>
+              {readiness.fluency_penalty_pct > 0 && (
+                <div className="mt-2 text-[11px] font-semibold text-rose-500 dark:text-rose-400 flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 px-2.5 py-1 rounded-lg">
+                  <Repeat size={13} className="shrink-0" />
+                  <span>Fluency & Repetition Deduction: -{readiness.fluency_penalty_pct}% on overall pass probability</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -125,26 +131,67 @@ export function AnalyticsDashboard({ analytics, history }: AnalyticsDashboardPro
         {/* Fluency Score Card */}
         {fluency && (
           <div className="p-6 rounded-2xl bg-white/10 dark:bg-slate-900/40 backdrop-blur-md border border-white/20 dark:border-white/10 shadow-xl">
-            <h3 className="text-base font-bold flex items-center gap-2 mb-4 text-slate-800 dark:text-slate-200">
-              <Activity className="text-indigo-500" size={18} />
-              Communication Fluency
-            </h3>
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full flex items-center justify-center bg-indigo-500/10 text-indigo-500 font-bold text-xl border-4 border-indigo-500/20 shrink-0">
-                {fluency.fluency_score}%
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-base font-bold flex items-center gap-2 text-slate-800 dark:text-slate-200">
+                <Activity className="text-indigo-500" size={18} />
+                Communication & Fluency
+              </h3>
+              <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                fluency.fluency_score >= 85 
+                  ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20" 
+                  : fluency.fluency_score >= 70 
+                    ? "bg-amber-500/10 text-amber-500 border border-amber-500/20" 
+                    : "bg-rose-500/10 text-rose-500 border border-rose-500/20"
+              }`}>
+                {fluency.fluency_score >= 85 ? "Articulate" : fluency.fluency_score >= 70 ? "Moderate Hesitation" : "Needs Revision"}
+              </span>
+            </div>
+            
+            <div className="flex items-start gap-4">
+              <div className={`w-16 h-16 rounded-full flex flex-col items-center justify-center font-bold text-xl border-4 shrink-0 ${
+                fluency.fluency_score >= 85
+                  ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                  : fluency.fluency_score >= 70
+                    ? "bg-amber-500/10 text-amber-500 border-amber-500/20"
+                    : "bg-rose-500/10 text-rose-500 border-rose-500/20"
+              }`}>
+                <span>{Math.round(fluency.fluency_score)}%</span>
+                <span className="text-[8px] uppercase tracking-wider font-semibold opacity-75">Fluency</span>
               </div>
-              <div className="flex-1">
-                <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+              
+              <div className="flex-1 space-y-2">
+                <p className="text-xs text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
                   {fluency.feedback}
                 </p>
+
+                {/* Detected Fillers */}
                 {Object.keys(fluency.filler_words_used || {}).length > 0 && (
-                  <div className="mt-2 text-xs text-slate-500 flex flex-wrap gap-1 items-center">
-                    Fillers: 
+                  <div className="text-xs text-slate-500 flex flex-wrap gap-1.5 items-center">
+                    <span className="font-semibold text-slate-600 dark:text-slate-400 text-[11px]">Fillers:</span>
                     {Object.entries(fluency.filler_words_used).map(([word, count]: any) => (
-                      <span key={word} className="bg-red-500/10 text-red-500 px-1.5 py-0.5 rounded font-mono">
+                      <span key={word} className="bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 px-1.5 py-0.5 rounded text-[11px] font-mono">
                         "{word}" ({count})
                       </span>
                     ))}
+                  </div>
+                )}
+
+                {/* Detected Repetitions */}
+                {Object.keys(fluency.repetitive_words_used || {}).length > 0 && (
+                  <div className="text-xs text-slate-500 flex flex-wrap gap-1.5 items-center">
+                    <span className="font-semibold text-rose-600 dark:text-rose-400 text-[11px]">Repetitions:</span>
+                    {Object.entries(fluency.repetitive_words_used).map(([word, count]: any) => (
+                      <span key={word} className="bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 px-1.5 py-0.5 rounded text-[11px] font-mono">
+                        "{word}" ({count})
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* Repetition Penalty Tag */}
+                {fluency.repetition_penalty > 0 && (
+                  <div className="text-[11px] font-semibold text-rose-500 dark:text-rose-400 flex items-center gap-1">
+                    <span>⚠️ -{fluency.repetition_penalty}% Fluency Penalty applied for repetitive vocabulary</span>
                   </div>
                 )}
               </div>
@@ -279,31 +326,128 @@ export function AnalyticsDashboard({ analytics, history }: AnalyticsDashboardPro
         </div>
 
         {/* XGBoost Weakness Detection */}
-        <div className="p-6 rounded-2xl bg-white/10 dark:bg-slate-900/40 backdrop-blur-md border border-white/20 dark:border-white/10 shadow-xl h-[245px] overflow-y-auto">
-          <h3 className="text-base font-bold flex items-center gap-2 mb-4 text-slate-800 dark:text-slate-200">
-            <ShieldAlert className="text-indigo-500" size={18} />
-            XGBoost Weakness Detection
-          </h3>
+        <div className="p-6 rounded-2xl bg-white/10 dark:bg-slate-900/40 backdrop-blur-md border border-white/20 dark:border-white/10 shadow-xl min-h-[260px] max-h-[460px] overflow-y-auto">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-base font-bold flex items-center gap-2 text-slate-800 dark:text-slate-200">
+              <ShieldAlert className="text-rose-500" size={18} />
+              XGBoost Weakness Detection
+            </h3>
+            <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
+              weaknesses.length > 0 
+                ? "bg-rose-500/10 text-rose-500 border border-rose-500/20" 
+                : "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20"
+            }`}>
+              {weaknesses.length > 0 ? `${weaknesses.length} Area${weaknesses.length > 1 ? 's' : ''} Flagged` : "All Clear"}
+            </span>
+          </div>
           
           {weaknesses.length > 0 ? (
             <div className="space-y-3">
-              {weaknesses.map((w: string, i: number) => (
-                <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-300">
-                  <AlertTriangle size={18} className="shrink-0 mt-0.5 text-red-500" />
-                  <div className="space-y-1">
-                    <h4 className="text-xs font-bold capitalize">{w.replace("_", " ")}</h4>
-                    <p className="text-[10px] opacity-80 leading-snug">
-                      Synthetic XGBoost classifier flagged this topic as weak. We recommend revising the core formulas and architectures relating to {w}.
-                    </p>
+              {weaknesses.map((w: any, i: number) => {
+                const isObj = typeof w === "object" && w !== null;
+                const concept = isObj ? w.concept : w;
+                const riskProb = isObj ? (w.risk_probability ?? 80) : 80;
+                const avgScore = isObj ? w.average_score : null;
+                const difficulty = isObj ? w.difficulty_level : null;
+                const coverage = isObj ? w.coverage : null;
+                const attempts = isObj ? w.attempts : 1;
+                const severity = isObj ? (w.severity || "Critical Risk") : "High Risk";
+                const reason = isObj ? w.reason : "Evaluation score below pass threshold";
+                const recommendation = isObj ? w.recommendation : `Review core formulas, principles, and implementation details for ${concept}.`;
+
+                const isCritical = String(severity).toLowerCase().includes("critical") || riskProb >= 75;
+                const isHigh = !isCritical && (String(severity).toLowerCase().includes("high") || riskProb >= 60);
+
+                return (
+                  <div 
+                    key={i} 
+                    className={`p-3.5 rounded-xl border transition-all ${
+                      isCritical 
+                        ? "bg-rose-500/10 border-rose-500/30 text-rose-950 dark:text-rose-200" 
+                        : isHigh 
+                          ? "bg-amber-500/10 border-amber-500/30 text-amber-950 dark:text-amber-200" 
+                          : "bg-indigo-500/10 border-indigo-500/30 text-indigo-950 dark:text-indigo-200"
+                    }`}
+                  >
+                    {/* Header Row */}
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <div className="flex items-center gap-2">
+                        <AlertTriangle size={16} className={isCritical ? "text-rose-500 shrink-0" : isHigh ? "text-amber-500 shrink-0" : "text-indigo-500 shrink-0"} />
+                        <h4 className="text-xs font-bold capitalize text-slate-800 dark:text-slate-100">
+                          {String(concept).replace(/_/g, " ")}
+                        </h4>
+                      </div>
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                        isCritical 
+                          ? "bg-rose-500/20 text-rose-600 dark:text-rose-300 border border-rose-500/30" 
+                          : isHigh 
+                            ? "bg-amber-500/20 text-amber-600 dark:text-amber-300 border border-amber-500/30" 
+                            : "bg-indigo-500/20 text-indigo-600 dark:text-indigo-300 border border-indigo-500/30"
+                      }`}>
+                        {severity}
+                      </span>
+                    </div>
+
+                    {/* Risk Probability Meter */}
+                    <div className="mb-2.5">
+                      <div className="flex justify-between text-[10px] font-semibold mb-1 text-slate-600 dark:text-slate-400">
+                        <span>XGBoost Weakness Risk Probability</span>
+                        <span className="font-mono font-bold text-rose-500 dark:text-rose-400">{riskProb}%</span>
+                      </div>
+                      <div className="w-full bg-slate-200 dark:bg-slate-800/80 rounded-full h-1.5 overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all duration-700 ${
+                            isCritical ? "bg-rose-500" : isHigh ? "bg-amber-500" : "bg-indigo-500"
+                          }`}
+                          style={{ width: `${Math.min(riskProb, 100)}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Telemetry Metrics Badges */}
+                    {avgScore !== null && (
+                      <div className="grid grid-cols-4 gap-1.5 mb-2.5 text-center">
+                        <div className="bg-white/40 dark:bg-slate-900/50 p-1 rounded border border-white/20 dark:border-white/5">
+                          <div className="text-[9px] text-slate-500 uppercase">Avg Score</div>
+                          <div className="text-[11px] font-bold text-slate-800 dark:text-slate-200">{avgScore}%</div>
+                        </div>
+                        <div className="bg-white/40 dark:bg-slate-900/50 p-1 rounded border border-white/20 dark:border-white/5">
+                          <div className="text-[9px] text-slate-500 uppercase">Diff Lvl</div>
+                          <div className="text-[11px] font-bold text-slate-800 dark:text-slate-200">{difficulty}/4</div>
+                        </div>
+                        <div className="bg-white/40 dark:bg-slate-900/50 p-1 rounded border border-white/20 dark:border-white/5">
+                          <div className="text-[9px] text-slate-500 uppercase">Coverage</div>
+                          <div className="text-[11px] font-bold text-slate-800 dark:text-slate-200">{coverage}%</div>
+                        </div>
+                        <div className="bg-white/40 dark:bg-slate-900/50 p-1 rounded border border-white/20 dark:border-white/5">
+                          <div className="text-[9px] text-slate-500 uppercase">Attempts</div>
+                          <div className="text-[11px] font-bold text-slate-800 dark:text-slate-200">{attempts}</div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Reason & Recommendation */}
+                    <div className="space-y-1 text-[11px] leading-relaxed">
+                      <p className="text-slate-600 dark:text-slate-300">
+                        <span className="font-semibold text-slate-700 dark:text-slate-200">Diagnosis: </span>
+                        {reason}
+                      </p>
+                      <p className="text-slate-500 dark:text-slate-400 bg-white/20 dark:bg-black/20 p-2 rounded-lg border border-white/10 dark:border-white/5 text-[10px]">
+                        <span className="font-bold text-indigo-500 dark:text-indigo-400">💡 Target Fix: </span>
+                        {recommendation}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
-            <div className="h-full flex flex-col items-center justify-center pb-8 text-slate-400 dark:text-slate-500 text-center">
-              <Award className="mb-2 opacity-50 text-emerald-500 animate-bounce" size={32} />
-              <p className="text-xs font-medium">No weaknesses detected yet.</p>
-              <p className="text-[10px] opacity-75 mt-1">Synthetic XGBoost classifier evaluates features on each turn.</p>
+            <div className="h-[180px] flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 text-center">
+              <Award className="mb-2 opacity-60 text-emerald-500 animate-pulse" size={32} />
+              <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">No weaknesses detected yet.</p>
+              <p className="text-[10px] opacity-75 mt-1 max-w-[280px]">
+                Trained XGBoost classifier assesses performance score, difficulty, and depth on every viva answer.
+              </p>
             </div>
           )}
         </div>

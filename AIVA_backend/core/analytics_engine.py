@@ -136,40 +136,82 @@ class AnalyticsEngine:
             avg_length = sum(a.get("answer_length", 0.5) for a in attempts) / len(attempts)
             avg_confidence = sum(a.get("confidence", 0.8) for a in attempts) / len(attempts)
             
+            is_weak = False
+            risk_probability = max(0.05, min(0.99, 1.0 - avg_score))
+            
             # Predict using XGBoost if loaded
             if self.xgb_model is not None:
                 try:
                     features = np.array([[avg_score, avg_difficulty, avg_coverage, avg_length, avg_confidence]], dtype=np.float32)
-                    is_weak = self.xgb_model.predict(features)[0]
-                    if is_weak == 1:
-                        weaknesses.append(concept)
+                    pred = self.xgb_model.predict(features)[0]
+                    is_weak = (pred == 1)
+                    if hasattr(self.xgb_model, "predict_proba"):
+                        proba = self.xgb_model.predict_proba(features)[0]
+                        if len(proba) > 1:
+                            risk_probability = float(proba[1])
                 except Exception as e:
                     print(f"XGBoost weakness prediction error: {repr(e)}")
-                    # Rule-based fallback
-                    if avg_score < 0.6:
-                        weaknesses.append(concept)
+                    is_weak = (avg_score < 0.6)
             else:
                 # Rule-based fallback if model is not loaded
-                if avg_score < 0.6:
-                    weaknesses.append(concept)
+                is_weak = (avg_score < 0.6)
+                
+            if is_weak:
+                risk_pct = round(risk_probability * 100, 1)
+                severity = "Critical Risk" if risk_pct >= 80 else ("High Risk" if risk_pct >= 60 else "Moderate Concern")
+                reason = "Turn evaluation score below pass threshold" if avg_score < 0.4 else "Incomplete explanation depth and technical coverage"
+                
+                weaknesses.append({
+                    "concept": concept,
+                    "risk_probability": risk_pct,
+                    "average_score": round(avg_score * 100, 1),
+                    "difficulty_level": round(avg_difficulty, 1),
+                    "coverage": round(avg_coverage * 100, 1),
+                    "attempts": len(attempts),
+                    "severity": severity,
+                    "reason": reason,
+                    "recommendation": f"Review key algorithms, equations, and implementation details of {concept}."
+                })
                     
         return weaknesses
 
     def analyze_fluency(self, answer_text: str) -> dict:
         """
-        Module 8: Fluency & Filler-Word Analyzer
-        Counts occurrences of unwanted filler words to compute a fluency score.
+        Module 8: Fluency, Filler-Word & Repetitive Word Analyzer
+        Counts occurrences of unwanted filler words and repetitive word phrases to compute fluency.
         """
         if not answer_text or not answer_text.strip():
-            return {"fluency_score": 100.0, "filler_words_used": {}, "feedback": "No answer provided."}
+            return {
+                "fluency_score": 100.0,
+                "filler_words_used": {},
+                "repetitive_words_used": {},
+                "total_filler_count": 0,
+                "total_repetitive_count": 0,
+                "repetition_penalty": 0.0,
+                "feedback": "No answer provided."
+            }
             
-        filler_words = ["like", "so", "basically", "literally", "umm", "uh", "you know", "i mean", "actually", "just"]
+        import re
+        filler_words = ["like", "so", "basically", "literally", "umm", "uh", "you know", "i mean", "actually", "just", "well", "right"]
         text_lower = answer_text.lower()
-        words = text_lower.split()
+        cleaned_text = re.sub(r'[^\w\s]', ' ', text_lower)
+        words = cleaned_text.split()
+        total_words = len(words)
         
+        if total_words == 0:
+            return {
+                "fluency_score": 100.0,
+                "filler_words_used": {},
+                "repetitive_words_used": {},
+                "total_filler_count": 0,
+                "total_repetitive_count": 0,
+                "repetition_penalty": 0.0,
+                "feedback": "No answer provided."
+            }
+            
+        # 1. Detect Filler Words
         filler_counts = {}
         total_filler_count = 0
-        
         for fw in filler_words:
             if " " in fw:
                 count = text_lower.count(fw)
@@ -179,31 +221,70 @@ class AnalyticsEngine:
             if count > 0:
                 filler_counts[fw] = count
                 total_filler_count += count
-                
-        total_words = len(words)
-        if total_words == 0:
-            return {"fluency_score": 100.0, "filler_words_used": {}, "feedback": "No answer provided."}
-            
-        # Calculate penalty: e.g., 2 points for every 1% of filler words.
-        filler_ratio = total_filler_count / total_words
-        penalty = (filler_ratio * 100) * 2
-        fluency_score = max(0.0, 100.0 - penalty)
+
+        # 2. Detect Repetitive Words
+        # A) Consecutive word repeats (e.g. "we we", "is is")
+        consecutive_repeats = re.findall(r'\b(\w+)\s+\1\b', text_lower)
         
-        feedback = "Excellent fluency. Clear communication."
-        if fluency_score < 70:
-            feedback = f"Try to avoid filler words. You used {total_filler_count} filler words, which makes you sound unsure."
-        elif fluency_score < 90:
-            feedback = f"Good, but some hesitation detected. You used {total_filler_count} filler words."
+        # B) High-frequency over-used non-stop words (repeated >= 3 times in a single turn)
+        stopwords = {
+            "the", "a", "an", "and", "or", "in", "on", "at", "to", "for", "of", "with",
+            "is", "it", "this", "that", "are", "was", "were", "as", "by", "from", "be"
+        }
+        word_freq = {}
+        for w in words:
+            if len(w) > 2 and w not in stopwords:
+                word_freq[w] = word_freq.get(w, 0) + 1
+                
+        repetitive_counts = {}
+        for w in consecutive_repeats:
+            repetitive_counts[w] = repetitive_counts.get(w, 0) + 1
+            
+        for w, count in word_freq.items():
+            if count >= 3 and w not in filler_counts:
+                repetitive_counts[w] = count
+                
+        total_repetitive_count = sum(repetitive_counts.values())
+        
+        # Penalties:
+        # Filler penalty: 1.8 points for every 1% of words that are fillers
+        filler_ratio = total_filler_count / total_words
+        filler_penalty = (filler_ratio * 100) * 1.8
+        
+        # Repetition penalty: 2.0 points per repetition percentage
+        repetition_ratio = total_repetitive_count / total_words
+        repetition_penalty = (repetition_ratio * 100) * 2.0
+        
+        total_penalty = filler_penalty + repetition_penalty
+        fluency_score = max(0.0, min(100.0, 100.0 - total_penalty))
+        
+        feedback_parts = []
+        if total_filler_count > 0:
+            feedback_parts.append(f"{total_filler_count} filler words")
+        if total_repetitive_count > 0:
+            feedback_parts.append(f"{total_repetitive_count} repetitive words")
+            
+        if fluency_score >= 88:
+            feedback = "Excellent fluency and clear vocabulary articulation."
+        elif fluency_score >= 70:
+            feedback = f"Good communication, but hesitation detected: {'; '.join(feedback_parts)}."
+        else:
+            feedback = f"Frequent repetitions and filler words detected: {'; '.join(feedback_parts)}. Focus on concise phrasing."
             
         return {
-            "fluency_score": round(fluency_score, 2),
+            "fluency_score": round(fluency_score, 1),
             "filler_words_used": filler_counts,
+            "repetitive_words_used": repetitive_counts,
+            "total_filler_count": total_filler_count,
+            "total_repetitive_count": total_repetitive_count,
+            "repetition_penalty": round(repetition_penalty, 1),
             "feedback": feedback
         }
 
-    def predict_readiness(self, coverage: float, avg_score: float, difficulty_trend: float, weakness_count: int) -> dict:
+    def predict_readiness(self, coverage: float, avg_score: float, difficulty_trend: float, weakness_count: int, fluency_score: float = 100.0) -> dict:
         """
         Module 7: Viva Readiness Prediction using Logistic Regression Classifier
+        Incorporates average score, coverage, difficulty trend, detected weaknesses, and verbal fluency/repetition penalties.
         """
         probability = 0.5
         
@@ -224,6 +305,13 @@ class AnalyticsEngine:
             probability = avg_score * 0.45 + (coverage / 100.0) * 0.30 + (difficulty_trend + 1) * 0.08 - (weakness_count * 0.05)
             probability = float(np.clip(probability, 0.0, 1.0))
             
+        # Apply verbal fluency & repetitive words penalty to preparedness score (up to 12% reduction for severe hesitation/repetition)
+        fluency_penalty_pct = 0.0
+        if fluency_score < 90.0:
+            fluency_deduction = ((90.0 - fluency_score) / 90.0) * 0.12
+            probability = max(0.0, probability - fluency_deduction)
+            fluency_penalty_pct = round(fluency_deduction * 100, 1)
+
         probability_pct = round(probability * 100.0, 2)
         
         # Determine level and recommendations
@@ -241,5 +329,6 @@ class AnalyticsEngine:
             "probability": probability_pct,
             "readiness_level": level,
             "confidence_score": 0.85 if self.lr_model is not None else 0.70,
-            "recommendation": rec
+            "recommendation": rec,
+            "fluency_penalty_pct": fluency_penalty_pct
         }

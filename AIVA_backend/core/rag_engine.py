@@ -40,6 +40,35 @@ class RAGEngine:
             except Exception as e:
                 print(f"Error loading BM25 corpus: {e}")
 
+    def clear(self):
+        """Clears all indexed chunks from ChromaDB and BM25 memory to ensure a fresh session."""
+        try:
+            # Delete collection in ChromaDB if it exists
+            self.chroma_client.delete_collection("aiva_docs")
+        except Exception as e:
+            print(f"Info/Error deleting ChromaDB collection: {e}")
+            
+        try:
+            self.collection = self.chroma_client.get_or_create_collection(
+                name="aiva_docs",
+                metadata={"hnsw:space": "cosine"}
+            )
+            # Ensure any lingering items are deleted
+            all_data = self.collection.get()
+            if all_data and all_data.get("ids"):
+                self.collection.delete(ids=all_data["ids"])
+        except Exception as e:
+            print(f"Error resetting ChromaDB collection: {e}")
+            
+        # Clear BM25 memory
+        self.corpus = []
+        self.bm25 = None
+        if os.path.exists(self.chunks_cache_file):
+            try:
+                os.remove(self.chunks_cache_file)
+            except Exception as e:
+                print(f"Error removing chunks cache: {e}")
+
     def index_document(self, text: str, document_id: str) -> int:
         chunks = self.text_splitter.split_text(text)
         
@@ -87,8 +116,8 @@ class RAGEngine:
             ids=ids
         )
         
-        # Save chunks for BM25
-        self.corpus.extend(chunks)
+        # Save chunks for BM25 (scoped strictly to current document)
+        self.corpus = list(chunks)
         os.makedirs(os.path.dirname(self.chunks_cache_file), exist_ok=True)
         with open(self.chunks_cache_file, "w", encoding="utf-8") as f:
             json.dump(self.corpus, f, ensure_ascii=False, indent=2)
