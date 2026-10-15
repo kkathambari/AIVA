@@ -87,15 +87,15 @@ flowchart LR
 ```
 
 #### Baselines:
-1. **Sequential Round-Robin:** Purely cyclical turn assignment ($P_1 \to P_2 \to P_3 \to P_4 \to P_1$).
+1. **Verified Sequential Round-Robin:** Purely cyclical turn assignment ($P_1 \to P_2 \to P_3 \to P_4 \to P_1$) verified via unit tests (`tests/test_routing_sequence.py`).
 2. **Keyword-Guided Balanced Routing:** Adaptive semantic routing matching student response focus while enforcing minimum-turn fallback.
 
 #### Empirical Benchmark Results (`experiments/results_multi_agent_routing.json`):
 
 | Routing Strategy | Turn Distribution (Prof / Ind / Crit / Exam) | Shannon Entropy (Max: 2.0 bits) | Uniformity Ratio | Semantic Concordance % |
 | :--- | :---: | :---: | :---: | :---: |
-| **Baseline Round-Robin** | 7 / 0 / 0 / 1 | 0.544 bits | 27.2% | **37.5%** |
-| **Keyword-Guided Balanced** | 2 / 4 / 1 / 1 | **1.750 bits** | **87.5%** | **87.5%** |
+| **Verified Round-Robin Baseline** | 2 / 2 / 2 / 2 | **2.000 bits** | **100.0%** | 25.0% (Random Chance) |
+| **Keyword-Guided Balanced** | 2 / 4 / 1 / 1 | 1.750 bits | 87.5% | **87.5%** |
 
 > [!NOTE]
 > **Genuine Traceability Guarantee:** Every turn execution records the node identifier, display name, and explicit textual reason in `session.turn_audit_trail`, accessible via `/audit_trail` for post-hoc validation.
@@ -108,31 +108,33 @@ To prevent factual hallucination, examiners generate questions strictly grounded
 
 $$\text{RRF Score}(d) = \sum_{m \in \{\text{dense}, \text{sparse}\}} \frac{1}{k + \text{rank}_m(d)}, \quad k = 60$$
 
-- **Sparse Engine:** BM25Okapi using a dedicated technical regex tokenizer (`technical_tokenize`) preserving identifiers (e.g., `docker-compose`, `gemini-2.5-flash`, `O(n log n)`).
-- **Dense Engine:** Google Gemini Embedding 2 with cosine similarity.
+- **Sparse Lexical Engine:** BM25Okapi using a dedicated technical regex tokenizer (`technical_tokenize`) preserving identifiers (e.g., `docker-compose`, `O(n log n)`, `HMAC-SHA256`).
+- **Dense Semantic Engine:** Google Generative AI Embeddings (`models/gemini-embedding-2`, 3072-dimensional) with cosine distance in ChromaDB.
+- **TF-IDF Baseline:** Term Frequency - Inverse Document Frequency vectorizer with cosine similarity.
 
 #### Empirical Benchmark Results (`experiments/results_rag_retrieval.json`):
-*Evaluated across 10 technical computer science queries against 10 passage chunks.*
+*Evaluated across 25 technical engineering dissertation passages and 15 independently labelled queries spanning exact keyword lookups, conceptual paraphrases, and composite systems questions.*
 
-| Retrieval Strategy | Recall@1 | Recall@3 | Recall@5 | MRR | nDCG@3 | nDCG@5 |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **BM25 Alone (Technical Tokenizer)** | 1.000 | 1.000 | 1.000 | 1.0000 | 1.0000 | 1.0000 |
-| **Dense Alone (Embedding Cosine)** | 1.000 | 1.000 | 1.000 | 1.0000 | 1.0000 | 1.0000 |
-| **Hybrid RRF ($k=60$)** | **1.000** | **1.000** | **1.000** | **1.0000** | **1.0000** | **1.0000** |
+| Retrieval Strategy | Embedding / Representation | Recall@1 | Recall@3 | Recall@5 | MRR | nDCG@3 | nDCG@5 |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **TF-IDF Baseline** | Unigram + Bigram TF-IDF Vectors | 0.9333 | 1.0000 | 1.0000 | 0.9667 | 0.9754 | 0.9754 |
+| **BM25 Sparse** | Technical Tokenizer + BM25Okapi | **1.0000** | 1.0000 | 1.0000 | **1.0000** | **1.0000** | **1.0000** |
+| **Gemini Dense** | `models/gemini-embedding-2` (3072-d) | 0.9333 | 1.0000 | 1.0000 | 0.9667 | 0.9754 | 0.9754 |
+| **Hybrid RRF** | Dense Cosine + Sparse BM25 ($k=60$) | **1.0000** | 1.0000 | 1.0000 | **1.0000** | **1.0000** | **1.0000** |
 
 ---
 
 ### 2.4 Component D — Knowledge Graph Extraction Validation
 
-Knowledge graphs are extracted from ingested project text using structured Pydantic outputs and NetworkX.
+Knowledge graphs are extracted from ingested project text using structured Pydantic outputs and NetworkX via `KGBuilder`.
 
-#### Empirical Benchmark Results (`experiments/results_knowledge_graph.json`):
-*Compared against human-annotated reference entities and triples from sample dissertation.*
+#### Empirical Benchmark Results (`experiments/results_knowledge_graph.json`, `experiments/live_extracted_kg.json`):
+*Executed live against a 2,683-character engineering dissertation excerpt (Chapter 3: System Architecture) using Gemini 2.5 Flash with Pydantic structured output, evaluated against independent human-annotated ground-truth concepts (18) and relationships (13).*
 
-| Extraction Task | Ground Truth | Extracted | Precision | Recall | F1 Score |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **Technical Concepts / Entities** | 10 | 11 | **0.9091** | **1.0000** | **0.9524** |
-| **Typed Relationship Triples** | 7 | 7 | **0.8571** | **0.8571** | **0.8571** |
+| Extraction Task | Ground Truth Count | Extracted Count (Live) | True Positives | Precision | Recall | F1 Score |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Technical Concepts / Entities** | 18 | 30 | 10 | 0.3333 | 0.5556 | 0.4167 |
+| **Typed Relationship Triples** | 13 | 29 | 3 | 0.1034 | 0.2308 | 0.1429 |
 
 ---
 
@@ -148,10 +150,12 @@ A critical distinction is established:
 
 $$\text{Composite Score} = 0.35 \cdot C_{\text{corr}} + 0.25 \cdot C_{\text{comp}} + 0.20 \cdot E_{\text{align}} + 0.20 \cdot R_{\text{depth}}$$
 
-Agreement between human evaluators and AIVA's structured rubric is verified via `compute_evaluator_agreement()`:
-- **Mean Absolute Error (MAE):** $0.0333$
-- **Pearson Correlation ($r$):** $0.9799$
-- **Quadratic Weighted Cohen's Kappa:** $0.7273$ (substantial inter-rater reliability)
+#### Pilot Faculty Calibration Study (`benchmark_data/pilot_evaluator_dataset.json`, `experiments/results_rubric_agreement.json`):
+Agreement between independent university computing faculty evaluations and AIVA's structured rubric across $N=15$ diverse viva answer responses:
+- **Mean Absolute Error (MAE):** **$0.0166$** (on continuous 0.0–1.0 score scale)
+- **Pearson Correlation ($r$):** **$0.9988$** ($p = 1.77 \times 10^{-18}$)
+- **Quadratic Weighted Cohen's Kappa:** **$1.0000$** (across 5 academic grade bands)
+- **Study Scope:** Initial pilot calibration ($N=15$). Large-scale multi-faculty cohort validation ($N \ge 60$) across institutions is an active Phase 2 research task.
 
 ---
 

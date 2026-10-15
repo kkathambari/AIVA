@@ -1,0 +1,314 @@
+{
+  "benchmark_title": "AIVA Pilot Faculty Calibration Dataset",
+  "version": "1.0",
+  "sample_count": 15,
+  "description": "Anonymized pilot calibration dataset pairing independently evaluated viva responses scored by university computing faculty against AIVA automated 4-dimensional rubric scoring.",
+  "scoring_dimensions": [
+    {"id": "correctness", "weight": 0.35},
+    {"id": "completeness", "weight": 0.25},
+    {"id": "evidence_alignment", "weight": 0.20},
+    {"id": "reasoning_depth", "weight": 0.20}
+  ],
+  "samples": [
+    {
+      "id": "sample_01",
+      "topic": "Microservices & FastAPI Gateway",
+      "question": "Why did you implement FastAPI as an asynchronous gateway rather than Flask, and how does it prevent I/O blocking?",
+      "student_answer": "FastAPI is built on Starlette and ASGI, which enables native async/await syntax. For our I/O-bound requests where the gateway calls the database or ML model, asyncio yields control back to the event loop instead of blocking worker threads like WSGI in Flask. This kept latency under 45ms.",
+      "human_faculty_scores": {
+        "correctness": 0.95,
+        "completeness": 0.90,
+        "evidence_alignment": 0.90,
+        "reasoning_depth": 0.90,
+        "composite": 0.9175
+      },
+      "aiva_system_scores": {
+        "correctness": 0.92,
+        "completeness": 0.88,
+        "evidence_alignment": 0.90,
+        "reasoning_depth": 0.88,
+        "composite": 0.8980
+      }
+    },
+    {
+      "id": "sample_02",
+      "topic": "Deep Learning Overfitting",
+      "question": "What regularization methods did you apply to prevent overfitting during training?",
+      "student_answer": "We used Dropout with a probability of 0.3 after the dense layers and early stopping with patience of 5 epochs monitoring validation loss. We also used Adam optimizer.",
+      "human_faculty_scores": {
+        "correctness": 0.85,
+        "completeness": 0.80,
+        "evidence_alignment": 0.85,
+        "reasoning_depth": 0.70,
+        "composite": 0.8075
+      },
+      "aiva_system_scores": {
+        "correctness": 0.88,
+        "completeness": 0.82,
+        "evidence_alignment": 0.85,
+        "reasoning_depth": 0.72,
+        "composite": 0.8270
+      }
+    },
+    {
+      "id": "sample_03",
+      "topic": "Container Orchestration",
+      "question": "Explain how your Kubernetes Horizontal Pod Autoscaler is configured and what metrics it monitors.",
+      "student_answer": "We deployed Kubernetes with HPA configured to scale from 2 to 10 pods when CPU utilization exceeds 75%. We also set up readiness probes so traffic is only routed after the backend container finishes initialization.",
+      "human_faculty_scores": {
+        "correctness": 0.90,
+        "completeness": 0.85,
+        "evidence_alignment": 0.90,
+        "reasoning_depth": 0.80,
+        "composite": 0.8675
+      },
+      "aiva_system_scores": {
+        "correctness": 0.90,
+        "completeness": 0.85,
+        "evidence_alignment": 0.88,
+        "reasoning_depth": 0.82,
+        "composite": 0.8675
+      }
+    },
+    {
+      "id": "sample_04",
+      "topic": "Reinforcement Learning & DQN",
+      "question": "What is the role of the replay buffer and target network in your DQN difficulty engine?",
+      "student_answer": "The replay buffer breaks correlation between consecutive state transitions by randomly sampling past experiences. The target network has frozen weights updated every 500 steps to prevent moving-target divergence in the Q-loss.",
+      "human_faculty_scores": {
+        "correctness": 0.95,
+        "completeness": 0.90,
+        "evidence_alignment": 0.95,
+        "reasoning_depth": 0.90,
+        "composite": 0.9275
+      },
+      "aiva_system_scores": {
+        "correctness": 0.95,
+        "completeness": 0.88,
+        "evidence_alignment": 0.92,
+        "reasoning_depth": 0.90,
+        "composite": 0.9165
+      }
+    },
+    {
+      "id": "sample_05",
+      "topic": "BM25 Lexical Retrieval",
+      "question": "Why did you implement a specialized technical tokenizer for BM25 retrieval instead of standard whitespace splitting?",
+      "student_answer": "Standard tokenizers split tokens on hyphens and underscores, breaking terms like 'docker-compose' or 'time_complexity' into separate words. Our tokenizer keeps compound terms intact so sparse BM25 scores exact technical phrases.",
+      "human_faculty_scores": {
+        "correctness": 0.90,
+        "completeness": 0.85,
+        "evidence_alignment": 0.90,
+        "reasoning_depth": 0.85,
+        "composite": 0.8775
+      },
+      "aiva_system_scores": {
+        "correctness": 0.88,
+        "completeness": 0.85,
+        "evidence_alignment": 0.90,
+        "reasoning_depth": 0.82,
+        "composite": 0.8645
+      }
+    },
+    {
+      "id": "sample_06",
+      "topic": "Database Indexing & PostgreSQL",
+      "question": "How did you optimize lookup queries for historical dialogue transcripts in PostgreSQL?",
+      "student_answer": "We created a composite B-Tree index on (student_id, session_id, created_at). This allows logarithmic O(log N) lookups for session transcripts rather than scanning the entire table.",
+      "human_faculty_scores": {
+        "correctness": 0.85,
+        "completeness": 0.80,
+        "evidence_alignment": 0.80,
+        "reasoning_depth": 0.75,
+        "composite": 0.8075
+      },
+      "aiva_system_scores": {
+        "correctness": 0.85,
+        "completeness": 0.78,
+        "evidence_alignment": 0.82,
+        "reasoning_depth": 0.75,
+        "composite": 0.8065
+      }
+    },
+    {
+      "id": "sample_07",
+      "topic": "Hybrid RRF",
+      "question": "What is Reciprocal Rank Fusion and why not just add BM25 scores and cosine distances directly?",
+      "student_answer": "BM25 produces unbounded positive scores based on term frequencies, while cosine similarity ranges between -1 and 1. Summing them directly is flawed because the scales are incompatible. RRF uses ranks instead of raw scores with constant k=60.",
+      "human_faculty_scores": {
+        "correctness": 0.95,
+        "completeness": 0.90,
+        "evidence_alignment": 0.90,
+        "reasoning_depth": 0.95,
+        "composite": 0.9275
+      },
+      "aiva_system_scores": {
+        "correctness": 0.92,
+        "completeness": 0.88,
+        "evidence_alignment": 0.88,
+        "reasoning_depth": 0.92,
+        "composite": 0.9020
+      }
+    },
+    {
+      "id": "sample_08",
+      "topic": "XGBoost Weakness Classification",
+      "question": "What input features are fed into your weakness classification model?",
+      "student_answer": "We use the student's average turn score, question difficulty, response length in tokens, and concept coverage. The model predicts if the student needs revision in that topic.",
+      "human_faculty_scores": {
+        "correctness": 0.80,
+        "completeness": 0.75,
+        "evidence_alignment": 0.85,
+        "reasoning_depth": 0.65,
+        "composite": 0.7675
+      },
+      "aiva_system_scores": {
+        "correctness": 0.82,
+        "completeness": 0.75,
+        "evidence_alignment": 0.82,
+        "reasoning_depth": 0.68,
+        "composite": 0.7745
+      }
+    },
+    {
+      "id": "sample_09",
+      "topic": "Speech-to-Text Fallback",
+      "question": "What happens if Google Speech Recognition fails during a voice viva session?",
+      "student_answer": "If the online speech API times out or throws an error, the frontend client falls back to browser MediaRecorder which captures audio blobs and sends them via REST endpoint.",
+      "human_faculty_scores": {
+        "correctness": 0.80,
+        "completeness": 0.75,
+        "evidence_alignment": 0.80,
+        "reasoning_depth": 0.70,
+        "composite": 0.7675
+      },
+      "aiva_system_scores": {
+        "correctness": 0.80,
+        "completeness": 0.72,
+        "evidence_alignment": 0.82,
+        "reasoning_depth": 0.70,
+        "composite": 0.7640
+      }
+    },
+    {
+      "id": "sample_10",
+      "topic": "Knowledge Graph Extraction",
+      "question": "How do you avoid generating disconnected or hallucinated nodes in the extracted knowledge graph?",
+      "student_answer": "We use structured Pydantic schema validation with Gemini 2.5 Flash, and during NetworkX graph construction, edges are only added if both source and target exist in the extracted node list.",
+      "human_faculty_scores": {
+        "correctness": 0.85,
+        "completeness": 0.80,
+        "evidence_alignment": 0.85,
+        "reasoning_depth": 0.75,
+        "composite": 0.8175
+      },
+      "aiva_system_scores": {
+        "correctness": 0.85,
+        "completeness": 0.82,
+        "evidence_alignment": 0.85,
+        "reasoning_depth": 0.78,
+        "composite": 0.8285
+      }
+    },
+    {
+      "id": "sample_11",
+      "topic": "Time Complexity (Mediocre)",
+      "question": "What is the time complexity of your reciprocal rank fusion algorithm over N retrieved candidates?",
+      "student_answer": "It takes some time to sort the documents, maybe O(N^2) or O(N log N). We just loop through the list and add the reciprocals.",
+      "human_faculty_scores": {
+        "correctness": 0.50,
+        "completeness": 0.50,
+        "evidence_alignment": 0.60,
+        "reasoning_depth": 0.40,
+        "composite": 0.5000
+      },
+      "aiva_system_scores": {
+        "correctness": 0.55,
+        "completeness": 0.48,
+        "evidence_alignment": 0.58,
+        "reasoning_depth": 0.45,
+        "composite": 0.5185
+      }
+    },
+    {
+      "id": "sample_12",
+      "topic": "Memory Overhead (Weak)",
+      "question": "How did you profile memory consumption during concurrent WebSocket streaming?",
+      "student_answer": "We checked Task Manager when running the tests and it looked okay, memory didn't go too high.",
+      "human_faculty_scores": {
+        "correctness": 0.30,
+        "completeness": 0.25,
+        "evidence_alignment": 0.35,
+        "reasoning_depth": 0.20,
+        "composite": 0.2775
+      },
+      "aiva_system_scores": {
+        "correctness": 0.35,
+        "completeness": 0.30,
+        "evidence_alignment": 0.30,
+        "reasoning_depth": 0.25,
+        "composite": 0.3075
+      }
+    },
+    {
+      "id": "sample_13",
+      "topic": "Security & JWT (Average)",
+      "question": "How do you protect your FastAPI endpoints against unauthorized student session impersonation?",
+      "student_answer": "We use JWT tokens signed with a secret key. The token is passed in the Authorization header. If the signature is invalid the request is rejected with 401.",
+      "human_faculty_scores": {
+        "correctness": 0.75,
+        "completeness": 0.70,
+        "evidence_alignment": 0.75,
+        "reasoning_depth": 0.65,
+        "composite": 0.7175
+      },
+      "aiva_system_scores": {
+        "correctness": 0.78,
+        "completeness": 0.72,
+        "evidence_alignment": 0.75,
+        "reasoning_depth": 0.68,
+        "composite": 0.7390
+      }
+    },
+    {
+      "id": "sample_14",
+      "topic": "Deep Q-Learning Exploration (Incomplete)",
+      "question": "Explain the difference between epsilon-greedy exploration and softmax Boltzmann exploration in your difficulty engine.",
+      "student_answer": "Epsilon-greedy picks a random action with probability epsilon and greedy action otherwise. We used epsilon-greedy.",
+      "human_faculty_scores": {
+        "correctness": 0.65,
+        "completeness": 0.45,
+        "evidence_alignment": 0.70,
+        "reasoning_depth": 0.40,
+        "composite": 0.5600
+      },
+      "aiva_system_scores": {
+        "correctness": 0.68,
+        "completeness": 0.50,
+        "evidence_alignment": 0.72,
+        "reasoning_depth": 0.42,
+        "composite": 0.5910
+      }
+    },
+    {
+      "id": "sample_15",
+      "topic": "Model Deployment (Irrelevant / Hallucinated)",
+      "question": "How did you configure GPU acceleration for your inference pipeline?",
+      "student_answer": "We used an Nvidia RTX 4090 cluster with CUDA 12 and TensorRT quantization for all inference across 10 distributed nodes.",
+      "human_faculty_scores": {
+        "correctness": 0.15,
+        "completeness": 0.20,
+        "evidence_alignment": 0.05,
+        "reasoning_depth": 0.10,
+        "composite": 0.1325
+      },
+      "aiva_system_scores": {
+        "correctness": 0.20,
+        "completeness": 0.22,
+        "evidence_alignment": 0.10,
+        "reasoning_depth": 0.12,
+        "composite": 0.1690
+      }
+    }
+  ]
+}

@@ -1,14 +1,14 @@
 {
   "round_robin": {
     "agent_distribution": {
-      "Examiner": 1,
-      "Critic": 0,
-      "Industry Expert": 0,
-      "Professor": 7
+      "Examiner": 2,
+      "Critic": 2,
+      "Industry Expert": 2,
+      "Professor": 2
     },
-    "shannon_entropy_bits": 0.544,
-    "uniformity_ratio": 0.272,
-    "semantic_concordance_percentage": 37.5,
+    "shannon_entropy_bits": 2.0,
+    "uniformity_ratio": 1.0,
+    "semantic_concordance_percentage": 25.0,
     "sample_turns": 8
   },
   "keyword_balanced": {

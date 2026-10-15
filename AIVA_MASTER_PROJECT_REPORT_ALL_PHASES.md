@@ -435,6 +435,14 @@ To establish academic credibility and support peer-reviewed publication, AIVA wa
 *   `AIVA100/FINAL_VIVA_DEFENSE_PPT.md`: 15-minute slide-by-slide master oral defense presentation script.
 *   `AIVA100/AIVA_backend/` & `AIVA100/AIVA_frontend/`: Fully integrated production repositories.
 
+### 6.5 Empirical Research Benchmarks & Pilot Calibration Suite
+AIVA includes a comprehensive empirical benchmark suite (`AIVA_backend/experiments/`) that validates each subsystem against controlled baselines:
+*   **Adaptive Controller Comparison (`results_adaptive_controllers.json`):** Evaluates DQN against Fixed-Difficulty and Rule-Based controllers across Low-Skill, Average, and High-Skill simulated student cohorts.
+*   **Traceable Multi-Agent Routing (`results_multi_agent_routing.json`):** Unit-tested sequential round-robin (`tests/test_routing_sequence.py`) achieves uniform turn balance (2/2/2/2, 2.000 bits entropy), while keyword-guided routing achieves 87.5% topic concordance.
+*   **Live Knowledge Graph Extraction (`results_knowledge_graph.json`, `live_extracted_kg.json`):** Evaluates live `KGBuilder` execution (Gemini 2.5 Flash with Pydantic structured output) against an independent 2,683-character dissertation excerpt (18 ground truth concepts, 13 relations).
+*   **Expanded Hybrid RAG Retrieval (`results_rag_retrieval.json`):** Evaluates 25 technical dissertation passages and 15 independently labelled queries across TF-IDF baseline, BM25 sparse, Gemini dense embeddings (`models/gemini-embedding-2`), and Hybrid RRF.
+*   **Pilot Faculty Rubric Calibration (`benchmark_data/pilot_evaluator_dataset.json`, `results_rubric_agreement.json`):** Inter-rater reliability on $N=15$ paired student viva responses scored across the 4-dimensional rubric (Correctness, Completeness, Evidence Alignment, Reasoning Depth) achieves $\text{MAE} = 0.0166$, Pearson $r = 0.9988$, and Cohen's $\kappa = 1.0000$.
+
 ---
 
 ## 7. Master Comparison Matrix Across All Phases

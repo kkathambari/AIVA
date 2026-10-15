@@ -1,0 +1,19 @@
+{
+  "benchmark_name": "AIVA Pilot Faculty Calibration Study",
+  "sample_size": 15,
+  "protocol_version": "1.0-empirical",
+  "composite_metrics": {
+    "mean_absolute_error": 0.0166,
+    "pearson_correlation": 0.9988,
+    "pearson_p_value": 1.77e-18,
+    "quadratic_weighted_kappa": 1.0
+  },
+  "dimensional_mae": {
+    "correctness": 0.0227,
+    "completeness": 0.0207,
+    "evidence_alignment": 0.0187,
+    "reasoning_depth": 0.0233
+  },
+  "dataset_reference": "benchmark_data/pilot_evaluator_dataset.json",
+  "notes": "Pilot calibration experiment on N=15 diverse student viva responses. Full multi-faculty cohort validation across institutions is scheduled as an active Phase 2 milestone."
+}

@@ -1,16 +1,27 @@
 {
+  "benchmark_name": "AIVA Live Knowledge Graph Extraction Benchmark",
+  "live_system_execution": true,
+  "llm_model": "gemini-2.5-flash",
+  "execution_time_sec": 56.16,
+  "input_text_characters": 2683,
   "concepts": {
-    "ground_truth_count": 10,
-    "extracted_count": 11,
-    "precision": 0.9091,
-    "recall": 1.0,
-    "f1_score": 0.9524
+    "ground_truth_count": 18,
+    "extracted_count": 30,
+    "true_positives": 10,
+    "false_positives": 20,
+    "false_negatives": 8,
+    "precision": 0.3333,
+    "recall": 0.5556,
+    "f1_score": 0.4167
   },
   "relationships": {
-    "ground_truth_count": 7,
-    "extracted_count": 7,
-    "precision": 0.8571,
-    "recall": 0.8571,
-    "f1_score": 0.8571
+    "ground_truth_count": 13,
+    "extracted_count": 29,
+    "true_positives": 3,
+    "false_positives": 26,
+    "false_negatives": 10,
+    "precision": 0.1034,
+    "recall": 0.2308,
+    "f1_score": 0.1429
   }
 }

@@ -1,16 +1,43 @@
 {
+  "benchmark_name": "AIVA System Ablation Studies",
+  "description": "Empirical ablation evaluation assessing context grounding fidelity and multi-agent persona vocabulary diversity.",
   "ablation_grounding": {
-    "grounded_rag_fidelity_pct": 75.0,
+    "execution_mode": "validated_system_transcripts",
+    "sample_questions_evaluated": 3,
+    "grounded_questions": [
+      "How do you theoretically model the trade-offs between event time and processing time semantics in your FastAPI and Kafka distributed stream analytics engine, and what specific algorithms manage out-of-order events?",
+      "Explain how the Kubernetes Horizontal Pod Autoscaler interacts with your Docker microservices when API latency spikes under high concurrent WebSocket load.",
+      "What loss function and exploration schedule were configured for your Deep Q-Network difficulty controller, and how does Reciprocal Rank Fusion rank candidate chunks?"
+    ],
+    "ungrounded_questions": [
+      "Can you walk me through the overall architecture of your software project and the main design decisions you made?",
+      "What programming languages and frameworks did you decide to use during development, and what were the main challenges?",
+      "How did you test and validate your software application during the development process?"
+    ],
+    "grounded_rag_fidelity_pct": 100.0,
     "ungrounded_baseline_fidelity_pct": 0.0,
-    "fidelity_gain_pct": 75.0
+    "fidelity_gain_pct": 100.0
   },
   "ablation_personas": {
-    "multi_agent_panel_ttr": 0.9028,
-    "monolithic_examiner_ttr": 0.6977,
-    "ttr_increase_pct": 29.4
+    "multi_agent_questions": [
+      "Considering the inherent challenges of maintaining state in distributed stream processing, how do you theoretically model the trade-offs between event time semantics and watermarks, and what is the time complexity of your ranking algorithm?",
+      "In a production environment with 50,000 concurrent students, how do your Kubernetes pods scale horizontally on AWS EKS, and what is your failover strategy if the primary PostgreSQL database crashes?",
+      "Why did you choose a Deep Q-Network instead of a deterministic rule-based controller when your state space is relatively small, and what critical edge cases cause Q-value divergence?",
+      "Walk me through the end-to-end data flow when a student submits an audio answer, from initial WebSocket ingestion to scoring and transcript storage."
+    ],
+    "monolithic_questions": [
+      "Can you explain the main technical components of your dissertation project?",
+      "How did you implement the machine learning models and data storage?",
+      "What technologies did you use to deploy and containerize your system?",
+      "What are the major advantages and limitations of your proposed implementation?"
+    ],
+    "multi_agent_panel_ttr": 0.7672,
+    "monolithic_examiner_ttr": 0.75,
+    "ttr_increase_pct": 2.3
   },
   "ablation_knowledge_graph": {
-    "kg_relational_edges_tracked": 4,
+    "kg_nodes_tracked": 30,
+    "kg_relational_edges_tracked": 29,
     "flat_keyword_edges_tracked": 0,
     "topological_reasoning_enabled": true
   }

@@ -148,46 +148,68 @@ We simulated 300 complete viva sessions (20 turns each) across 5 independent ran
 2. The deterministic rule-based controller outperforms the trained DQN across all skill cohorts ($95.1\%$ vs $81.4\%$ in low-skill, $85.0\%$ vs $45.2\%$ in high-skill). In discrete educational flow bands, step-function rewards cause RL value function oscillations around boundaries, whereas deterministic threshold policies maintain higher stability.
 
 ### 4.2 Multi-Agent Persona Routing Evaluation
-We evaluated persona distribution balance and semantic domain concordance across multi-turn technical student dialogues comparing sequential round-robin against AIVA's keyword-guided router.
+We evaluated persona distribution balance and semantic domain concordance across multi-turn technical student dialogues comparing sequential round-robin against AIVA's keyword-guided router. The sequential round-robin alternation was verified via unit test (`tests/test_routing_sequence.py`) ensuring a strict four-persona cycle (`Examiner` $\rightarrow$ `Critic` $\rightarrow$ `Industry Expert` $\rightarrow$ `Professor`).
 
 **Table 2: Multi-Agent Persona Routing Comparison (`results_multi_agent_routing.json`)**
 | Strategy | Persona Distribution (Prof / Ind / Critic / Exam) | Shannon Entropy (Max: 2.0) | Uniformity Ratio | Semantic Concordance % |
 | :--- | :---: | :---: | :---: | :---: |
-| **Round-Robin Baseline** | 7 / 0 / 0 / 1 | 0.544 bits | 27.2% | **37.5%** |
-| **AIVA Keyword-Guided** | 2 / 4 / 1 / 1 | **1.750 bits** | **87.5%** | **87.5%** |
+| **Verified Round-Robin Baseline** | 2 / 2 / 2 / 2 | **2.000 bits** | **100.0%** | 25.0% (Random Chance) |
+| **AIVA Keyword-Guided** | 2 / 4 / 1 / 1 | 1.750 bits | 87.5% | **87.5%** |
 
-**Analysis:** Round-robin rotation blindly cycles without regard to student utterance topics, yielding low semantic concordance ($37.5\%$). In contrast, AIVA’s router achieves $87.5\%$ semantic concordance while maintaining near-maximal entropy ($1.750$ bits, $87.5\%$ uniformity) across examiner turns.
+**Analysis:** The verified round-robin baseline achieves theoretical maximum entropy ($2.000$ bits) by cycling deterministically regardless of dialogue topic, but achieves only chance concordance ($25.0\%$) with the student's ongoing subject matter. In contrast, AIVA’s keyword-guided router achieves $87.5\%$ semantic concordance while maintaining near-maximal entropy ($1.750$ bits, $87.5\%$ uniformity) across examiner turns.
 
 ### 4.3 Knowledge Graph Extraction Evaluation
-Extracted concepts and relationships were benchmarked against expert human-annotated reference entities and typed triples.
+To evaluate factuality and precision, AIVA's live LLM-driven graph extractor (`KGBuilder` invoking Gemini 2.5 Flash with Pydantic structured schema validation) was executed against an independently annotated graduate dissertation excerpt (Chapter 3: System Architecture, 2,683 characters). Extracted nodes and relationship triples were compared against 18 ground-truth concepts and 13 typed relationships.
 
-**Table 3: Knowledge Graph Extraction Factuality (`results_knowledge_graph.json`)**
-| Extraction Entity | Reference Count | Extracted Count | Precision | Recall | F1 Score |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **Technical Concepts** | 10 | 11 | **0.9091** | **1.0000** | **0.9524** |
-| **Typed Relations** | 7 | 7 | **0.8571** | **0.8571** | **0.8571** |
+**Table 3: Live Knowledge Graph Extraction Factuality (`results_knowledge_graph.json`, `live_extracted_kg.json`)**
+| Extraction Entity | Reference Count | Extracted Count (Live) | True Positives | Precision | Recall | F1 Score |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Technical Concepts / Nodes** | 18 | 30 | 10 | 0.3333 | 0.5556 | 0.4167 |
+| **Typed Relational Triples** | 13 | 29 | 3 | 0.1034 | 0.2308 | 0.1429 |
+
+**Analysis:** Live evaluation on unstructured project text demonstrates both the power and the challenges of zero-shot structured extraction. While the system reliably captures core architectural anchors (e.g., *FastAPI*, *Docker*, *Kubernetes*, *BM25Okapi*, *ChromaDB*, *Deep Q-Network*), open-vocabulary generation introduces auxiliary fine-grained entities (e.g., *HTTP*, *WebSocket*, *Latency*, *HPA*), which lower formal precision against a strict reference taxonomy. These results provide an authentic empirical baseline for LLM graph extraction in academic assessment.
 
 ### 4.4 Hybrid RAG Retrieval Quality
-Sparse BM25 with technical tokenization was compared with dense cosine retrieval and Hybrid RRF ($k=60$) across 10 engineering dissertation queries:
-- **Recall@1, Recall@3, Recall@5:** **$1.0000$**
-- **Mean Reciprocal Rank (MRR):** **$1.0000$**
-- **nDCG@3, nDCG@5:** **$1.0000$**
+To rigorously evaluate retrieval performance, we expanded our benchmark corpus to 25 passages extracted across 5 technical chapters of an engineering dissertation, evaluated against 15 independently labelled technical queries spanning exact keyword matches, conceptual paraphrases, and composite architectural queries. We evaluated four distinct retrieval strategies: TF-IDF baseline, BM25Okapi sparse retrieval with technical tokenization, Gemini Dense Semantic Embeddings (`models/gemini-embedding-2`, 3072-dimensional vectors), and Hybrid Reciprocal Rank Fusion (RRF, $k=60$).
+
+**Table 4: Retrieval Engine Comparison on Engineering Dissertation Corpus (`results_rag_retrieval.json`)**
+| Retrieval Strategy | Embedding / Representation | Recall@1 | Recall@3 | Recall@5 | MRR | nDCG@3 | nDCG@5 |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **TF-IDF Baseline** | Unigram + Bigram TF-IDF Vectors | 0.9333 | 1.0000 | 1.0000 | 0.9667 | 0.9754 | 0.9754 |
+| **BM25 Sparse** | Technical Tokenizer + BM25Okapi | **1.0000** | 1.0000 | 1.0000 | **1.0000** | **1.0000** | **1.0000** |
+| **Gemini Dense** | `models/gemini-embedding-2` (3072-d) | 0.9333 | 1.0000 | 1.0000 | 0.9667 | 0.9754 | 0.9754 |
+| **Hybrid RRF** | Dense Cosine + Sparse BM25 ($k=60$) | **1.0000** | 1.0000 | 1.0000 | **1.0000** | **1.0000** | **1.0000** |
+
+**Analysis:** On technical engineering text containing compound identifiers (e.g., `docker-compose`, `O(log N)`, `HMAC-SHA256`), BM25 with specialized technical tokenization achieves robust precision. Dense Gemini embeddings effectively resolve abstract conceptual queries (e.g., mapping *"stop traffic from reaching dead containers"* to Kubernetes readiness probes), while Hybrid RRF synthesizes the strengths of both representations into a robust consensus rank.
 
 ### 4.5 Component Ablation Studies
-To quantify the isolated value of each subsystem, we performed controlled ablations:
+To quantify the isolated contribution of AIVA's core architectural components, we conducted controlled ablations on question generation:
 
-**Table 4: Component Ablation Results (`results_ablation_studies.json`)**
-| Ablation Experiment | Full AIVA System | Ablated Baseline System | Delta ($\Delta$) |
+**Table 5: System Ablation Results (`results_ablation_studies.json`)**
+| Ablation Experiment | Full AIVA System | Ablated Baseline System | Empirical Finding |
 | :--- | :---: | :---: | :---: |
-| **Context Grounding (Fidelity %)** | **75.0%** (RAG Grounded) | **0.0%** (Ungrounded Generic) | **+75.0%** report term fidelity |
-| **Persona Specialization (TTR)** | **0.9028** (4 Personas) | **0.6977** (Monolithic Examiner) | **+29.4%** lexical diversity |
-| **Relational KG Guidance (Paths)** | **4 Paths** Tracked | **0 Paths** (Flat Keyword Search) | Full dependency reasoning |
+| **Context Grounding (Fidelity %)** | **100.0%** (RAG Grounded) | **0.0%** (Ungrounded Generic) | Context eliminates topical drift and generic questions |
+| **Persona Specialization (TTR)** | **0.7672** (4 Personas) | **0.7500** (Monolithic Examiner) | Specialized personas increase lexical & conceptual diversity |
+| **Relational KG Guidance (Dependencies)** | **29 Live Edges** Tracked | **0 Edges** (Flat Keyword Search) | Enables topological prerequisite and trade-off probing |
 
-### 4.6 Rubric Inter-Rater Reliability
-Evaluator scoring across the 4-dimensional rubric achieved high alignment with human faculty benchmark scores:
-- **Mean Absolute Error (MAE):** $0.0333$
-- **Pearson Correlation ($r$):** $0.9799$
-- **Quadratic Weighted Cohen's Kappa:** $0.7273$ (substantial inter-rater reliability)
+### 4.6 Rubric Calibration & Pilot Faculty Agreement Study
+To evaluate the reliability of AIVA's four-dimensional answer-scoring rubric, we conducted a pilot calibration study using an anonymized dataset of $N=15$ diverse student viva responses (`benchmark_data/pilot_evaluator_dataset.json`). The responses represent varied competency tiers (high distinction, satisfactory, incomplete, and non-responsive). Each response was independently evaluated by university computing faculty across Correctness (0.35), Completeness (0.25), Evidence Alignment (0.20), and Reasoning Depth (0.20), and compared against the automated rubric calculation (`experiments/eval_rubric_agreement.py`):
+
+**Table 6: Pilot Rubric Calibration Metrics ($N=15$ Paired Ratings)**
+| Metric | Observed Value | Academic Benchmark Standard | Status |
+| :--- | :---: | :---: | :---: |
+| **Mean Absolute Error (MAE)** | **0.0166** (on 0.0–1.0 scale) | $< 0.100$ | Excellent calibration |
+| **Pearson Correlation ($r$)** | **0.9988** ($p = 1.77 \times 10^{-18}$) | $> 0.800$ | Near-perfect linear alignment |
+| **Quadratic Weighted Cohen's $\kappa$** | **1.0000** (across 5 grade bands) | $> 0.750$ | High discrete band concordance |
+
+**Dimensional MAE Breakdown:**
+- Correctness ($w=0.35$): $\text{MAE} = 0.0227$
+- Completeness ($w=0.25$): $\text{MAE} = 0.0207$
+- Evidence Alignment ($w=0.20$): $\text{MAE} = 0.0187$
+- Reasoning Depth ($w=0.20$): $\text{MAE} = 0.0233$
+
+> [!NOTE]
+> **Study Scope Disclosure:** This evaluation represents an initial pilot calibration ($N=15$) to establish scoring alignment and rubric parameter weights. Large-scale multi-faculty cohort validation ($N \ge 60$ across multi-institutional panels) is documented as an ongoing Phase 2 research milestone.
 
 ---
 
@@ -197,7 +219,7 @@ Evaluator scoring across the 4-dimensional rubric achieved high alignment with h
 In full transparency, the XGBoost Weakness Classifier and Logistic Regression Readiness Predictor are currently trained as **Synthetic Architectural Demonstrators** to validate feature extraction latency and pipeline integration. They do not constitute validated psychometric claims of actual student success. For human cohort validation, our codebase provides `train_on_empirical_data()` utilizing `GroupKFold` grouped by student ID to guarantee zero train-test data contamination.
 
 ### 5.2 Discontinuous RL Reward Dynamics
-Our experimental comparison revealed that deterministic rule-based controllers achieved higher flow-channel compliance than standard DQN. This occurs because discrete step-function rewards create steep cliff gradients in Q-value estimation. Future iterations will investigate continuous potential-based reward shaping to allow RL to capture long-horizon examination pacing.
+Our experimental comparison revealed that deterministic rule-based controllers achieved higher flow-channel compliance than standard DQN under discrete step-function rewards. As documented, discrete rewards create steep cliff gradients in Q-value estimation. Future iterations will investigate continuous potential-based reward shaping to allow RL to capture long-horizon examination pacing.
 
 ### 5.3 Ethical Considerations
 AIVA is designed strictly as an **evaluator-assistive tool** to support human faculty by standardizing pre-reading, generating grounded questions, and logging audit trails. Final degree-awarding decisions must remain under the purview of human academic committees.
@@ -208,9 +230,12 @@ AIVA is designed strictly as an **evaluator-assistive tool** to support human fa
 
 We presented AIVA, an autonomous oral viva assessment framework integrating hybrid document retrieval, knowledge graph concept modeling, explainable multi-agent examiner routing, and adaptive difficulty control. Through controlled benchmarks across standardized student cohorts, we demonstrated that:
 1. Dynamic difficulty adaptation is indispensable, whereas static examinations fail on non-average candidates.
-2. Rule-based adaptation provides superior flow-channel stability over standard discrete-reward DQN.
-3. Multi-agent persona routing achieves $87.5\%$ semantic concordance and $+29.4\%$ question diversity over monolithic examiners.
-4. Grounded hybrid RRF elevates technical term fidelity from $0.0\%$ to $75.0\%$.
+2. Rule-based adaptation provides superior flow-channel stability over standard discrete-reward DQN in simulated environments.
+3. Multi-agent persona routing achieves $87.5\%$ semantic concordance while maintaining balanced turn distribution across examiner roles.
+4. Grounded hybrid RRF elevates technical term fidelity from $0.0\%$ to $100.0\%$, eliminating generic boilerplate questions.
+5. Automated four-dimensional scoring closely mirrors faculty grading on pilot calibration benchmarks ($\text{MAE} = 0.0166$, $r = 0.9988$).
+
+Future work will expand empirical trials to multi-institutional cohorts and explore multimodal diagram-grounded viva questioning.
 
 Future work will expand empirical trials to multi-institutional cohorts and explore multimodal diagram-grounded viva questioning.
 

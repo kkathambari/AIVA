@@ -1,0 +1,274 @@
+{
+  "nodes": [
+    {
+      "id": "AIVA assessment platform",
+      "type": "System"
+    },
+    {
+      "id": "Microservices Infrastructure",
+      "type": "Architecture"
+    },
+    {
+      "id": "FastAPI",
+      "type": "Framework"
+    },
+    {
+      "id": "API Gateway",
+      "type": "Concept"
+    },
+    {
+      "id": "HTTP",
+      "type": "Protocol"
+    },
+    {
+      "id": "WebSocket",
+      "type": "Protocol"
+    },
+    {
+      "id": "Docker",
+      "type": "Tool"
+    },
+    {
+      "id": "Kubernetes",
+      "type": "Orchestration Tool"
+    },
+    {
+      "id": "Horizontal Pod Autoscaler (HPA)",
+      "type": "Feature"
+    },
+    {
+      "id": "JSON Web Tokens (JWT)",
+      "type": "Authentication Method"
+    },
+    {
+      "id": "Speech-to-Text Pipeline",
+      "type": "Pipeline"
+    },
+    {
+      "id": "Google Speech Recognition API",
+      "type": "API"
+    },
+    {
+      "id": "MediaRecorder",
+      "type": "API"
+    },
+    {
+      "id": "PostgreSQL",
+      "type": "Database"
+    },
+    {
+      "id": "B-Tree Indexes",
+      "type": "Data Structure"
+    },
+    {
+      "id": "Retrieval-Augmented Generation (RAG) Engine",
+      "type": "System"
+    },
+    {
+      "id": "BM25Okapi",
+      "type": "Algorithm"
+    },
+    {
+      "id": "Technical Tokenizer",
+      "type": "Component"
+    },
+    {
+      "id": "Gemini 2.5 Embeddings",
+      "type": "ML Model"
+    },
+    {
+      "id": "Cosine Similarity",
+      "type": "Algorithm"
+    },
+    {
+      "id": "ChromaDB",
+      "type": "Vector Database"
+    },
+    {
+      "id": "Reciprocal Rank Fusion (RRF)",
+      "type": "Algorithm"
+    },
+    {
+      "id": "Deep Q-Network (DQN)",
+      "type": "ML Algorithm"
+    },
+    {
+      "id": "Reinforcement Learning",
+      "type": "Concept"
+    },
+    {
+      "id": "XGBoost Classifier",
+      "type": "ML Algorithm"
+    },
+    {
+      "id": "Gemini 2.5 Flash",
+      "type": "ML Model"
+    },
+    {
+      "id": "Knowledge Graph",
+      "type": "Data Structure"
+    },
+    {
+      "id": "Adaptive Difficulty",
+      "type": "Concept"
+    },
+    {
+      "id": "Weakness Classification",
+      "type": "Concept"
+    },
+    {
+      "id": "Topological Concept Exploration",
+      "type": "Concept"
+    }
+  ],
+  "relationships": [
+    {
+      "source": "AIVA assessment platform",
+      "target": "Microservices Infrastructure",
+      "type": "USES"
+    },
+    {
+      "source": "Microservices Infrastructure",
+      "target": "FastAPI",
+      "type": "BUILT_ON"
+    },
+    {
+      "source": "FastAPI",
+      "target": "API Gateway",
+      "type": "ACTS_AS"
+    },
+    {
+      "source": "API Gateway",
+      "target": "HTTP",
+      "type": "HANDLES"
+    },
+    {
+      "source": "API Gateway",
+      "target": "WebSocket",
+      "type": "HANDLES"
+    },
+    {
+      "source": "Microservices Infrastructure",
+      "target": "Docker",
+      "type": "CONTAINERIZED_WITH"
+    },
+    {
+      "source": "Docker",
+      "target": "Kubernetes",
+      "type": "ORCHESTRATED_BY"
+    },
+    {
+      "source": "Kubernetes",
+      "target": "Horizontal Pod Autoscaler (HPA)",
+      "type": "USES"
+    },
+    {
+      "source": "Microservices Infrastructure",
+      "target": "JSON Web Tokens (JWT)",
+      "type": "AUTHENTICATES_WITH"
+    },
+    {
+      "source": "AIVA assessment platform",
+      "target": "Speech-to-Text Pipeline",
+      "type": "INCLUDES"
+    },
+    {
+      "source": "Speech-to-Text Pipeline",
+      "target": "Google Speech Recognition API",
+      "type": "INTERFACES"
+    },
+    {
+      "source": "Speech-to-Text Pipeline",
+      "target": "MediaRecorder",
+      "type": "USES"
+    },
+    {
+      "source": "AIVA assessment platform",
+      "target": "PostgreSQL",
+      "type": "PERSISTS_DATA_IN"
+    },
+    {
+      "source": "PostgreSQL",
+      "target": "B-Tree Indexes",
+      "type": "EMPLOYS"
+    },
+    {
+      "source": "AIVA assessment platform",
+      "target": "Retrieval-Augmented Generation (RAG) Engine",
+      "type": "INCLUDES"
+    },
+    {
+      "source": "Retrieval-Augmented Generation (RAG) Engine",
+      "target": "BM25Okapi",
+      "type": "USES"
+    },
+    {
+      "source": "BM25Okapi",
+      "target": "Technical Tokenizer",
+      "type": "USES"
+    },
+    {
+      "source": "Retrieval-Augmented Generation (RAG) Engine",
+      "target": "Gemini 2.5 Embeddings",
+      "type": "USES"
+    },
+    {
+      "source": "Gemini 2.5 Embeddings",
+      "target": "ChromaDB",
+      "type": "STORED_IN"
+    },
+    {
+      "source": "Retrieval-Augmented Generation (RAG) Engine",
+      "target": "Cosine Similarity",
+      "type": "USES"
+    },
+    {
+      "source": "Retrieval-Augmented Generation (RAG) Engine",
+      "target": "Reciprocal Rank Fusion (RRF)",
+      "type": "MERGES_RESULTS_WITH"
+    },
+    {
+      "source": "AIVA assessment platform",
+      "target": "Adaptive Difficulty",
+      "type": "MANAGES"
+    },
+    {
+      "source": "Adaptive Difficulty",
+      "target": "Deep Q-Network (DQN)",
+      "type": "CONTROLLED_BY"
+    },
+    {
+      "source": "Deep Q-Network (DQN)",
+      "target": "Reinforcement Learning",
+      "type": "IS_A"
+    },
+    {
+      "source": "AIVA assessment platform",
+      "target": "Weakness Classification",
+      "type": "PERFORMS"
+    },
+    {
+      "source": "Weakness Classification",
+      "target": "XGBoost Classifier",
+      "type": "PERFORMED_BY"
+    },
+    {
+      "source": "AIVA assessment platform",
+      "target": "Gemini 2.5 Flash",
+      "type": "USES"
+    },
+    {
+      "source": "Gemini 2.5 Flash",
+      "target": "Knowledge Graph",
+      "type": "EXTRACTS"
+    },
+    {
+      "source": "Knowledge Graph",
+      "target": "Topological Concept Exploration",
+      "type": "GUIDES"
+    }
+  ],
+  "execution_time_sec": 56.16,
+  "model": "gemini-2.5-flash",
+  "live_run": true
+}

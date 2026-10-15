@@ -60,20 +60,27 @@ class MultiAgentPanel:
             }
 
         # 2. Automated Panel Routing
-        history_lower = history.lower()
-        # Count previous turns per persona across history
-        counts = {
-            "professor": history_lower.count("professor:") + history_lower.count("examiner (professor):"),
-            "industry": history_lower.count("industry expert:") + history_lower.count("examiner (industry expert):"),
-            "critic": history_lower.count("critic:") + history_lower.count("research critic:") + history_lower.count("examiner (critic):"),
-            "examiner": history_lower.count("examiner (general):") + (history_lower.count("examiner:") - history_lower.count("examiner ("))
-        }
+        # Count previous turns per persona across history by inspecting examiner lines
+        counts = {"professor": 0, "industry": 0, "critic": 0, "examiner": 0}
+        total_examiner_turns = 0
+        for line in history.splitlines():
+            line_str = line.strip().lower()
+            if not line_str or any(line_str.startswith(p) for p in ["student:", "user:", "student response:"]):
+                continue
+            total_examiner_turns += 1
+            if "professor" in line_str:
+                counts["professor"] += 1
+            elif "industry" in line_str:
+                counts["industry"] += 1
+            elif "critic" in line_str:
+                counts["critic"] += 1
+            else:
+                counts["examiner"] += 1
 
         # Strategy A: Baseline Sequential Round-Robin
         if strategy == "round_robin":
             cycle = ["examiner", "critic", "industry", "professor"]
-            total_turns = sum(counts.values())
-            chosen_node = cycle[total_turns % len(cycle)]
+            chosen_node = cycle[total_examiner_turns % len(cycle)]
             display_names = {
                 "examiner": "Examiner",
                 "critic": "Critic",
@@ -83,8 +90,9 @@ class MultiAgentPanel:
             return {
                 "selected_agent_node": chosen_node,
                 "selected_agent": display_names[chosen_node],
-                "routing_reason": f"Baseline Round-Robin: Turn #{total_turns + 1} cycling to {display_names[chosen_node]}."
+                "routing_reason": f"Baseline Round-Robin: Turn #{total_examiner_turns + 1} cycling to {display_names[chosen_node]}."
             }
+
 
         # Strategy B: Keyword-Guided with Turn-Balancing Fallback (Default)
         # Extract last student message
@@ -206,8 +214,20 @@ class MultiAgentPanel:
             Output only the question. Do not add any greeting, intro, or wrap-up text.
             """
             
-        response = self.llm.invoke([HumanMessage(content=prompt)])
-        return {"generated_question": response.content.strip()}
+        try:
+            response = self.llm.invoke([HumanMessage(content=prompt)])
+            return {"generated_question": response.content.strip()}
+        except Exception as e:
+            print(f"Warning: MultiAgent LLM invocation error ({e.__class__.__name__}). Using persona fallback.")
+            persona = state.get("selected_agent", "Examiner")
+            fallbacks = {
+                "Professor": "Can you explain the theoretical computational complexity and mathematical formulation underlying this component?",
+                "Industry Expert": "In a high-throughput production environment, how does this architecture scale horizontally and handle node failures?",
+                "Critic": "What critical engineering trade-offs did you accept in this design, and what limitations or failure modes remain?",
+                "Examiner": "Walk me through how this component integrates with the overall system data flow and architecture."
+            }
+            fallback_q = fallbacks.get(persona, "Can you elaborate on your architectural design choices?")
+            return {"generated_question": fallback_q}
 
     def examiner_node(self, state: AgentState):
         prompt = "You are an Examiner. Ask normal, balanced viva questions assessing the student's overall understanding of the project flow, design, and implementation."
