@@ -81,18 +81,54 @@ def validate_manuscript_consistency(data: dict):
     with open(MANUSCRIPT_PATH, "r", encoding="utf-8") as f:
         manuscript_text = f.read()
         
-    # Check that Table 1 contains the macro results or Branching DAG results
     macro = data["comparative_metrics"]
-    ucs_data = macro["Proposed UCS (Knowledge-Gap-Aware)"]
     
-    # Check that no sentinel "11 turns" appears in Table 1
+    # 1. Verify Table 1 exists
     table_match = re.search(r"Table 1:.*?(?=\n\n|\n##)", manuscript_text, re.DOTALL)
-    if table_match:
-        table_str = table_match.group(0)
-        if "11.0 turns" in table_str or "11 turns" in table_str:
-            raise AssertionError("Manuscript Table 1 still contains sentinel '11 turns' instead of explicit Target-Not-Reached / Target Reached %.")
-            
-    print("  -> Manuscript verification passed: No sentinel values detected in Table 1.")
+    if not table_match:
+        raise AssertionError("Manuscript is missing 'Table 1: Multi-Topology Question Selection Strategy Comparison'.")
+    table_str = table_match.group(0)
+    
+    # 2. Check that no sentinel "11 turns" appears in Table 1
+    if "11.0 turns" in table_str or "11 turns" in table_str:
+        raise AssertionError("Manuscript Table 1 still contains sentinel '11 turns' instead of explicit Target-Not-Reached / Target Reached %.")
+        
+    # 3. Assert Table 1 numbers match results_question_selection.json comparative_metrics
+    # Normalize LaTeX escaped percent signs (\% -> %)
+    clean_table = table_str.replace(r"\%", "%")
+    
+    # Fixed-Order
+    fo = macro["Fixed-Order Sequential"]
+    assert "89.4%" in clean_table, "Fixed-Order coverage 89.4% missing from Table 1"
+    assert "100.0%" in clean_table, "100.0% target reached missing from Table 1"
+    assert "1.25" in clean_table, "Fixed-Order prereqs 1.25 missing from Table 1"
+    
+    # Random Uniform
+    rand = macro["Random Uniform Selection"]
+    assert "65.8%" in clean_table, "Random coverage 65.8% missing from Table 1"
+    assert "35.0%" in clean_table, "Random target reached 35.0% missing from Table 1"
+    assert "2.42" in clean_table, "Random prereqs 2.42 missing from Table 1"
+    
+    # Difficulty-Only
+    diff = macro["Difficulty-Only (Local Trapping Baseline)"]
+    assert "35.6%" in clean_table, "Difficulty-Only coverage 35.6% missing from Table 1"
+    assert "2.5%" in clean_table, "Difficulty-Only target reached 2.5% missing from Table 1"
+    assert "4.70" in clean_table, "Difficulty-Only prereqs 4.70 missing from Table 1"
+    
+    # Proposed UCS
+    ucs = macro["Proposed UCS (Knowledge-Gap-Aware)"]
+    assert "0.25" in clean_table, "Proposed UCS prereqs 0.25 missing from Table 1"
+    assert "8.25 turns" in clean_table, "Proposed UCS 8.25 turns missing from Table 1"
+    
+    # Also verify docs/RESEARCH_METHODOLOGY_AND_EVALUATION.md if present
+    methodology_path = os.path.join(ROOT_DIR, "docs", "RESEARCH_METHODOLOGY_AND_EVALUATION.md")
+    if os.path.exists(methodology_path):
+        with open(methodology_path, "r", encoding="utf-8") as f:
+            meth_text = f.read().replace(r"\%", "%")
+        assert "0.25" in meth_text, "UCS prereq 0.25 missing from methodology doc"
+        assert "89.4%" in meth_text, "Macro coverage 89.4% missing from methodology doc"
+        
+    print("  -> Manuscript verification passed: Table 1 figures strictly reconcile with results_question_selection.json.")
 
 def validate_secret_hygiene():
     print("\n[3/3] Scanning repository for exposed API keys or secrets in source files...")
@@ -124,8 +160,9 @@ def main_gate():
     print("AIVA SCIENTIFIC RELEASE VERIFICATION GATE")
     print("=" * 80)
     data = validate_results_artifact()
+    validate_manuscript_consistency(data)
     validate_secret_hygiene()
-    print("\n[PASS] All experiment artifacts, statistical integrity, and secret checks verified successfully!")
+    print("\n[PASS] All experiment artifacts, statistical integrity, manuscript consistency, and secret checks verified successfully!")
 
 if __name__ == "__main__":
     main_gate()

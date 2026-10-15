@@ -11,7 +11,7 @@ AIVA_backend/chroma_db/
 AIVA_backend/temp_*
 AIVA_backend/*.log
 AIVA_backend/bm25_chunks.json
-AIVA_backend/kg_visualization.html
+AIVA_backend/kg_visualization*.html
 AIVA_backend/graph_metadata.json
 AIVA_backend/kg_data.json
 AIVA_backend/test_embeddings.py
