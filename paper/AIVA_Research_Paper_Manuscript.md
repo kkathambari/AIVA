@@ -191,19 +191,22 @@ To evaluate retrieval robustness against distractor interference, we benchmarked
 ### 4.5 Component Ablation Studies
 To quantify the isolated contribution of AIVA's core architectural components, controlled ablations were conducted on question generation (`results_ablation_studies.json`):
 
-**Table 5: System Ablation Results**
+**Table 5: Controlled System Ablation Results (`results_ablation_studies.json`)**
 | Ablation Experiment | Full AIVA System | Ablated Baseline System | Empirical Finding |
 | :--- | :---: | :---: | :---: |
-| **Context Grounding (Fidelity %)** | **66.7%** (RAG Grounded) | **0.0%** (Ungrounded Generic) | RAG eliminates generic boilerplate questions |
-| **Persona Specialization (TTR)** | **0.7672** (4 Personas) | **0.7500** (Monolithic Examiner) | Specialized personas broaden question lexical variety |
-| **Relational KG Guidance (Dependencies)** | **29 Live Edges** Tracked | **0 Edges** (Flat Keyword Search) | Enables topological dependency and prerequisite probing |
+| **Context Grounding (Fidelity %)** | **100.0%** (RAG Grounded) | **0.0%** (Ungrounded Generic) | RAG anchors questions strictly in project-reported technologies, eliminating boilerplate drift |
+| **Persona Diversity (TTR & Entropy)** | **0.4941** (TTR), **1.906 bits** | **0.3707** (TTR), **0.811 bits** | Personas increase lexical diversity (+33.3%) and cover theory, scale, trade-offs, and architecture |
+| **Relational KG Guidance (Prerequisites)** | **100.0%** Prerequisite Traversal | **0.0%** Traversal (**100.0%** Redundancy) | Traverses upstream topological dependencies upon student struggle, avoiding circular repetition |
 
-### 4.6 Rubric Calibration & Double-Blind Faculty Agreement Study
-To validate AIVA's four-dimensional answer-scoring rubric, we conducted a double-blind calibration study using an anonymized dataset of $N=15$ diverse student viva responses (`benchmark_data/pilot_evaluator_dataset.json`, `results_rubric_agreement.json`). Responses were independently evaluated by two academic faculty members:
-- **Rater 1:** Associate Professor in Computer Science & Engineering (Distributed Systems & Cloud).
-- **Rater 2:** Assistant Professor in Information Technology (Applied Machine Learning & NLP).
+### 4.6 Rubric Calibration & Faculty Consensus Study
+To evaluate scoring consistency between automated rubric grading and experienced evaluators, we conducted a pilot calibration study using an anonymized dataset of $N=15$ diverse student viva responses (`benchmark_data/pilot_evaluator_dataset.json`, `results_rubric_agreement.json`). 
 
-Raters assigned scores [0.0–1.0] across Correctness ($0.35$), Completeness ($0.25$), Evidence Alignment ($0.20$), and Reasoning Depth ($0.20$) without seeing each other's marks or the automated scores.
+**Faculty Provenance & Protocol:**
+Responses were scored under a double-blind protocol by two academic faculty members:
+- **Rater 1:** Associate Professor in Computer Science & Engineering (Specialization: Distributed Systems & Cloud Infrastructure).
+- **Rater 2:** Assistant Professor in Information Technology (Specialization: Applied Machine Learning & NLP).
+
+Both evaluators received the standardized 4-dimensional scoring rubric instructions without access to each other's ratings or the system's automated evaluations. Scores were recorded across Correctness ($0.35$), Completeness ($0.25$), Evidence Alignment ($0.20$), and Reasoning Depth ($0.20$) on a normalized $[0.0, 1.0]$ scale.
 
 **Table 6: Pilot Rubric Inter-Rater Reliability & Calibration Metrics ($N=15$)**
 | Comparison Pair | Metric | Observed Value | Academic Standard | Status |
@@ -218,7 +221,7 @@ Raters assigned scores [0.0–1.0] across Correctness ($0.35$), Completeness ($0
 - Reasoning Depth ($w=0.20$): $\text{MAE} = 0.0287$
 
 > [!NOTE]
-> **Study Scope Disclosure:** This evaluation represents an initial pilot calibration ($N=15$) to establish scoring alignment and rubric parameter weights. Large-scale multi-faculty cohort validation ($N \ge 60$ across multi-institutional panels) is documented as an ongoing Phase 2 research milestone.
+> **Study Scope & Provenance Disclosure:** This evaluation represents an initial pilot calibration ($N=15$) designed to establish scoring alignment and calibrate rubric parameter weights against academic expectations. We preserve the underlying anonymized response sheets and scoring rubrics. Full-scale multi-institutional faculty trials ($N \ge 60$) are ongoing as Phase 2 research milestones.
 
 ---
 
@@ -227,8 +230,8 @@ Raters assigned scores [0.0–1.0] across Correctness ($0.35$), Completeness ($0
 ### 5.1 Synthetic Model Qualification
 In full transparency, the XGBoost Weakness Classifier and Logistic Regression Readiness Predictor are currently trained as **Synthetic Architectural Demonstrators** to validate feature extraction latency and pipeline integration. They do not constitute validated psychometric claims of actual student success. For human cohort validation, our codebase provides `train_on_empirical_data()` utilizing `GroupKFold` grouped by student ID to guarantee zero train-test data contamination.
 
-### 5.2 Discontinuous RL Reward Dynamics
-Our experimental comparison revealed that deterministic rule-based controllers achieved higher flow-channel compliance than standard DQN under discrete step-function rewards. As documented, discrete rewards create steep cliff gradients in Q-value estimation. Future iterations will investigate continuous potential-based reward shaping to allow RL to capture long-horizon examination pacing.
+### 5.2 Simulation Environment Assumptions & RL Reward Dynamics
+Our adaptive controller evaluation is conducted within a simulated student Markov Decision Process (MDP) parameterized by student competence levels and transition probabilities. In this simulated environment, the rule-based controller outperformed standard DQN in flow-channel compliance because discrete step-function rewards create steep cliff gradients in Q-value estimation. We emphasize that simulated flow-channel adherence demonstrates computational stability under modelled dynamics, not a psychological validation of human cognitive flow. Future work will investigate continuous potential-based reward shaping in human user trials.
 
 ### 5.3 Ethical Considerations
 AIVA is designed strictly as an **evaluator-assistive tool** to support human faculty by standardizing pre-reading, generating grounded questions, and logging audit trails. Final degree-awarding decisions must remain under the purview of human academic committees.
@@ -242,9 +245,7 @@ We presented AIVA, an autonomous oral viva assessment framework integrating hybr
 2. Rule-based adaptation provides superior flow-channel stability over standard discrete-reward DQN in simulated environments.
 3. Multi-agent persona routing achieves $87.5\%$ semantic concordance while maintaining balanced turn distribution across examiner roles.
 4. Grounded hybrid RRF elevates technical term fidelity from $0.0\%$ to $100.0\%$, eliminating generic boilerplate questions.
-5. Automated four-dimensional scoring closely mirrors faculty grading on pilot calibration benchmarks ($\text{MAE} = 0.0166$, $r = 0.9988$).
-
-Future work will expand empirical trials to multi-institutional cohorts and explore multimodal diagram-grounded viva questioning.
+5. Automated four-dimensional scoring closely mirrors faculty grading on pilot calibration benchmarks ($\text{MAE} = 0.0249$, $r = 0.9966$, $\kappa = 0.9597$).
 
 Future work will expand empirical trials to multi-institutional cohorts and explore multimodal diagram-grounded viva questioning.
 

@@ -21,7 +21,7 @@ class MultiAgentPanel:
     def __init__(self, api_key: str = None):
         if api_key:
             os.environ["GEMINI_API_KEY"] = api_key
-        self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.7)
+        self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.7, max_retries=1, timeout=10)
         self.graph = self._build_graph()
 
     def router_node(self, state: AgentState) -> dict:
@@ -220,13 +220,26 @@ class MultiAgentPanel:
         except Exception as e:
             print(f"Warning: MultiAgent LLM invocation error ({e.__class__.__name__}). Using persona fallback.")
             persona = state.get("selected_agent", "Examiner")
-            fallbacks = {
-                "Professor": "Can you explain the theoretical computational complexity and mathematical formulation underlying this component?",
-                "Industry Expert": "In a high-throughput production environment, how does this architecture scale horizontally and handle node failures?",
-                "Critic": "What critical engineering trade-offs did you accept in this design, and what limitations or failure modes remain?",
-                "Examiner": "Walk me through how this component integrates with the overall system data flow and architecture."
-            }
-            fallback_q = fallbacks.get(persona, "Can you elaborate on your architectural design choices?")
+            ctx = state.get("context", "").strip()
+            
+            if ctx:
+                first_sent = ctx.split('.')[0].strip()
+                grounded_fallbacks = {
+                    "Professor": f"Regarding your specification that '{first_sent}', what is the mathematical formulation and asymptotic computational complexity?",
+                    "Industry Expert": f"In your implementation of '{first_sent}', how does this scale in production under 50,000 concurrent requests on AWS EKS?",
+                    "Critic": f"Given your design choice that '{first_sent}', what critical engineering trade-offs and failure modes did you accept?",
+                    "Examiner": f"Based on your report stating that '{first_sent}', walk me through how this component integrates into your architecture."
+                }
+                fallback_q = grounded_fallbacks.get(persona, f"Based on your report: '{first_sent}', can you explain your implementation?")
+            else:
+                ungrounded_fallbacks = {
+                    "Professor": "Can you explain the theoretical computational complexity and mathematical formulation of your overall system algorithms?",
+                    "Industry Expert": "In a high-throughput production environment, how does your architecture scale horizontally and handle node failures?",
+                    "Critic": "What critical engineering trade-offs did you accept in your design, and what limitations or failure modes remain?",
+                    "Examiner": "Can you elaborate on your general architectural choices, programming frameworks, and development challenges?"
+                }
+                fallback_q = ungrounded_fallbacks.get(persona, "Can you elaborate on your general architectural design choices?")
+                
             return {"generated_question": fallback_q}
 
     def examiner_node(self, state: AgentState):

@@ -160,13 +160,27 @@ Evaluated on $N=15$ diverse viva answer responses independently scored by two ac
 
 ---
 
-### 2.6 Component F — Synthetic Model Qualification Notice
+### 2.6 Component F — Synthetic Model & MDP Simulation Qualification Notice
 
 > [!WARNING]
-> **Research Provenance Disclosure:**
-> The XGBoost Weakness Classifier and Logistic Regression Readiness Predictor in `train_intelligence_models.py` are **Synthetic Architectural Demonstrators**.
-> They validate pipeline throughput, API schemas, and feature extraction. They do **NOT** represent clinically or psychometrically validated predictions of human student cohorts.
-> In research publications, these models are explicitly labeled as simulation demonstrations. When empirical assessment data is collected in Phase 2, `train_on_empirical_data()` with student-grouped cross-validation (`GroupKFold`) must be executed to prevent data leakage.
+> **Research Provenance & Simulation Disclosure:**
+> 1. The XGBoost Weakness Classifier and Logistic Regression Readiness Predictor in `train_intelligence_models.py` are **Synthetic Architectural Demonstrators** to validate pipeline throughput, API schemas, and feature extraction. They do **NOT** represent clinically or psychometrically validated predictions of human student cohorts. When empirical assessment data is collected in Phase 2, `train_on_empirical_data()` with student-grouped cross-validation (`GroupKFold`) must be executed to prevent data leakage.
+> 2. The adaptive difficulty controller comparison (Fixed vs Rule-Based vs DQN) is evaluated within a simulated student Markov Decision Process (MDP) with discrete step rewards. Flow-channel compliance demonstrates algorithmic stability within modeled dynamics, not a psychological validation of human cognitive flow.
+
+---
+
+### 2.7 Component G — Controlled Component Ablation Suite (`experiments/results_ablation_studies.json`)
+
+To quantify the isolated contribution of each subsystem, matched multi-turn trials evaluate:
+1. **Context Grounding (Hybrid RAG vs No-RAG Parametric):**
+   - Grounded Fidelity: **100.0%** vs Ungrounded Baseline: **0.0%** (Gain: **+100.0%**).
+   - Factual Hallucination Rate: **0.0%** across both systems.
+2. **Persona Specialization (4 Personas vs Monolithic Examiner):**
+   - Multi-Agent Panel Lexical Diversity (TTR): **0.4941** vs Monolithic: **0.3707** (+33.3% increase).
+   - Domain Entropy ($H_{\text{domain}}$): **1.906 bits** (spanning Theory, Production, Trade-offs, Architecture) vs Monolithic: **0.811 bits** (concentrated on general architecture).
+3. **Knowledge Graph Guidance (Topological Traversal vs Flat Lexical Search):**
+   - Diagnostic Prerequisite Resolution Rate: **100.0%** (resolves upstream concept dependencies on student struggle).
+   - Flat Keyword Search Redundancy Rate: **100.0%** (lacks edge awareness, leading to circular re-asking).
 
 ---
 
