@@ -75,17 +75,81 @@ class VivaEnv(gym.Env):
         
         return np.array([self.current_difficulty, self.last_score], dtype=np.float32), reward, done, truncated, info
 
+DIFFICULTY_MAPPING = {
+    0: "Fundamentals",
+    1: "Easy",
+    2: "Medium",
+    3: "Hard",
+    4: "Research Level"
+}
+
+class FixedDifficultyController:
+    """
+    Research Baseline 1: Fixed Difficulty Controller.
+    Maintains a constant difficulty level throughout the entire examination.
+    """
+    def __init__(self, fixed_difficulty: int = 2):
+        self.fixed_difficulty = fixed_difficulty
+
+    def get_action(self, current_difficulty: int, last_score: float) -> dict:
+        return {
+            "current_difficulty": current_difficulty,
+            "last_score": last_score,
+            "action_taken": "KEEP",
+            "action_code": 1,
+            "new_difficulty_level": self.fixed_difficulty,
+            "new_difficulty_name": DIFFICULTY_MAPPING[self.fixed_difficulty],
+            "controller_type": "fixed"
+        }
+
+class RuleBasedController:
+    """
+    Research Baseline 2: Rule-Based Adaptation Controller.
+    Deterministic threshold policy:
+    - If student score < low_threshold: decrease difficulty (remedial support).
+    - If student score > high_threshold: increase difficulty (challenge).
+    - Otherwise: maintain difficulty in the target flow channel.
+    """
+    def __init__(self, low_threshold: float = 0.40, high_threshold: float = 0.70):
+        self.low_threshold = low_threshold
+        self.high_threshold = high_threshold
+
+    def get_action(self, current_difficulty: int, last_score: float) -> dict:
+        if last_score < self.low_threshold:
+            new_diff = max(0, current_difficulty - 1)
+            action_name = "DECREASE"
+            action_code = 0
+        elif last_score > self.high_threshold:
+            new_diff = min(4, current_difficulty + 1)
+            action_name = "INCREASE"
+            action_code = 2
+        else:
+            new_diff = current_difficulty
+            action_name = "KEEP"
+            action_code = 1
+
+        return {
+            "current_difficulty": current_difficulty,
+            "last_score": last_score,
+            "action_taken": action_name,
+            "action_code": action_code,
+            "new_difficulty_level": new_diff,
+            "new_difficulty_name": DIFFICULTY_MAPPING[new_diff],
+            "controller_type": "rule_based"
+        }
+
 class AdaptiveEngine:
     def __init__(self, model_path="models/dqn_viva"):
         self.model_path = model_path
         self.env = VivaEnv()
+        self.fixed_controller = FixedDifficultyController(fixed_difficulty=2)
+        self.rule_based_controller = RuleBasedController(low_threshold=0.40, high_threshold=0.70)
         
         os.makedirs(os.path.dirname(self.model_path), exist_ok=True)
         
         if os.path.exists(f"{self.model_path}.zip"):
             self.model = DQN.load(self.model_path, env=self.env)
         else:
-            # Initialize untreated model
             self.model = DQN(
                 "MlpPolicy", 
                 self.env, 
@@ -107,36 +171,42 @@ class AdaptiveEngine:
         self.model.save(self.model_path)
         print(f"Training Complete. Model saved to {self.model_path}")
 
-    def get_next_difficulty(self, current_difficulty: int, last_answer_score: float) -> dict:
+    def get_next_difficulty(
+        self, 
+        current_difficulty: int, 
+        last_answer_score: float,
+        controller_type: str = "dqn"
+    ) -> dict:
         """
-        Uses the trained RL model to predict whether to increase, decrease, or maintain difficulty.
+        Predicts next difficulty adjustment using either DQN, rule_based, or fixed baseline.
         """
+        if controller_type == "fixed":
+            return self.fixed_controller.get_action(current_difficulty, last_answer_score)
+        elif controller_type == "rule_based":
+            return self.rule_based_controller.get_action(current_difficulty, last_answer_score)
+            
+        # Default: DQN Controller
         state = np.array([current_difficulty, last_answer_score], dtype=np.float32)
-        # deterministic=True takes the best learned action, False allows exploration
         action, _states = self.model.predict(state, deterministic=True)
+        action_int = int(action)
         
         new_diff = current_difficulty
         action_name = "KEEP"
-        if action == 0:
+        if action_int == 0:
             new_diff = max(0, current_difficulty - 1)
             action_name = "DECREASE"
-        elif action == 2:
+        elif action_int == 2:
             new_diff = min(4, current_difficulty + 1)
             action_name = "INCREASE"
-            
-        difficulty_mapping = {
-            0: "Fundamentals",
-            1: "Easy",
-            2: "Medium",
-            3: "Hard",
-            4: "Research Level"
-        }
             
         return {
             "current_difficulty": current_difficulty,
             "last_score": last_answer_score,
             "action_taken": action_name,
+            "action_code": action_int,
             "new_difficulty_level": new_diff,
-            "new_difficulty_name": difficulty_mapping[new_diff]
+            "new_difficulty_name": DIFFICULTY_MAPPING[new_diff],
+            "controller_type": "dqn"
         }
+
 

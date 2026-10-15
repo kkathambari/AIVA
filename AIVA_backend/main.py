@@ -11,7 +11,7 @@ from core.voice_engine import VoiceEngine
 import shutil
 import os
 import json
-from typing import List
+from typing import List, Optional
 from dotenv import load_dotenv
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -38,9 +38,13 @@ evaluator_llm = None
 tutor_llm = None
 
 class AnswerEvaluation(BaseModel):
-    score: float = Field(description="Score between 0.0 and 1.0. 1.0 is perfect, 0.0 is completely incorrect or empty.")
-    feedback: str = Field(description="Brief explanation of the score and what was missing or incorrect.")
-    concept: str = Field(description="The primary concept tested by the question, e.g. 'Random Forest', 'FastAPI'. Must be short (1-3 words).")
+    correctness: float = Field(ge=0.0, le=1.0, default=0.5, description="Technical accuracy of the student's answer (0.0 to 1.0).")
+    completeness: float = Field(ge=0.0, le=1.0, default=0.5, description="Degree to which all essential components of the question are addressed (0.0 to 1.0).")
+    evidence_alignment: float = Field(ge=0.0, le=1.0, default=0.5, description="Consistency with facts and architectural details in the retrieved project report context (0.0 to 1.0).")
+    reasoning_depth: float = Field(ge=0.0, le=1.0, default=0.5, description="Student's ability to articulate 'why' specific choices/methods were used and explain trade-offs (0.0 to 1.0).")
+    score: float = Field(ge=0.0, le=1.0, default=0.5, description="Composite score (0.0 to 1.0) synthesized from the 4 rubric dimensions.")
+    feedback: str = Field(description="Actionable diagnostic feedback explaining strengths, omissions, or misconceptions.")
+    concept: str = Field(description="Primary technical concept tested (1-3 words).")
 
 @app.on_event("startup")
 def startup_event():
@@ -87,8 +91,10 @@ class VivaSession:
         self.overall_coverage = 0.0
         self.last_fluency_report = None
         self.document_name = ""
+        self.turn_audit_trail = []
 
 session = VivaSession()
+
 
 @app.get("/")
 def read_root():
@@ -207,7 +213,8 @@ async def get_session():
         "current_difficulty": session.current_difficulty,
         "difficulty_history": session.difficulty_history,
         "performance_data": session.performance_data,
-        "last_fluency_report": session.last_fluency_report
+        "last_fluency_report": session.last_fluency_report,
+        "turn_audit_trail": session.turn_audit_trail
     }
 
 @app.post("/reset_examination")
@@ -220,12 +227,48 @@ async def reset_examination():
     session.current_difficulty = 1
     session.overall_coverage = 0.0
     session.last_fluency_report = None
+    session.turn_audit_trail = []
     return {"message": "Examination reset successfully."}
 
-class DifficultyRequest(BaseModel):
+@app.get("/audit_trail")
+async def get_audit_trail():
+    """Returns the complete, reproducible audit log of examiner routing and turn decisions."""
+    return {
+        "total_turns": len(session.turn_audit_trail),
+        "audit_trail": session.turn_audit_trail
+    }
 
+@app.get("/research_metadata")
+async def get_research_metadata():
+    """Returns experimental configurations, baseline settings, and synthetic model qualifications."""
+    return {
+        "framework": "AIVA (Adaptive Intelligent Viva Assessment)",
+        "multi_agent_personas": ["Professor", "Industry Expert", "Critic", "Examiner"],
+        "routing_strategies_supported": ["keyword_balanced", "round_robin"],
+        "adaptive_controllers_supported": ["dqn", "rule_based", "fixed"],
+        "rubric_dimensions": [
+            {"name": "correctness", "weight": 0.35, "description": "Technical veracity"},
+            {"name": "completeness", "weight": 0.25, "description": "Core facet coverage"},
+            {"name": "evidence_alignment", "weight": 0.20, "description": "Report context support"},
+            {"name": "reasoning_depth", "weight": 0.20, "description": "Trade-offs and architectural rationale"}
+        ],
+        "rag_configuration": {
+            "retrieval_architecture": "Hybrid Reciprocal Rank Fusion",
+            "k_parameter": 60,
+            "sparse_engine": "BM25Okapi with technical tokenization",
+            "dense_engine": "Google Gemini Embedding 2 (cosine similarity)"
+        },
+        "synthetic_models_qualification": {
+            "is_synthetic_simulation": True,
+            "models": ["XGBoost Weakness Classifier", "Logistic Regression Readiness Predictor"],
+            "provenance": "Rule-parameterized synthetic demonstration models for latency and architectural verification. Empirical human validation pending Phase 2 data collection."
+        }
+    }
+
+class DifficultyRequest(BaseModel):
     current_difficulty: int
     last_score: float
+
 
 @app.post("/next_difficulty")
 async def next_difficulty(request: DifficultyRequest):
@@ -240,39 +283,8 @@ class MultiAgentRequest(BaseModel):
     agent_type: str
     difficulty: int = 5
     is_final_turn: bool = False
-
-def determine_agent_spoke(chat_history: str) -> str:
-    # Extract last student message
-    last_student_msg = ""
-    lines = chat_history.strip().split("\n")
-    for line in reversed(lines):
-        if any(line.lower().startswith(prefix) for prefix in ["student:", "user:", "student response:"]):
-            parts = line.split(":", 1)
-            if len(parts) > 1:
-                last_student_msg = parts[1].strip()
-            break
-            
-    text_to_scan = last_student_msg.lower()
-    
-    prof_keywords = ["math", "formula", "algorithm", "complexity", "theorem", "proof", "equation", "analysis", "theory", "time complexity", "big-o", "space complexity", "derivation"]
-    industry_keywords = ["deploy", "docker", "aws", "cloud", "scale", "latency", "production", "kubernetes", "database", "ci/cd", "pipeline", "dockerfile", "server", "hosting", "architecture", "microservice", "infrastructure"]
-    critic_keywords = ["limit", "fail", "drawback", "bottleneck", "weakness", "error", "alternative", "compromise", "flaw", "shortcoming", "disadvantage", "constraint"]
-    
-    if any(kw in text_to_scan for kw in prof_keywords):
-        return "Professor"
-    elif any(kw in text_to_scan for kw in industry_keywords):
-        return "Industry Expert"
-    elif any(kw in text_to_scan for kw in critic_keywords):
-        return "Critic"
-    else:
-        # Turn balancing: choose who has spoken the least
-        counts = {
-            "Professor": chat_history.lower().count("professor:"),
-            "Industry Expert": chat_history.lower().count("industry expert:"),
-            "Critic": chat_history.lower().count("research critic:"),
-            "Examiner": chat_history.lower().count("examiner:")
-        }
-        return min(counts, key=counts.get)
+    routing_strategy: Optional[str] = "keyword_balanced"  # Supports 'keyword_balanced' or 'round_robin'
+    controller_type: Optional[str] = "dqn"  # Supports 'dqn', 'rule_based', or 'fixed'
 
 @app.post("/multi_agent_question")
 async def generate_multi_agent_question(request: MultiAgentRequest):
@@ -282,16 +294,23 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
         # 1. Update the local conversation history
         session.conversation_history = request.conversation_history
         
-        # Build formatted chat history string
+        # Build formatted chat history string preserving persona tags
         chat_history_str = ""
         for msg in request.conversation_history:
-            role_name = "Student" if msg["role"] == "user" else "Examiner"
-            chat_history_str += f"{role_name}: {msg['content']}\n"
+            if msg.get("role") == "user":
+                role_name = "Student"
+            else:
+                agent_name = msg.get("agent")
+                if agent_name:
+                    role_name = f"Examiner ({agent_name})"
+                else:
+                    role_name = "Examiner"
+            chat_history_str += f"{role_name}: {msg.get('content', '')}\n"
             
         session.chat_history = chat_history_str
         
         # 2. Check if this is the start of the session (no student answers yet)
-        student_answers = [m for m in request.conversation_history if m["role"] == "user"]
+        student_answers = [m for m in request.conversation_history if m.get("role") == "user"]
         
         evaluation = None
         action_taken = "KEEP"
@@ -304,37 +323,64 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
             session.last_fluency_report = analytics_engine.analyze_fluency(last_student_answer)
             
             # Find the previous question asked by the agent
-            agent_questions = [m for m in request.conversation_history[:-1] if m["role"] != "user"]
+            agent_questions = [m for m in request.conversation_history[:-1] if m.get("role") != "user"]
             prev_question = agent_questions[-1]["content"] if agent_questions else "Introduction"
             
-            # Retrieve relevant context from RAG
+            # Retrieve relevant context from RAG (using default hybrid RRF)
             context_chunks = rag_engine.query(last_student_answer, n_results=3)
             retrieved_context = "\n\n".join(context_chunks)
             
-            # Run Evaluation using Gemini structure
+            # Run 4-Dimensional Rubric Evaluation using structured output LLM
             prompt = f"""
-            Previous Question asked: {prev_question}
+            You are an academic viva examination evaluator assessing a university student's defense answer.
+            Evaluate the student's answer along these four distinct academic rubric dimensions (each scored 0.0 to 1.0):
+            1. correctness: Technical accuracy and domain correctness.
+            2. completeness: Extent to which the response addresses the core components of the examiner's question.
+            3. evidence_alignment: Grounding in and consistency with the provided project report context.
+            4. reasoning_depth: Depth of explanation articulate 'why' specific choices/methods were made and trade-offs.
+
+            Previous Question Asked: {prev_question}
             Student Answer: {last_student_answer}
-            Context from Project: {retrieved_context}
+            Retrieved Report Context:
+            {retrieved_context}
             """
             try:
                 eval_result = evaluator_llm.invoke(prompt)
+                composite_score = analytics_engine.calculate_rubric_composite(
+                    correctness=eval_result.correctness,
+                    completeness=eval_result.completeness,
+                    evidence_alignment=eval_result.evidence_alignment,
+                    reasoning_depth=eval_result.reasoning_depth
+                )
                 evaluation = {
-                    "score": eval_result.score,
+                    "correctness": eval_result.correctness,
+                    "completeness": eval_result.completeness,
+                    "evidence_alignment": eval_result.evidence_alignment,
+                    "reasoning_depth": eval_result.reasoning_depth,
+                    "score": composite_score,
                     "feedback": eval_result.feedback,
                     "concept": eval_result.concept
                 }
             except Exception as e:
                 print(f"Error in LLM evaluation: {repr(e)}")
-                # Fallback evaluation
+                # Robust fallback evaluation
                 evaluation = {
+                    "correctness": 0.5,
+                    "completeness": 0.5,
+                    "evidence_alignment": 0.5,
+                    "reasoning_depth": 0.5,
                     "score": 0.5,
                     "feedback": "Evaluation fallback due to API error.",
                     "concept": "General"
                 }
                 
-            # 3. Call RL adaptive engine to adjust difficulty based on the score
-            rl_decision = adaptive_engine.get_next_difficulty(session.current_difficulty, evaluation["score"])
+            # 3. Call adaptive engine (supporting dqn, rule_based, or fixed baseline)
+            controller = request.controller_type or "dqn"
+            rl_decision = adaptive_engine.get_next_difficulty(
+                current_difficulty=session.current_difficulty,
+                last_answer_score=evaluation["score"],
+                controller_type=controller
+            )
             action_taken = rl_decision["action_taken"]
             session.current_difficulty = rl_decision["new_difficulty_level"]
             session.difficulty_history.append(session.current_difficulty)
@@ -372,7 +418,8 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
         }
         difficulty_name = difficulty_mapping[session.current_difficulty]
         
-        # Run Multi Agent Panel
+        # Run Multi Agent Panel with traceable routing
+        strategy = request.routing_strategy or "keyword_balanced"
         try:
             panel_result = multi_agent_panel.run_panel(
                 context=next_context,
@@ -380,21 +427,37 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
                 difficulty=difficulty_name,
                 agent_type=request.agent_type,
                 asked_questions=session.asked_questions,
-                is_final_turn=request.is_final_turn
+                is_final_turn=request.is_final_turn,
+                routing_strategy=strategy
             )
             next_question = panel_result["question"]
+            actual_agent = panel_result.get("selected_agent", "Examiner")
+            routing_reason = panel_result.get("routing_reason", "Automated selection")
         except Exception as e:
             print(f"Error in Multi-Agent Panel: {repr(e)}")
             next_question = "I apologize, but I am having trouble generating the next question. Could you please elaborate on your previous point?"
+            actual_agent = request.agent_type
+            routing_reason = f"Fallback error: {e}"
+
         session.asked_questions.append(next_question)
         
-        # Determine actual agent type in case of Auto routing
-        actual_agent = request.agent_type
-        if request.agent_type.lower() in ["auto", "panel", "auto (panel)"]:
-            actual_agent = determine_agent_spoke(session.chat_history)
+        # 7. Record Turn Audit Trail for scientific evaluation and reproducibility
+        turn_audit_entry = {
+            "turn_index": len(session.asked_questions),
+            "selected_agent": actual_agent,
+            "routing_reason": routing_reason,
+            "routing_strategy": strategy,
+            "controller_type": request.controller_type or "dqn",
+            "question": next_question,
+            "difficulty_level": session.current_difficulty,
+            "difficulty_name": difficulty_name,
+            "evaluation": evaluation,
+            "action_taken": action_taken,
+            "retrieved_context_snippets": next_context_chunks[:2]
+        }
+        session.turn_audit_trail.append(turn_audit_entry)
             
-        # 7. Compute updated analytics
-        # Coverage
+        # 8. Compute updated analytics
         coverage_data = analytics_engine.calculate_coverage(session.graph_nodes, session.chat_history)
         session.overall_coverage = coverage_data["overall_coverage_percent"]
         
@@ -420,6 +483,8 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
         
         return {
             "agent": actual_agent,
+            "routing_reason": routing_reason,
+            "routing_strategy": strategy,
             "question": next_question,
             "evaluation": evaluation,
             "new_difficulty": session.current_difficulty,
@@ -436,6 +501,7 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 class AnalyticsRequest(BaseModel):
     graph_nodes: list = None

@@ -109,10 +109,42 @@ npm run dev
 
 ---
 
-## 🧪 Automated Testing
-To run the verification test suite checking RAG, TF-IDF coverage calculations, and ML model predictions:
+## 🧪 Automated Testing & Empirical Research Benchmarks
+
+### 1. Backend Integration Verification
+Runs the core smoke test checking RAG, RL, analytics, and multi-agent routing:
 ```bash
 cd AIVA_backend
-venv\Scripts\activate
 python verify_backend.py
 ```
+
+### 2. Research Benchmark Experiments
+To reproduce all empirical tables and baseline comparisons published in the research manuscript:
+```bash
+cd AIVA_backend
+
+# 1. Adaptive Difficulty Benchmark (DQN vs Rule-Based vs Fixed across 3 skill profiles)
+python experiments/eval_adaptive_engine.py
+
+# 2. Multi-Agent Routing Benchmark (Keyword-guided vs Round-Robin baseline)
+python experiments/eval_multi_agent_routing.py
+
+# 3. Hybrid RAG Benchmark (Recall@k, MRR, nDCG comparing BM25, Dense, and RRF)
+python experiments/eval_rag_retrieval.py
+
+# 4. Knowledge Graph Factuality Benchmark (Precision, Recall, F1 against ground truth)
+python experiments/eval_knowledge_graph.py
+
+# 5. Component Ablation Studies (Grounding fidelity, Persona TTR diversity, KG paths)
+python experiments/eval_ablations.py
+```
+
+---
+
+## 📚 Academic Publication & Documentation
+
+- **Full Research Paper Manuscript:** [`paper/AIVA_Research_Paper_Manuscript.md`](paper/AIVA_Research_Paper_Manuscript.md)
+- **Empirical Methodology & Evaluation Protocol:** [`docs/RESEARCH_METHODOLOGY_AND_EVALUATION.md`](docs/RESEARCH_METHODOLOGY_AND_EVALUATION.md)
+- **Standardized Evaluation Protocol Specification:** [`benchmark_data/evaluation_protocol.json`](benchmark_data/evaluation_protocol.json)
+- **Master Project Report (All Milestones):** [`AIVA_MASTER_PROJECT_REPORT_ALL_PHASES.md`](AIVA_MASTER_PROJECT_REPORT_ALL_PHASES.md)
+

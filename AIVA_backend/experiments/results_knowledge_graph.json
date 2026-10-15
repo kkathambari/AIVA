@@ -1,0 +1,16 @@
+{
+  "concepts": {
+    "ground_truth_count": 10,
+    "extracted_count": 11,
+    "precision": 0.9091,
+    "recall": 1.0,
+    "f1_score": 0.9524
+  },
+  "relationships": {
+    "ground_truth_count": 7,
+    "extracted_count": 7,
+    "precision": 0.8571,
+    "recall": 0.8571,
+    "f1_score": 0.8571
+  }
+}

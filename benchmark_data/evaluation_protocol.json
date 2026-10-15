@@ -1,0 +1,74 @@
+{
+  "protocol_version": "1.0-empirical",
+  "framework": "AIVA (Adaptive Intelligent Viva Assessment)",
+  "objective": "Standardized evaluation protocol for assessing autonomous viva examinations against human expert baselines.",
+  "target_domains": [
+    "Machine Learning & Data Science",
+    "Cloud Computing & Distributed Systems",
+    "Web Engineering & Microservices",
+    "Cybersecurity & Software Architecture"
+  ],
+  "rubric_specification": {
+    "dimensions": [
+      {
+        "id": "correctness",
+        "weight": 0.35,
+        "definition": "Factual, theoretical, and mathematical correctness of technical claims.",
+        "anchor_examples": {
+          "high_1.0": "Accurate formulation of algorithm complexity, loss functions, and architectural trade-offs.",
+          "mid_0.5": "Partially correct intuition with minor arithmetic or terminological inaccuracies.",
+          "low_0.0": "Conceptually invalid assertions or fabricated technical properties."
+        }
+      },
+      {
+        "id": "completeness",
+        "weight": 0.25,
+        "definition": "Degree to which all core facets of the examiner's prompt are directly addressed.",
+        "anchor_examples": {
+          "high_1.0": "Directly resolves all explicit and implicit sub-questions with thorough explanation.",
+          "mid_0.5": "Answers the primary question but omits secondary considerations (e.g., failure handling).",
+          "low_0.0": "Evasive, tangential, or empty response."
+        }
+      },
+      {
+        "id": "evidence_alignment",
+        "weight": 0.20,
+        "definition": "Consistency with implementation facts, libraries, and design in the submitted dissertation.",
+        "anchor_examples": {
+          "high_1.0": "Strictly matches methods, libraries, and experimental parameters reported in the document.",
+          "mid_0.5": "General industry methods mentioned without specific linkage to the report implementation.",
+          "low_0.0": "Contradicts reported dissertation methodology or references nonexistent features."
+        }
+      },
+      {
+        "id": "reasoning_depth",
+        "weight": 0.20,
+        "definition": "Ability to justify engineering decisions, explain 'why', and analyze trade-offs.",
+        "anchor_examples": {
+          "high_1.0": "Articulates alternative techniques considered and justifies why the chosen design was optimal.",
+          "mid_0.5": "States choices made without in-depth comparative justification.",
+          "low_0.0": "Inability to explain why a library or algorithm was selected."
+        }
+      }
+    ],
+    "composite_formula": "Score = 0.35*Correctness + 0.25*Completeness + 0.20*EvidenceAlignment + 0.20*ReasoningDepth"
+  },
+  "inter_rater_reliability_guidelines": {
+    "evaluator_panel_size": 3,
+    "evaluator_qualification": "University faculty member or PhD teaching assistant in computing/engineering.",
+    "metrics_reported": [
+      "Mean Absolute Error (MAE)",
+      "Pearson Correlation Coefficient (r)",
+      "Quadratic Weighted Cohen's Kappa (kappa)"
+    ],
+    "minimum_benchmark_threshold": {
+      "pearson_r": 0.75,
+      "quadratic_kappa": 0.60
+    }
+  },
+  "data_leakage_prevention": {
+    "grouping_strategy": "GroupKFold by student_id and project_id",
+    "rule": "No project or student utterances may span both training and evaluation folds."
+  },
+  "provenance_disclosure_requirement": "All models trained on synthetic rule distributions must be explicitly tagged as 'simulation demonstrators'. Human claims require empirical scoring."
+}

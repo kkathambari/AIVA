@@ -102,11 +102,13 @@ export function VivaPanel({
   const handleSend = async (text: string) => {
     if (!text.trim()) return;
 
-    // Build history for backend API (standard role/content)
+    // Build history for backend API (preserving agent persona)
     const apiHistory = messages.map(m => ({
       role: m.role,
-      content: m.content
+      content: m.content,
+      agent: (m as any).agent
     }));
+
 
     const newMessages = [...messages, { role: "user", content: text }];
     const apiHistoryWithNew = [...apiHistory, { role: "user", content: text }];

@@ -12,6 +12,9 @@ class AnalyticsEngine:
         self.xgb_model_path = os.path.join(self.model_dir, "weakness_xgb.json")
         self.lr_model_path = os.path.join(self.model_dir, "readiness_lr.joblib")
         
+        self.is_synthetic_simulation = True
+        self.model_provenance = "Trained on synthetic rule-parameterized distributions for architectural and latency verification."
+        
         self.xgb_model = None
         self.lr_model = None
         self._load_models()
@@ -36,16 +39,77 @@ class AnalyticsEngine:
                 print(f"Error loading Logistic Regression model: {e}")
                 self.lr_model = None
 
+    @staticmethod
+    def calculate_rubric_composite(
+        correctness: float,
+        completeness: float,
+        evidence_alignment: float,
+        reasoning_depth: float
+    ) -> float:
+        """
+        Calculates composite answer quality score based on 4-dimensional rubric:
+        - Correctness (35%): Technical veracity of the explanation.
+        - Completeness (25%): Covers essential core facets of the question.
+        - Evidence Alignment (20%): Supported by facts/design in the project report.
+        - Reasoning Depth (20%): Articulates 'why', design justifications, and trade-offs.
+        """
+        composite = (
+            0.35 * correctness +
+            0.25 * completeness +
+            0.20 * evidence_alignment +
+            0.20 * reasoning_depth
+        )
+        return round(float(np.clip(composite, 0.0, 1.0)), 4)
+
+    @staticmethod
+    def compute_evaluator_agreement(human_scores: list, model_scores: list) -> dict:
+        """
+        Computes inter-rater reliability metrics between LLM rubric ratings and human evaluator ground-truth:
+        - Mean Absolute Error (MAE)
+        - Pearson correlation coefficient (r)
+        - Quadratic weighted Cohen's Kappa
+        """
+        if len(human_scores) == 0 or len(human_scores) != len(model_scores):
+            return {"error": "Mismatched or empty score lists for agreement computation."}
+
+        h = np.array(human_scores, dtype=np.float64)
+        m = np.array(model_scores, dtype=np.float64)
+
+        mae = float(np.mean(np.abs(h - m)))
+        
+        # Pearson correlation
+        if np.std(h) > 1e-9 and np.std(m) > 1e-9:
+            pearson_r = float(np.corrcoef(h, m)[0, 1])
+        else:
+            pearson_r = 1.0 if np.allclose(h, m) else 0.0
+
+        # Discretize into 5 bins [0.0, 0.2, 0.4, 0.6, 0.8, 1.0] for Cohen's Kappa
+        from sklearn.metrics import cohen_kappa_score
+        h_bins = np.clip(np.digitize(h, bins=[0.2, 0.4, 0.6, 0.8]) , 0, 4)
+        m_bins = np.clip(np.digitize(m, bins=[0.2, 0.4, 0.6, 0.8]), 0, 4)
+        kappa = float(cohen_kappa_score(h_bins, m_bins, weights="quadratic"))
+
+        return {
+            "sample_size": len(human_scores),
+            "mae": round(mae, 4),
+            "pearson_r": round(pearson_r, 4),
+            "quadratic_weighted_kappa": round(kappa, 4)
+        }
+
     def calculate_coverage(self, graph_nodes: list, chat_history: str, threshold: float = 0.12) -> dict:
         """
-        Module 5: Concept Coverage Analysis (Node-by-Node comparison using TF-IDF and Cosine Similarity)
+        Module 5: Lexical & Semantic Concept Mention Coverage Analysis (TF-IDF overlap against Knowledge Graph entities).
+        NOTE: This measures topical lexical coverage across utterances, NOT psychometrically validated comprehension.
         """
+        qualification_note = "Measures topical lexical/semantic mention coverage against KG concept nodes, not validated student comprehension."
         if not graph_nodes:
             return {
                 "overall_coverage_percent": 0.0,
                 "coverage_percentage": 0.0,
                 "coverage_map": {},
-                "concept_breakdown": {}
+                "concept_breakdown": {},
+                "metric_type": "lexical_semantic_mention_coverage",
+                "qualification": qualification_note
             }
             
         if not chat_history.strip():
@@ -53,8 +117,11 @@ class AnalyticsEngine:
                 "overall_coverage_percent": 0.0,
                 "coverage_percentage": 0.0,
                 "coverage_map": {node['id']: 0 for node in graph_nodes},
-                "concept_breakdown": {node['id']: 0.0 for node in graph_nodes}
+                "concept_breakdown": {node['id']: 0.0 for node in graph_nodes},
+                "metric_type": "lexical_semantic_mention_coverage",
+                "qualification": qualification_note
             }
+
             
         total_concepts = len(graph_nodes)
         tested_concepts = 0
@@ -106,8 +173,11 @@ class AnalyticsEngine:
             "overall_coverage_percent": round(overall_coverage, 2),
             "coverage_percentage": round(overall_coverage, 2),
             "coverage_map": coverage_map,
-            "concept_breakdown": concept_breakdown
+            "concept_breakdown": concept_breakdown,
+            "metric_type": "lexical_semantic_mention_coverage",
+            "qualification": "Measures topical lexical/semantic mention coverage against KG concept nodes, not validated student comprehension."
         }
+
 
     def detect_weaknesses(self, performance_data: list) -> list:
         """
@@ -170,7 +240,9 @@ class AnalyticsEngine:
                     "attempts": len(attempts),
                     "severity": severity,
                     "reason": reason,
-                    "recommendation": f"Review key algorithms, equations, and implementation details of {concept}."
+                    "recommendation": f"Review key algorithms, equations, and implementation details of {concept}.",
+                    "is_synthetic_simulation": self.is_synthetic_simulation,
+                    "provenance": self.model_provenance
                 })
                     
         return weaknesses
@@ -330,5 +402,7 @@ class AnalyticsEngine:
             "readiness_level": level,
             "confidence_score": 0.85 if self.lr_model is not None else 0.70,
             "recommendation": rec,
-            "fluency_penalty_pct": fluency_penalty_pct
+            "fluency_penalty_pct": fluency_penalty_pct,
+            "is_synthetic_simulation": self.is_synthetic_simulation,
+            "provenance": self.model_provenance
         }

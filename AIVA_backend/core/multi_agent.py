@@ -1,7 +1,7 @@
-from typing import TypedDict, List
+from typing import TypedDict, List, Optional
 from langgraph.graph import StateGraph, END
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.messages import SystemMessage, HumanMessage
+from langchain_core.messages import HumanMessage
 import os
 
 class AgentState(TypedDict):
@@ -9,8 +9,13 @@ class AgentState(TypedDict):
     chat_history: str
     difficulty: str
     agent_type: str
+    routing_strategy: str  # 'keyword_balanced' or 'round_robin'
+    selected_agent_node: str
+    selected_agent: str
+    routing_reason: str
     generated_question: str
     asked_questions: List[str]  # Prevents repeated questions
+    is_final_turn: bool
 
 class MultiAgentPanel:
     def __init__(self, api_key: str = None):
@@ -19,70 +24,139 @@ class MultiAgentPanel:
         self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.7)
         self.graph = self._build_graph()
 
+    def router_node(self, state: AgentState) -> dict:
+        """
+        First-class LangGraph router node that computes traceable persona assignment
+        and explicit reasoning based on the chosen strategy (keyword_balanced or round_robin).
+        """
+        agent = state.get("agent_type", "auto").lower()
+        strategy = state.get("routing_strategy", "keyword_balanced").lower()
+        history = state.get("chat_history", "")
+        
+        # 1. Direct explicit persona selection
+        if agent in ["critic", "research critic"]:
+            return {
+                "selected_agent_node": "critic",
+                "selected_agent": "Critic",
+                "routing_reason": "Direct user override: Critic persona requested."
+            }
+        elif agent in ["industry", "industry expert"]:
+            return {
+                "selected_agent_node": "industry",
+                "selected_agent": "Industry Expert",
+                "routing_reason": "Direct user override: Industry Expert persona requested."
+            }
+        elif agent in ["professor", "university professor"]:
+            return {
+                "selected_agent_node": "professor",
+                "selected_agent": "Professor",
+                "routing_reason": "Direct user override: Professor persona requested."
+            }
+        elif agent in ["examiner", "general examiner"]:
+            return {
+                "selected_agent_node": "examiner",
+                "selected_agent": "Examiner",
+                "routing_reason": "Direct user override: General Examiner persona requested."
+            }
+
+        # 2. Automated Panel Routing
+        history_lower = history.lower()
+        # Count previous turns per persona across history
+        counts = {
+            "professor": history_lower.count("professor:") + history_lower.count("examiner (professor):"),
+            "industry": history_lower.count("industry expert:") + history_lower.count("examiner (industry expert):"),
+            "critic": history_lower.count("critic:") + history_lower.count("research critic:") + history_lower.count("examiner (critic):"),
+            "examiner": history_lower.count("examiner (general):") + (history_lower.count("examiner:") - history_lower.count("examiner ("))
+        }
+
+        # Strategy A: Baseline Sequential Round-Robin
+        if strategy == "round_robin":
+            cycle = ["examiner", "critic", "industry", "professor"]
+            total_turns = sum(counts.values())
+            chosen_node = cycle[total_turns % len(cycle)]
+            display_names = {
+                "examiner": "Examiner",
+                "critic": "Critic",
+                "industry": "Industry Expert",
+                "professor": "Professor"
+            }
+            return {
+                "selected_agent_node": chosen_node,
+                "selected_agent": display_names[chosen_node],
+                "routing_reason": f"Baseline Round-Robin: Turn #{total_turns + 1} cycling to {display_names[chosen_node]}."
+            }
+
+        # Strategy B: Keyword-Guided with Turn-Balancing Fallback (Default)
+        # Extract last student message
+        last_student_msg = ""
+        lines = history.strip().split("\n")
+        for line in reversed(lines):
+            if any(line.lower().startswith(prefix) for prefix in ["student:", "user:", "student response:"]):
+                parts = line.split(":", 1)
+                if len(parts) > 1:
+                    last_student_msg = parts[1].strip()
+                break
+        
+        text_to_scan = last_student_msg.lower()
+        
+        prof_keywords = ["math", "formula", "algorithm", "complexity", "theorem", "proof", "equation", "analysis", "theory", "time complexity", "big-o", "space complexity", "derivation"]
+        industry_keywords = ["deploy", "docker", "aws", "cloud", "scale", "latency", "production", "kubernetes", "database", "ci/cd", "pipeline", "dockerfile", "server", "hosting", "architecture", "microservice", "infrastructure"]
+        critic_keywords = ["limit", "fail", "drawback", "bottleneck", "weakness", "error", "alternative", "compromise", "flaw", "shortcoming", "disadvantage", "constraint"]
+        
+        matched_prof = [kw for kw in prof_keywords if kw in text_to_scan]
+        matched_ind = [kw for kw in industry_keywords if kw in text_to_scan]
+        matched_critic = [kw for kw in critic_keywords if kw in text_to_scan]
+        
+        if matched_prof:
+            return {
+                "selected_agent_node": "professor",
+                "selected_agent": "Professor",
+                "routing_reason": f"Semantic keyword match: detected theoretical keywords [{', '.join(matched_prof[:3])}] in student response."
+            }
+        elif matched_ind:
+            return {
+                "selected_agent_node": "industry",
+                "selected_agent": "Industry Expert",
+                "routing_reason": f"Semantic keyword match: detected production/scaling keywords [{', '.join(matched_ind[:3])}] in student response."
+            }
+        elif matched_critic:
+            return {
+                "selected_agent_node": "critic",
+                "selected_agent": "Critic",
+                "routing_reason": f"Semantic keyword match: detected limitation/trade-off keywords [{', '.join(matched_critic[:3])}] in student response."
+            }
+        else:
+            # Balanced rotation: choose the agent who has spoken the least
+            least_node = min(counts, key=counts.get)
+            display_names = {
+                "examiner": "Examiner",
+                "critic": "Critic",
+                "industry": "Industry Expert",
+                "professor": "Professor"
+            }
+            return {
+                "selected_agent_node": least_node,
+                "selected_agent": display_names[least_node],
+                "routing_reason": f"Balanced rotation fallback: {display_names[least_node]} has fewest prior turns ({counts[least_node]} turns)."
+            }
+
     def _build_graph(self):
         workflow = StateGraph(AgentState)
 
-        # Define Nodes
+        # Define Router and Persona Nodes
+        workflow.add_node("router", self.router_node)
         workflow.add_node("examiner", self.examiner_node)
         workflow.add_node("critic", self.critic_node)
         workflow.add_node("industry", self.industry_node)
         workflow.add_node("professor", self.professor_node)
 
-        # Define rule-based router function
-        def route_to_agent(state: AgentState):
-            agent = state["agent_type"].lower()
-            
-            # If Auto (Panel) mode is selected, route based on response keywords or balanced turns
-            if agent in ["auto", "panel", "auto (panel)"]:
-                history = state.get("chat_history", "")
-                
-                # Extract last student message
-                last_student_msg = ""
-                lines = history.strip().split("\n")
-                for line in reversed(lines):
-                    if any(line.lower().startswith(prefix) for prefix in ["student:", "user:", "student response:"]):
-                        parts = line.split(":", 1)
-                        if len(parts) > 1:
-                            last_student_msg = parts[1].strip()
-                        break
-                
-                text_to_scan = last_student_msg.lower()
-                
-                # Rule-based keyword matching
-                prof_keywords = ["math", "formula", "algorithm", "complexity", "theorem", "proof", "equation", "analysis", "theory", "time complexity", "big-o", "space complexity", "derivation"]
-                industry_keywords = ["deploy", "docker", "aws", "cloud", "scale", "latency", "production", "kubernetes", "database", "ci/cd", "pipeline", "dockerfile", "server", "hosting", "architecture", "microservice", "infrastructure"]
-                critic_keywords = ["limit", "fail", "drawback", "bottleneck", "weakness", "error", "alternative", "compromise", "flaw", "shortcoming", "disadvantage", "constraint"]
-                
-                if any(kw in text_to_scan for kw in prof_keywords):
-                    return "professor"
-                elif any(kw in text_to_scan for kw in industry_keywords):
-                    return "industry"
-                elif any(kw in text_to_scan for kw in critic_keywords):
-                    return "critic"
-                else:
-                    # Balanced rotation: choose the agent who has spoken the least
-                    history_lower = history.lower()
-                    counts = {
-                        "professor": history_lower.count("professor:"),
-                        "industry": history_lower.count("industry expert:"),
-                        "critic": history_lower.count("research critic:"),
-                        "examiner": history_lower.count("examiner:")
-                    }
-                    # Return the agent with minimum turns
-                    return min(counts, key=counts.get)
-            
-            # Direct routing if a specific agent is selected
-            if agent == "critic":
-                return "critic"
-            elif agent in ["industry", "industry expert"]:
-                return "industry"
-            elif agent == "professor":
-                return "professor"
-            else:
-                return "examiner"
+        # Entry point is always the traceable router
+        workflow.set_entry_point("router")
 
-        workflow.set_conditional_entry_point(
-            route_to_agent,
+        # Conditional routing from router to persona
+        workflow.add_conditional_edges(
+            "router",
+            lambda s: s["selected_agent_node"],
             {
                 "examiner": "examiner",
                 "critic": "critic",
@@ -151,7 +225,20 @@ class MultiAgentPanel:
         prompt = "You are a University Professor. Focus heavily on underlying theory, mathematical formulas, algorithms, time complexity, and academic research foundations of their system."
         return self._generate_response(prompt, state)
 
-    def run_panel(self, context: str, chat_history: str, difficulty: str, agent_type: str, asked_questions: List[str] = None, is_final_turn: bool = False) -> dict:
+    def run_panel(
+        self, 
+        context: str, 
+        chat_history: str, 
+        difficulty: str, 
+        agent_type: str, 
+        asked_questions: List[str] = None, 
+        is_final_turn: bool = False,
+        routing_strategy: str = "keyword_balanced"
+    ) -> dict:
+        """
+        Executes the compiled multi-agent panel graph and returns both the generated question,
+        the genuinely selected agent identity, and the routing rationale.
+        """
         if asked_questions is None:
             asked_questions = []
             
@@ -160,22 +247,21 @@ class MultiAgentPanel:
             "chat_history": chat_history,
             "difficulty": difficulty,
             "agent_type": agent_type,
+            "routing_strategy": routing_strategy,
+            "selected_agent_node": "examiner",
+            "selected_agent": "Examiner",
+            "routing_reason": "Initial default",
             "generated_question": "",
             "asked_questions": asked_questions,
             "is_final_turn": is_final_turn
         }
         
-        # We want to trace which agent actually spoke!
-        # LangGraph compile allows us to inspect the final state which contains the agent selection
-        # But we can also determine which node ran by looking at the execution trace or just letting the node populate its type.
-        # Since we route using set_conditional_entry_point, we can find out the node that ran by checking the selected node.
-        # To make it simple, let's update the node functions to return the agent type as well!
-        # Wait, if we return it in the node dict, it updates the state. Let's add "selected_agent" to AgentState.
-        
         final_state = self.graph.invoke(initial_state)
         
-        # We can find out which agent ran by checking the entry point routing or we can just let each node return its identity.
-        # Let's inspect final_state
         return {
-            "question": final_state["generated_question"]
+            "question": final_state.get("generated_question", ""),
+            "selected_agent": final_state.get("selected_agent", "Examiner"),
+            "routing_reason": final_state.get("routing_reason", "Default routing"),
+            "routing_strategy": routing_strategy
         }
+

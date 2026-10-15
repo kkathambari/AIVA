@@ -51,7 +51,8 @@ def test_analytics_engine():
     ]
     weaknesses = ae.detect_weaknesses(performance_data)
     print("Detected Weaknesses (XGBoost):", weaknesses)
-    assert "Random Forest" in weaknesses, "Random Forest should be classified as a weakness"
+    weakness_concepts = [w["concept"] if isinstance(w, dict) else w for w in weaknesses]
+    assert "Random Forest" in weakness_concepts, "Random Forest should be classified as a weakness"
     
     # Test Logistic Regression Readiness Prediction
     # features: [avg_score, coverage_pct, difficulty_trend, weakness_count]

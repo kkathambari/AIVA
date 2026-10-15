@@ -1,0 +1,17 @@
+{
+  "ablation_grounding": {
+    "grounded_rag_fidelity_pct": 75.0,
+    "ungrounded_baseline_fidelity_pct": 0.0,
+    "fidelity_gain_pct": 75.0
+  },
+  "ablation_personas": {
+    "multi_agent_panel_ttr": 0.9028,
+    "monolithic_examiner_ttr": 0.6977,
+    "ttr_increase_pct": 29.4
+  },
+  "ablation_knowledge_graph": {
+    "kg_relational_edges_tracked": 4,
+    "flat_keyword_edges_tracked": 0,
+    "topological_reasoning_enabled": true
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "fixed": {
+    "Low Skill (0.30)": {
+      "mean_score": 0.3,
+      "std_score": 0.011,
+      "flow_band_percentage": 0.0,
+      "avg_transitions_per_session": 1.0,
+      "mean_cumulative_reward": -20.0,
+      "sample_episodes": 100
+    },
+    "Medium Skill (0.60)": {
+      "mean_score": 0.6,
+      "std_score": 0.011,
+      "flow_band_percentage": 100.0,
+      "avg_transitions_per_session": 1.0,
+      "mean_cumulative_reward": 20.0,
+      "sample_episodes": 100
+    },
+    "High Skill (0.85)": {
+      "mean_score": 0.85,
+      "std_score": 0.011,
+      "flow_band_percentage": 0.0,
+      "avg_transitions_per_session": 1.0,
+      "mean_cumulative_reward": -20.0,
+      "sample_episodes": 100
+    }
+  },
+  "rule_based": {
+    "Low Skill (0.30)": {
+      "mean_score": 0.561,
+      "std_score": 0.03,
+      "flow_band_percentage": 95.05,
+      "avg_transitions_per_session": 0.98,
+      "mean_cumulative_reward": 16.55,
+      "sample_episodes": 100
+    },
+    "Medium Skill (0.60)": {
+      "mean_score": 0.609,
+      "std_score": 0.01,
+      "flow_band_percentage": 95.0,
+      "avg_transitions_per_session": 1.0,
+      "mean_cumulative_reward": 16.5,
+      "sample_episodes": 100
+    },
+    "High Skill (0.85)": {
+      "mean_score": 0.602,
+      "std_score": 0.011,
+      "flow_band_percentage": 85.0,
+      "avg_transitions_per_session": 3.0,
+      "mean_cumulative_reward": 14.79,
+      "sample_episodes": 100
+    }
+  },
+  "dqn": {
+    "Low Skill (0.30)": {
+      "mean_score": 0.45,
+      "std_score": 0.011,
+      "flow_band_percentage": 81.4,
+      "avg_transitions_per_session": 0.0,
+      "mean_cumulative_reward": 12.56,
+      "sample_episodes": 100
+    },
+    "Medium Skill (0.60)": {
+      "mean_score": 0.653,
+      "std_score": 0.038,
+      "flow_band_percentage": 71.8,
+      "avg_transitions_per_session": 0.95,
+      "mean_cumulative_reward": 7.29,
+      "sample_episodes": 100
+    },
+    "High Skill (0.85)": {
+      "mean_score": 0.722,
+      "std_score": 0.01,
+      "flow_band_percentage": 45.2,
+      "avg_transitions_per_session": 2.0,
+      "mean_cumulative_reward": 0.36,
+      "sample_episodes": 100
+    }
+  }
+}
