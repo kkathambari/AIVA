@@ -167,7 +167,7 @@ We evaluated whether knowledge-gap-aware selection prevents local semantic trapp
 *Topology Breakdown Highlights:*
 - **Branching Architecture DAG (12 Concepts):** Proposed UCS achieves $83.3\%$ coverage and leaves only $1.00$ unassessed core prerequisite (vs $2.00$ for Fixed-Order and Greedy Gap, and $6.00$ for Difficulty-Only).
 - **Modular Disconnected Clusters (12 Concepts):** Proposed UCS achieves **$0.00$ unassessed core prerequisites** (vs $2.00$ for Fixed-Order and Greedy Gap, and $4.40$ for Difficulty-Only).
-- **Diamond Bottleneck Hierarchy (11 Concepts):** Proposed UCS achieves **$0.00$ unassessed core prerequisites** (vs $1.00$ for Fixed-Order and Greedy Gap, and $4.70$ for Difficulty-Only).
+- **Diamond Bottleneck Hierarchy (11 Concepts):** Proposed UCS achieves **$0.00$ unassessed core prerequisites** (vs $1.00$ for Fixed-Order and Greedy Gap, and $3.70$ for Difficulty-Only).
 
 **Analysis:**
 1. **Local Semantic Trapping Pathology:** When question selection relies purely on conversational utterance similarity (Difficulty-Only / Local Trapping), the examiner gets trapped in localized semantic sub-graphs, achieving only $35.6\%$ mean coverage, reaching the 70% threshold in only $2.5\%$ of sessions, repeating questions $39.7\%$ of the time, and leaving $4.70$ foundational prerequisites unassessed.

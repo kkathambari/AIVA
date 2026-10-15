@@ -65,7 +65,7 @@ At each turn $t$, AIVA selects $c^* = \arg\max_{c \in \mathcal{V}} S(c)$, querie
 *Topology Highlights:*
 - **Branching Architecture DAG (12 Concepts):** Proposed UCS achieves $83.3\%$ coverage and cuts unassessed prerequisites to $1.00$ (vs $2.00$ for Fixed-Order/Greedy Gap, $6.00$ for Difficulty-Only).
 - **Modular Disconnected Clusters (12 Concepts):** Proposed UCS achieves **$0.00$ unassessed prerequisites** (vs $2.00$ for Fixed-Order/Greedy Gap, $4.40$ for Difficulty-Only).
-- **Diamond Bottleneck Hierarchy (11 Concepts):** Proposed UCS achieves **$0.00$ unassessed prerequisites** (vs $1.00$ for Fixed-Order/Greedy Gap, $4.70$ for Difficulty-Only).
+- **Diamond Bottleneck Hierarchy (11 Concepts):** Proposed UCS achieves **$0.00$ unassessed prerequisites** (vs $1.00$ for Fixed-Order/Greedy Gap, $3.70$ for Difficulty-Only).
 
 > [!IMPORTANT]
 > **Key Scientific Takeaway:**
