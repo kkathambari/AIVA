@@ -116,7 +116,7 @@ class UCSEngine:
             
         # 2. P_c: Prerequisite Importance (Centrality + Domain Prerequisite Depth)
         base_pdepth = state.get("prereq_depth", 0.5)
-        if self.graph.number_of_nodes() > 0:
+        if self.graph.number_of_edges() > 0:
             out_deg = self.graph.out_degree(concept_id) if concept_id in self.graph else 0
             in_deg = self.graph.in_degree(concept_id) if concept_id in self.graph else 0
             deg_sum = out_deg * 1.5 + in_deg * 0.5
@@ -205,7 +205,14 @@ class UCSEngine:
         """Returns macro-level assessment efficiency and syllabus coverage metrics."""
         total_concepts = len(self.concept_states)
         if total_concepts == 0:
-            return {"coverage_pct": 0.0, "mastered_count": 0, "unresolved_count": 0}
+            return {
+                "total_concepts": 0,
+                "assessed_count": 0,
+                "mastered_count": 0,
+                "unresolved_count": 0,
+                "coverage_pct": 0.0,
+                "mastery_pct": 0.0
+            }
             
         assessed_concepts = [c for c, s in self.concept_states.items() if s["attempts"] > 0]
         mastered_concepts = [

@@ -123,19 +123,25 @@ To reproduce all empirical tables and baseline comparisons published in the rese
 ```bash
 cd AIVA_backend
 
-# 1. Adaptive Difficulty Benchmark (DQN vs Rule-Based vs Fixed across 3 skill profiles)
+# 1. Primary Research Benchmark (E1): Question Selection Strategy Comparison (UCS vs Fixed vs Random vs Difficulty-Only vs Greedy Gap)
+python experiments/eval_question_selection.py
+
+# 2. Adaptive Difficulty Benchmark (E4): (DQN vs Rule-Based vs Fixed across 3 skill profiles)
 python experiments/eval_adaptive_engine.py
 
-# 2. Multi-Agent Routing Benchmark (Keyword-guided vs Round-Robin baseline)
+# 3. Multi-Agent Routing Benchmark (E3): (Keyword-guided vs Round-Robin baseline)
 python experiments/eval_multi_agent_routing.py
 
-# 3. Hybrid RAG Benchmark (Recall@k, MRR, nDCG comparing BM25, Dense, and RRF)
+# 4. Hybrid RAG Benchmark (E5): (Recall@k, MRR, nDCG comparing BM25, Dense, and RRF)
 python experiments/eval_rag_retrieval.py
 
-# 4. Knowledge Graph Factuality Benchmark (Precision, Recall, F1 against ground truth)
+# 5. Knowledge Graph Factuality Benchmark (E2): (Precision, Recall, F1 against ground truth)
 python experiments/eval_knowledge_graph.py
 
-# 5. Component Ablation Studies (Grounding fidelity, Persona TTR diversity, KG paths)
+# 6. Double-Blind Faculty Rubric Calibration (E6): (Inter-rater agreement & AIVA calibration)
+python experiments/eval_rubric_agreement.py
+
+# 7. Component Ablation Studies: (Grounding fidelity, Persona TTR diversity, KG paths)
 python experiments/eval_ablations.py
 ```
 

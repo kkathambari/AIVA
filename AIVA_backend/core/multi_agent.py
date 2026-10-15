@@ -9,7 +9,9 @@ class AgentState(TypedDict):
     chat_history: str
     difficulty: str
     agent_type: str
-    routing_strategy: str  # 'keyword_balanced' or 'round_robin'
+    routing_strategy: str  # 'keyword_balanced', 'round_robin', or 'ucs_guided'
+    target_concept: Optional[str]
+    recommended_persona: Optional[str]
     selected_agent_node: str
     selected_agent: str
     routing_reason: str
@@ -95,8 +97,23 @@ class MultiAgentPanel:
                 "routing_reason": f"Baseline Round-Robin: Turn #{total_examiner_turns + 1} cycling to {display_names[chosen_node]}."
             }
 
+        # Strategy B: UCS Knowledge-Gap Guided Routing
+        if strategy == "ucs_guided" and state.get("recommended_persona"):
+            rec = state["recommended_persona"].strip()
+            persona_to_node = {
+                "Professor": "professor",
+                "Industry Expert": "industry",
+                "Critic": "critic",
+                "Examiner": "examiner"
+            }
+            chosen_node = persona_to_node.get(rec, "examiner")
+            return {
+                "selected_agent_node": chosen_node,
+                "selected_agent": rec,
+                "routing_reason": f"UCS Knowledge-Gap Selection: Probing targeted concept '{state.get('target_concept', 'unspecified')}' via {rec} persona."
+            }
 
-        # Strategy B: Keyword-Guided with Turn-Balancing Fallback (Default)
+        # Strategy C: Keyword-Guided with Turn-Balancing Fallback (Default)
         # Extract last student message
         last_student_msg = ""
         lines = history.strip().split("\n")
@@ -184,9 +201,12 @@ class MultiAgentPanel:
 
     def _generate_response(self, system_prompt: str, state: AgentState) -> dict:
         asked_str = ", ".join(state.get("asked_questions", []))
+        target_concept = state.get("target_concept")
+        concept_directive = f"\nTarget Concept to Probe: {target_concept}\nInstruction: Ensure your question specifically examines the student's mastery, architectural role, or algorithmic depth regarding '{target_concept}'." if target_concept else ""
         
         prompt = f"""
         {system_prompt}
+        {concept_directive}
         
         Project Context:
         {state['context']}
@@ -276,7 +296,9 @@ class MultiAgentPanel:
         agent_type: str, 
         asked_questions: List[str] = None, 
         is_final_turn: bool = False,
-        routing_strategy: str = "keyword_balanced"
+        routing_strategy: str = "keyword_balanced",
+        target_concept: Optional[str] = None,
+        recommended_persona: Optional[str] = None
     ) -> dict:
         """
         Executes the compiled multi-agent panel graph and returns both the generated question,
@@ -291,6 +313,8 @@ class MultiAgentPanel:
             "difficulty": difficulty,
             "agent_type": agent_type,
             "routing_strategy": routing_strategy,
+            "target_concept": target_concept,
+            "recommended_persona": recommended_persona,
             "selected_agent_node": "examiner",
             "selected_agent": "Examiner",
             "routing_reason": "Initial default",
@@ -306,6 +330,7 @@ class MultiAgentPanel:
             "selected_agent": final_state.get("selected_agent", "Examiner"),
             "routing_reason": final_state.get("routing_reason", "Default routing"),
             "routing_strategy": routing_strategy,
+            "target_concept": final_state.get("target_concept", target_concept),
             "is_fallback": final_state.get("is_fallback", False),
             "generation_source": final_state.get("generation_source", "live_llm")
         }

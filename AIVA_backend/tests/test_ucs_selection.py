@@ -1,5 +1,5 @@
 """
-Unit test asserting the mathematical properties and selection logic of the 
+Unit test asserting the mathematical properties, selection logic, and edge cases of the 
 Unresolved Concept Selection (UCS) engine:
     S(c) = w1 * G_c + w2 * P_c + w3 * U_c - w4 * R_c
 """
@@ -76,8 +76,75 @@ def test_ucs_struggle_concept_resolution():
     assert decision_1["recommended_persona"] == "Professor"
     print(f"[PASS] Correctly diagnosed prerequisite and recommended '{decision_1['recommended_persona']}' for '{decision_1['selected_concept']}'")
 
+# --- Edge Case 1: Empty Graph Fallback ---
+def test_ucs_empty_graph():
+    engine = UCSEngine()
+    decision = engine.select_next_concept(turn=0)
+    assert decision["selected_concept"] == "System Architecture"
+    assert decision["recommended_persona"] == "Examiner"
+    summary = engine.get_coverage_summary()
+    assert summary["total_concepts"] == 0
+    assert summary["assessed_count"] == 0
+    print("[PASS] Empty graph fallback test passed cleanly.")
+
+# --- Edge Case 2: Missing Graph Edges / Disconnected Components ---
+def test_ucs_missing_edges_disconnected():
+    engine = UCSEngine()
+    nodes = [
+        {"id": "Isolated Module A", "type": "Component", "prereq_depth": 0.7},
+        {"id": "Isolated Module B", "type": "Component", "prereq_depth": 0.5}
+    ]
+    # No edges provided
+    engine.load_concept_graph(nodes, relationships=[])
+    metrics_a = engine.calculate_metrics("Isolated Module A", turn=0)
+    metrics_b = engine.calculate_metrics("Isolated Module B", turn=0)
+    assert metrics_a["P_c"] == 0.7
+    assert metrics_b["P_c"] == 0.5
+    decision = engine.select_next_concept(turn=0)
+    assert decision["selected_concept"] == "Isolated Module A"
+    print("[PASS] Disconnected graph without edges evaluated using intrinsic prerequisite depth.")
+
+# --- Edge Case 3: Ties Stability ---
+def test_ucs_ties_stability():
+    engine = UCSEngine()
+    nodes = [
+        {"id": "Concept Alpha", "type": "Theory", "prereq_depth": 0.8},
+        {"id": "Concept Beta", "type": "Theory", "prereq_depth": 0.8}
+    ]
+    engine.load_concept_graph(nodes, relationships=[])
+    decision_turn0 = engine.select_next_concept(turn=0)
+    assert decision_turn0["selected_concept"] in ["Concept Alpha", "Concept Beta"]
+    # Deterministic selection when metrics match
+    decision_turn0_repeat = engine.select_next_concept(turn=0)
+    assert decision_turn0["selected_concept"] == decision_turn0_repeat["selected_concept"]
+    print(f"[PASS] Tie-breaking is deterministic: selected '{decision_turn0['selected_concept']}'.")
+
+# --- Edge Case 4: Repeated Low Scores Pacing ---
+def test_ucs_repeated_low_scores_pacing():
+    engine = UCSEngine()
+    nodes = [
+        {"id": "Challenging Topic", "type": "Theory", "prereq_depth": 0.8},
+        {"id": "Secondary Topic", "type": "Architecture", "prereq_depth": 0.6}
+    ]
+    engine.load_concept_graph(nodes, relationships=[])
+    
+    # Turn 0: Selects Challenging Topic
+    d0 = engine.select_next_concept(turn=0)
+    assert d0["selected_concept"] == "Challenging Topic"
+    # Student scores poorly
+    engine.update_concept_score("Challenging Topic", score=0.20, turn=0)
+    
+    # Turn 1: Immediate recency penalty (0.5) thwarts immediate repeat hammering
+    d1 = engine.select_next_concept(turn=1)
+    assert d1["selected_concept"] == "Secondary Topic", f"Expected pacing to 'Secondary Topic', got '{d1['selected_concept']}'"
+    print(f"[PASS] Pacing verified: after struggle on '{d0['selected_concept']}', engine pivoted to '{d1['selected_concept']}'.")
+
 if __name__ == "__main__":
     test_ucs_initialization_and_weights()
     test_ucs_selection_and_redundancy()
     test_ucs_struggle_concept_resolution()
-    print("\n[ALL PASS] All UCS engine unit tests completed successfully.")
+    test_ucs_empty_graph()
+    test_ucs_missing_edges_disconnected()
+    test_ucs_ties_stability()
+    test_ucs_repeated_low_scores_pacing()
+    print("\n[ALL PASS] All UCS engine unit tests and edge cases completed successfully.")

@@ -153,17 +153,21 @@ Where $C_{\text{corr}}$ is Technical Correctness, $C_{\text{comp}}$ is Completen
 ## 4. Empirical Evaluation & Results
 
 ### 4.1 Question Selection Strategy Comparison (E1)
-We evaluated whether knowledge-gap-aware selection prevents local semantic trapping and improves assessment efficiency across 12 core project concepts evaluated over 10 viva turns across 20 random seeds per student profile (`results_question_selection.json`).
+We evaluated whether knowledge-gap-aware selection prevents local semantic trapping and improves assessment efficiency across 12 core project concepts evaluated over 10 viva turns across 20 random seeds per student profile (`results_question_selection.json`). Efficiency is defined as the number of turns required to achieve $\ge 70\%$ syllabus coverage ($\lceil 0.70 \times 12 \rceil = 9$ concepts, representing $75.0\%$ coverage).
 
 **Table 1: Question Selection Strategy Comparison ($N=10$ Turns, 12 Core Concepts)**
-| Question Selection Strategy | Mean Coverage % (at 10 turns) | Turns to $\ge 70\%$ Coverage | Circular Redundancy % | Unresolved Core Prerequisites |
+| Question Selection Strategy | Mean Coverage % (at 10 turns) | Turns to $\ge 70\%$ Coverage ($\ge 9$ Concepts) | Circular Redundancy % | Unresolved Core Prerequisites |
 | :--- | :---: | :---: | :---: | :---: |
-| **Fixed-Order Sequential** | $83.3\% \pm 0.0\%$ | 8.0 turns | **0.0%** | 2.00 |
-| **Random / Round-Robin** | $57.9\% \pm 9.3\%$ | 10.6 turns | 12.8% | 3.10 |
-| **Difficulty-Only (Prior AIVA)** | $24.2\% \pm 2.5\%$ | 11.0 turns | 41.8% | 6.10 |
-| **Proposed UCS (Knowledge-Gap-Aware)** | **$83.3\% \pm 0.0\%$** | **8.0 turns** | **0.0%** | **1.00** |
+| **Fixed-Order Sequential** | $83.3\% \pm 0.0\%$ | 9.0 turns | **0.0%** | 2.00 |
+| **Random Uniform Selection** | $57.9\% \pm 9.3\%$ | 11.0 turns | 12.8% | 3.10 |
+| **Difficulty-Only (Local Trapping Baseline)** | $24.2\% \pm 2.5\%$ | 11.0 turns | 41.8% | 6.10 |
+| **Greedy Knowledge-Gap Alone ($S(c)=G_c$)** | $83.3\% \pm 0.0\%$ | 9.0 turns | **0.0%** | 2.00 |
+| **Proposed UCS (Knowledge-Gap-Aware)** | **$83.3\% \pm 0.0\%$** | **9.0 turns** | **0.0%** | **1.00** |
 
-**Analysis:** Difficulty-only question selection without concept tracking suffers from severe *local semantic trapping*: questions follow whatever topic the student mentioned in their previous response, resulting in only $24.2\%$ syllabus coverage, high circular redundancy ($41.8\%$), and leaving an average of $6.10$ foundational prerequisites unassessed. While Fixed-Order covers concepts sequentially, it leaves late-occurring foundational modules unaddressed (2.00 unresolved prerequisites). In contrast, AIVA's Proposed UCS algorithm achieves $83.3\%$ coverage with $0.0\%$ redundancy, while actively prioritizing foundational dependencies first, cutting unresolved core prerequisites to $1.00$.
+**Analysis:**
+1. **Local Semantic Trapping Pathology:** When question selection relies purely on conversational utterance similarity (Difficulty-Only / Local Trapping), the examiner gets trapped in localized semantic sub-graphs (e.g., containerization details), covering only $24.2\%$ of the syllabus, repeating questions $41.8\%$ of the time, and leaving $6.10$ foundational prerequisites unassessed.
+2. **Random Uniform Stochastic Omission:** Random selection lacks topological awareness, achieving only $57.9\%$ coverage and leaving $3.10$ core prerequisites unexamined due to stochastic duplicate inquiries ($12.8\%$ redundancy).
+3. **The Distinctive Value of Full UCS over Greedy Gap ($G_c$):** Selecting solely based on unassessed gap ($S(c) = G_c$) achieves high gross coverage ($83.3\%$), but because it lacks graph topological guidance ($P_c$), it probes concepts in arbitrary order and leaves late-occurring foundational modules unassessed ($2.00$ unresolved prerequisites). AIVA's Proposed UCS cuts unresolved core prerequisites in half ($1.00$) by leveraging prerequisite depth and out-degree centrality ($P_c$), while utilizing $U_c$ and $R_c$ to pace inquiries.
 
 ### 4.2 Adaptive Difficulty Controller Comparison (E4)
 We simulated 300 complete viva sessions (20 turns each) across 5 independent random seeds ($42, 101, 2024, 777, 999$) evaluating three student skill cohorts: Low ($0.30$), Medium ($0.60$), and High ($0.85$).

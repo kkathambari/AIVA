@@ -389,16 +389,17 @@ The primary empirical contribution of AIVA is the **Unresolved Concept Selection
 $$S(c) = w_1 G_c + w_2 P_c + w_3 U_c - w_4 R_c$$
 Where $G_c$ represents the unassessed knowledge gap ($1.0$ unprobed, $1.0 - \bar{s}_c$ assessed), $P_c$ models prerequisite topological importance ($0.6 \cdot d_{\text{prereq}} + 0.4 \cdot \text{deg}_{\text{topo}}$), $U_c$ captures epistemic mastery uncertainty, and $R_c$ enforces a recency/frequency redundancy penalty ($w_1=0.35, w_2=0.25, w_3=0.25, w_4=0.15$).
 
-*Evaluated across $N=20$ randomized simulation seeds, 3 student mastery archetypes (Low: 0.30, Medium: 0.60, High: 0.85), fixed 10-turn question budget over 12 dissertation syllabus concepts:*
+*Evaluated across $N=20$ randomized simulation seeds, 3 student mastery archetypes (Low: 0.30, Medium: 0.60, High: 0.85), fixed 10-turn question budget over 12 dissertation syllabus concepts. Efficiency targets $\ge 70\%$ syllabus coverage ($\lceil 0.70 \times 12 \rceil = 9$ concepts, representing $75.0\%$ coverage):*
 
-| Question Selection Strategy | Mean Concept Coverage % | Redundancy Rate % | Turns to 70% Syllabus | Unresolved Core Prerequisites | Failure Mode Observed |
+| Question Selection Strategy | Mean Concept Coverage % | Redundancy Rate % | Turns to $\ge 70\%$ Coverage ($\ge 9$ Concepts) | Unresolved Core Prerequisites | Failure Mode Observed |
 | :--- | :---: | :---: | :---: | :---: | :--- |
-| **Fixed-Order Sequential** | 83.33% | **0.00%** | 8.00 | 2.00 | Blind to candidate struggle / fixed rigidity |
-| **Random / Round-Robin** | 57.92% | 12.83% | 10.55 | 3.10 | Stochastic omission of critical milestones |
-| **Difficulty-Only (Local Trapping Baseline)** | 24.17% | 41.83% | >10.00 | 6.10 | **Local Semantic Trapping** in tight subgraphs |
-| **Proposed UCS (Knowledge-Gap-Aware)** | **83.33%** | **0.00%** | **8.00** | **1.00** | **Optimal coverage & prerequisite resolution** |
+| **Fixed-Order Sequential** | 83.33% | **0.00%** | 9.00 | 2.00 | Blind to candidate struggle / fixed rigidity |
+| **Random Uniform Selection** | 57.92% | 12.83% | 11.00 | 3.10 | Stochastic omission of critical milestones |
+| **Difficulty-Only (Local Trapping Baseline)** | 24.17% | 41.83% | 11.00 | 6.10 | **Local Semantic Trapping** in tight subgraphs |
+| **Greedy Knowledge-Gap Alone ($S(c)=G_c$)** | 83.33% | **0.00%** | 9.00 | 2.00 | Lacks topological prerequisite prioritization |
+| **Proposed UCS (Knowledge-Gap-Aware)** | **83.33%** | **0.00%** | **9.00** | **1.00** | **Optimal coverage & prerequisite resolution** |
 
-> **Key Research Finding:** Standard conversational examiners select follow-up questions from the student's previous utterance. This induces severe **local semantic trapping**, confining the viva to narrow sub-graphs (e.g., Docker $\leftrightarrow$ Kubernetes) and achieving only $24.2\%$ syllabus coverage with $41.8\%$ repetitive questions. UCS completely overcomes this pathology, delivering maximal budget coverage ($83.3\%$) with zero redundancy and reducing unassessed foundational prerequisites to $1.00$.
+> **Key Research Finding:** Standard conversational examiners select follow-up questions from the student's previous utterance. This induces severe **local semantic trapping**, confining the viva to narrow sub-graphs (e.g., Docker $\leftrightarrow$ Kubernetes) and achieving only $24.2\%$ syllabus coverage with $41.8\%$ repetitive questions. While Greedy Knowledge-Gap ($G_c$) and Fixed-Order achieve gross coverage, they leave $2.00$ foundational prerequisites unassessed. Proposed UCS completely overcomes this pathology, delivering maximal budget coverage ($83.3\%$) with zero redundancy and halving unassessed foundational prerequisites to $1.00$.
 
 #### B. Adaptive Difficulty Controller Evaluation (`results_adaptive_controllers.json`)
 *Evaluated across 5 random seeds (42, 101, 2024, 777, 999), 3 standardized student skill profiles (Low: 0.30, Medium: 0.60, High: 0.85), 20 turns per session (300 total viva sessions):*

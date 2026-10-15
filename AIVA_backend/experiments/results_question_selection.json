@@ -1,15 +1,18 @@
 {
   "benchmark_metadata": {
     "benchmark_name": "E1: Question Selection Strategy Comparison",
-    "execution_timestamp": "2026-10-15T15:48:34.019344",
+    "execution_timestamp": "2026-10-15T16:03:40.370760",
     "concepts_evaluated": 12,
     "turns_per_viva": 10,
+    "target_70pct_concepts": 9,
+    "target_70pct_rule": "math.ceil(0.70 * N_concepts)",
     "seeds_per_profile": 20,
     "profiles_tested": [
       "Competent_Student",
       "Struggling_Student",
       "Uneven_Student"
     ],
+    "study_type": "Controlled Monte Carlo MDP Simulation across Defined Student Mastery Archetypes",
     "ucs_weights": {
       "w_gap": 0.35,
       "w_prereq": 0.25,
@@ -21,28 +24,35 @@
     "Fixed-Order Sequential": {
       "mean_coverage_pct": 83.33,
       "std_coverage_pct": 0.0,
-      "mean_turns_to_70pct": 8.0,
+      "mean_turns_to_70pct": 9.0,
       "mean_redundancy_rate_pct": 0.0,
       "mean_unresolved_prereqs": 2.0
     },
-    "Random / Round-Robin": {
+    "Random Uniform Selection": {
       "mean_coverage_pct": 57.92,
       "std_coverage_pct": 9.31,
-      "mean_turns_to_70pct": 10.55,
+      "mean_turns_to_70pct": 11.0,
       "mean_redundancy_rate_pct": 12.83,
       "mean_unresolved_prereqs": 3.1
     },
-    "Difficulty-Only (Prior AIVA)": {
+    "Difficulty-Only (Local Trapping Baseline)": {
       "mean_coverage_pct": 24.17,
       "std_coverage_pct": 2.5,
       "mean_turns_to_70pct": 11.0,
       "mean_redundancy_rate_pct": 41.83,
       "mean_unresolved_prereqs": 6.1
     },
+    "Greedy Knowledge-Gap Alone": {
+      "mean_coverage_pct": 83.33,
+      "std_coverage_pct": 0.0,
+      "mean_turns_to_70pct": 9.0,
+      "mean_redundancy_rate_pct": 0.0,
+      "mean_unresolved_prereqs": 2.0
+    },
     "Proposed UCS (Knowledge-Gap-Aware)": {
       "mean_coverage_pct": 83.33,
       "std_coverage_pct": 0.0,
-      "mean_turns_to_70pct": 8.0,
+      "mean_turns_to_70pct": 9.0,
       "mean_redundancy_rate_pct": 0.0,
       "mean_unresolved_prereqs": 1.0
     }

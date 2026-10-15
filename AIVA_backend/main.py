@@ -8,6 +8,7 @@ from core.multi_agent import MultiAgentPanel
 from core.analytics_engine import AnalyticsEngine
 from core.rag_engine import RAGEngine
 from core.voice_engine import VoiceEngine
+from core.ucs_engine import UCSEngine
 import shutil
 import os
 import json
@@ -57,8 +58,8 @@ def startup_event():
     
     # Initialize the evaluator LLM using Gemini
     from langchain_google_genai import ChatGoogleGenerativeAI
-    evaluator_llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.0).with_structured_output(AnswerEvaluation)
-    tutor_llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.7)
+    evaluator_llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.0, max_retries=1, timeout=10).with_structured_output(AnswerEvaluation)
+    tutor_llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.7, max_retries=1, timeout=10)
     
     # Load existing KG data from file if present to restore session
     if os.path.exists("kg_data.json"):
@@ -68,7 +69,9 @@ def startup_event():
                 session.graph_nodes = data.get("nodes", [])
                 session.graph_relationships = data.get("relationships", [])
                 session.document_name = data.get("document_name", "")
-            print(f"AIVA Backend: Restored {len(session.graph_nodes)} nodes from kg_data.json")
+            if session.graph_nodes:
+                session.ucs_engine.load_concept_graph(session.graph_nodes, session.graph_relationships)
+            print(f"AIVA Backend: Restored {len(session.graph_nodes)} nodes from kg_data.json (UCS concept graph initialized)")
         except Exception as e:
             print(f"Error loading kg_data.json on startup: {e}")
             
@@ -77,6 +80,7 @@ def startup_event():
 
 class VivaSession:
     def __init__(self):
+        self.ucs_engine = UCSEngine()
         self.reset()
         
     def reset(self):
@@ -92,6 +96,7 @@ class VivaSession:
         self.last_fluency_report = None
         self.document_name = ""
         self.turn_audit_trail = []
+        self.ucs_engine = UCSEngine()
 
 session = VivaSession()
 
@@ -135,6 +140,9 @@ async def upload_and_build_kg(file: UploadFile = File(...)):
         # Store in session state
         session.graph_nodes = [node.model_dump() for node in extraction.nodes]
         session.graph_relationships = [rel.model_dump() for rel in extraction.relationships]
+        
+        # Initialize the Unresolved Concept Selection (UCS) engine with the extracted concept graph
+        session.ucs_engine.load_concept_graph(session.graph_nodes, session.graph_relationships)
         
         # Save kg_data.json with document_name for persistence across restarts
         try:
@@ -214,7 +222,8 @@ async def get_session():
         "difficulty_history": session.difficulty_history,
         "performance_data": session.performance_data,
         "last_fluency_report": session.last_fluency_report,
-        "turn_audit_trail": session.turn_audit_trail
+        "turn_audit_trail": session.turn_audit_trail,
+        "ucs_summary": session.ucs_engine.get_coverage_summary()
     }
 
 @app.post("/reset_examination")
@@ -228,6 +237,7 @@ async def reset_examination():
     session.overall_coverage = 0.0
     session.last_fluency_report = None
     session.turn_audit_trail = []
+    session.ucs_engine = UCSEngine()
     return {"message": "Examination reset successfully."}
 
 @app.get("/audit_trail")
@@ -244,7 +254,8 @@ async def get_research_metadata():
     return {
         "framework": "AIVA (Adaptive Intelligent Viva Assessment)",
         "multi_agent_personas": ["Professor", "Industry Expert", "Critic", "Examiner"],
-        "routing_strategies_supported": ["keyword_balanced", "round_robin"],
+        "routing_strategies_supported": ["keyword_balanced", "round_robin", "ucs_guided"],
+        "question_selection_strategies_supported": ["ucs", "difficulty_only"],
         "adaptive_controllers_supported": ["dqn", "rule_based", "fixed"],
         "rubric_dimensions": [
             {"name": "correctness", "weight": 0.35, "description": "Technical veracity"},
@@ -283,8 +294,9 @@ class MultiAgentRequest(BaseModel):
     agent_type: str
     difficulty: int = 5
     is_final_turn: bool = False
-    routing_strategy: Optional[str] = "keyword_balanced"  # Supports 'keyword_balanced' or 'round_robin'
+    routing_strategy: Optional[str] = "keyword_balanced"  # Supports 'keyword_balanced', 'round_robin', 'ucs_guided'
     controller_type: Optional[str] = "dqn"  # Supports 'dqn', 'rule_based', or 'fixed'
+    question_selection_strategy: Optional[str] = "ucs"  # Supports 'ucs' (default, knowledge-gap-aware) or 'difficulty_only'
 
 @app.post("/multi_agent_question")
 async def generate_multi_agent_question(request: MultiAgentRequest):
@@ -326,6 +338,10 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
             agent_questions = [m for m in request.conversation_history[:-1] if m.get("role") != "user"]
             prev_question = agent_questions[-1]["content"] if agent_questions else "Introduction"
             
+            # Identify the concept probed in the previous turn
+            prev_audit = session.turn_audit_trail[-1] if session.turn_audit_trail else {}
+            prev_concept = prev_audit.get("selected_concept")
+
             # Retrieve relevant context from RAG (using default hybrid RRF)
             context_chunks = rag_engine.query(last_student_answer, n_results=3)
             retrieved_context = "\n\n".join(context_chunks)
@@ -340,6 +356,7 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
             4. reasoning_depth: Depth of explanation articulate 'why' specific choices/methods were made and trade-offs.
 
             Previous Question Asked: {prev_question}
+            Target Concept Probed: {prev_concept or 'General Architecture'}
             Student Answer: {last_student_answer}
             Retrieved Report Context:
             {retrieved_context}
@@ -359,19 +376,19 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
                     "reasoning_depth": eval_result.reasoning_depth,
                     "score": composite_score,
                     "feedback": eval_result.feedback,
-                    "concept": eval_result.concept
+                    "concept": eval_result.concept or prev_concept or "General"
                 }
             except Exception as e:
                 print(f"Error in LLM evaluation: {repr(e)}")
-                # Robust fallback evaluation
+                # Robust fallback evaluation preserving the probed concept
                 evaluation = {
                     "correctness": 0.5,
                     "completeness": 0.5,
                     "evidence_alignment": 0.5,
                     "reasoning_depth": 0.5,
                     "score": 0.5,
-                    "feedback": "Evaluation fallback due to API error.",
-                    "concept": "General"
+                    "feedback": "Evaluation fallback due to API rate limit or error.",
+                    "concept": prev_concept or "General"
                 }
                 
             # 3. Call adaptive engine (supporting dqn, rule_based, or fixed baseline)
@@ -392,7 +409,7 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
             coverage_dict = analytics_engine.calculate_coverage(session.graph_nodes, last_student_answer)
             concept_coverage = coverage_dict["concept_breakdown"].get(evaluation["concept"], 0.0) / 100.0
             
-            # 4. Store performance data for weakness detection
+            # 4. Store performance data and update UCS concept state
             performance_entry = {
                 "concept": evaluation["concept"],
                 "score": evaluation["score"],
@@ -403,10 +420,42 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
             }
             session.performance_data.append(performance_entry)
             
-        # 5. Retrieve Context for the Next Question
-        query_text = student_answers[-1]["content"] if student_answers else "Overview of the project report"
-        next_context_chunks = rag_engine.query(query_text, n_results=3)
-        next_context = "\n\n".join(next_context_chunks)
+            # Update UCS engine with evaluated concept mastery
+            target_to_update = evaluation.get("concept")
+            if not target_to_update or target_to_update.lower() in ["general", "none"]:
+                target_to_update = prev_concept
+            if target_to_update:
+                session.ucs_engine.update_concept_score(
+                    concept_id=target_to_update,
+                    score=evaluation["score"],
+                    turn=len(session.asked_questions)
+                )
+            
+        # 5. Question Selection Strategy & Context Retrieval
+        q_strategy = request.question_selection_strategy or "ucs"
+        selected_concept = None
+        ucs_metrics = {}
+        recommended_persona = None
+        
+        if q_strategy == "ucs":
+            # Lazily populate concept graph if nodes exist but engine state is empty
+            if len(session.ucs_engine.concept_states) == 0 and len(session.graph_nodes) > 0:
+                session.ucs_engine.load_concept_graph(session.graph_nodes, session.graph_relationships)
+                
+            ucs_decision = session.ucs_engine.select_next_concept(turn=len(session.asked_questions))
+            selected_concept = ucs_decision["selected_concept"]
+            ucs_metrics = ucs_decision["score_metrics"]
+            recommended_persona = ucs_decision["recommended_persona"]
+            
+            # Knowledge-gap grounded query: anchor RAG search to targeted concept
+            query_text = f"{selected_concept} overview architecture implementation algorithms"
+            next_context_chunks = rag_engine.query(query_text, n_results=3)
+            next_context = "\n\n".join(next_context_chunks)
+        else:
+            # Baseline: Difficulty-only conversational local retrieval
+            query_text = student_answers[-1]["content"] if student_answers else "Overview of the project report"
+            next_context_chunks = rag_engine.query(query_text, n_results=3)
+            next_context = "\n\n".join(next_context_chunks)
         
         # 6. Route to selected agent and generate the next question
         difficulty_mapping = {
@@ -418,7 +467,7 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
         }
         difficulty_name = difficulty_mapping[session.current_difficulty]
         
-        # Run Multi Agent Panel with traceable routing
+        # Run Multi Agent Panel with traceable routing and optional UCS guidance
         strategy = request.routing_strategy or "keyword_balanced"
         try:
             panel_result = multi_agent_panel.run_panel(
@@ -428,7 +477,9 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
                 agent_type=request.agent_type,
                 asked_questions=session.asked_questions,
                 is_final_turn=request.is_final_turn,
-                routing_strategy=strategy
+                routing_strategy=strategy,
+                target_concept=selected_concept,
+                recommended_persona=recommended_persona
             )
             next_question = panel_result["question"]
             actual_agent = panel_result.get("selected_agent", "Examiner")
@@ -448,6 +499,9 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
             "routing_reason": routing_reason,
             "routing_strategy": strategy,
             "controller_type": request.controller_type or "dqn",
+            "question_selection_strategy": q_strategy,
+            "selected_concept": selected_concept,
+            "ucs_metrics": ucs_metrics,
             "question": next_question,
             "difficulty_level": session.current_difficulty,
             "difficulty_name": difficulty_name,
@@ -485,6 +539,9 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
             "agent": actual_agent,
             "routing_reason": routing_reason,
             "routing_strategy": strategy,
+            "question_selection_strategy": q_strategy,
+            "selected_concept": selected_concept,
+            "ucs_metrics": ucs_metrics,
             "question": next_question,
             "evaluation": evaluation,
             "new_difficulty": session.current_difficulty,
@@ -496,7 +553,8 @@ async def generate_multi_agent_question(request: MultiAgentRequest):
                 },
                 "readiness_prediction": readiness_data,
                 "difficulty_history": session.difficulty_history,
-                "fluency": session.last_fluency_report
+                "fluency": session.last_fluency_report,
+                "ucs_summary": session.ucs_engine.get_coverage_summary()
             }
         }
     except Exception as e:

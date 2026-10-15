@@ -2,24 +2,26 @@
 AIVA Research Benchmark: Question Selection Strategy Evaluation (E1)
 --------------------------------------------------------------------
 Empirically benchmarks the proposed Knowledge-Gap-Aware Unresolved Concept Selection (UCS)
-against three standard baseline strategies on a standardized 12-concept engineering project graph:
+against standard and competitive baseline strategies on a standardized 12-concept engineering project graph:
 
-1. Fixed-Order Sequential (Static syllabus / report appearance order)
-2. Random / Round-Robin (Uniform stochastic question sampling)
-3. Difficulty-Only Adaptive (Prior baseline: adjusts difficulty, but retrieves chunks purely from last answer keywords)
-4. Proposed UCS (Knowledge-Gap-Aware: S(c) = w1*Gc + w2*Pc + w3*Uc - w4*Rc)
+1. Fixed-Order Sequential: Static syllabus / report appearance order
+2. Random Uniform Selection: Uniform stochastic question sampling across concepts
+3. Difficulty-Only (Local Trapping Baseline): Adjusts difficulty, but retrieves chunks purely from last answer keywords
+4. Greedy Knowledge-Gap Alone (S(c) = G_c): Evaluates gap G_c without prerequisite topology, uncertainty, or redundancy penalties
+5. Proposed UCS (Full Formulation): S(c) = w1*G_c + w2*P_c + w3*U_c - w4*R_c
 
 Evaluation Metrics:
 - Concept Coverage (%) at 10 turns
-- Assessment Efficiency: Turns required to reach >= 70% syllabus coverage
-- Question Redundancy Rate (%): Turns spent re-asking already resolved/mastered concepts
-- Unresolved Core Prerequisites: Number of high-centrality foundational concepts left unassessed
+- Assessment Efficiency: Turns required to reach >= 70% syllabus coverage (Target: ceil(0.70 * N_concepts))
+- Question Redundancy Rate (%): Turns spent re-asking already resolved/mastered concepts (score >= 0.70)
+- Unresolved Core Prerequisites: Number of high-prerequisite foundational concepts (depth >= 0.8) left unassessed
 """
 
 import os
 import sys
 import json
 import random
+import math
 import datetime
 import numpy as np
 
@@ -78,6 +80,10 @@ STUDENT_PROFILES = {
 TOTAL_TURNS = 10
 NUM_SEEDS = 20
 
+def get_target_70() -> int:
+    """Returns strictly ceil(70% * N_concepts). For 12 concepts, ceil(8.4) = 9 concepts (75.0%)."""
+    return math.ceil(0.70 * len(BENCHMARK_CONCEPTS))
+
 def simulate_student_response(true_mastery: float, seed: int) -> float:
     """Simulates an observed rubric evaluation score with slight response noise."""
     rng = np.random.RandomState(seed)
@@ -88,7 +94,7 @@ def simulate_student_response(true_mastery: float, seed: int) -> float:
 def run_fixed_order(profile: dict, seed: int):
     assessed = {}
     turns_to_70 = None
-    target_70 = int(0.70 * len(BENCHMARK_CONCEPTS))
+    target_70 = get_target_70()
     redundancy_count = 0
     
     for turn in range(TOTAL_TURNS):
@@ -118,12 +124,12 @@ def run_fixed_order(profile: dict, seed: int):
         "unresolved_prereqs": unresolved_prereqs
     }
 
-# --- Strategy 2: Random / Round-Robin ---
+# --- Strategy 2: Random Uniform Selection ---
 def run_random_selection(profile: dict, seed: int):
     rng = random.Random(seed)
     assessed = {}
     turns_to_70 = None
-    target_70 = int(0.70 * len(BENCHMARK_CONCEPTS))
+    target_70 = get_target_70()
     redundancy_count = 0
     
     for turn in range(TOTAL_TURNS):
@@ -153,16 +159,14 @@ def run_random_selection(profile: dict, seed: int):
         "unresolved_prereqs": unresolved_prereqs
     }
 
-# --- Strategy 3: Difficulty-Only Adaptive (Prior AIVA Baseline) ---
-# Changes difficulty, but selects concepts based on keyword association with the previous response
+# --- Strategy 3: Difficulty-Only Adaptive (Local Trapping Baseline) ---
 def run_difficulty_only(profile: dict, seed: int):
     rng = random.Random(seed)
     assessed = {}
     turns_to_70 = None
-    target_70 = int(0.70 * len(BENCHMARK_CONCEPTS))
+    target_70 = get_target_70()
     redundancy_count = 0
     
-    # Keyword association graph (student mentioning Docker leads to HPA or Containers, causing cluster trapping)
     LOCAL_NEIGHBORS = {
         "FastAPI Gateway": ["Asynchronous Event Loops", "PostgreSQL Composite Indexing"],
         "Asynchronous Event Loops": ["FastAPI Gateway"],
@@ -196,7 +200,6 @@ def run_difficulty_only(profile: dict, seed: int):
         if len(assessed) >= target_70 and turns_to_70 is None:
             turns_to_70 = turn + 1
             
-        # Prior baseline: Follows keyword neighborhood of student answer
         neighbors = LOCAL_NEIGHBORS.get(cid, list(LOCAL_NEIGHBORS.keys()))
         current_cid = rng.choice(neighbors)
             
@@ -211,14 +214,65 @@ def run_difficulty_only(profile: dict, seed: int):
         "unresolved_prereqs": unresolved_prereqs
     }
 
-# --- Strategy 4: Proposed UCS (Knowledge-Gap-Aware Selection) ---
+# --- Strategy 4: Competitive Baseline — Greedy Knowledge-Gap Alone (S(c) = G_c) ---
+def run_greedy_gap_only(profile: dict, seed: int):
+    """
+    Evaluates selecting solely based on unassessed gap G_c without graph prerequisite
+    topological depth P_c, epistemic uncertainty U_c, or recency/redundancy penalty R_c.
+    """
+    assessed = {}
+    turns_to_70 = None
+    target_70 = get_target_70()
+    redundancy_count = 0
+    
+    for turn in range(TOTAL_TURNS):
+        # Candidate selection based purely on highest gap G_c
+        candidate_scores = []
+        for c in BENCHMARK_CONCEPTS:
+            cid = c["id"]
+            if cid not in assessed:
+                g_c = 1.0  # Unassessed candidate
+            else:
+                g_c = max(0.0, 1.0 - assessed[cid]["mean_score"])
+            candidate_scores.append((cid, g_c))
+            
+        # Sort by gap descending (ties broken by concept list order)
+        candidate_scores.sort(key=lambda x: x[1], reverse=True)
+        cid = candidate_scores[0][0]
+        
+        if cid in assessed and assessed[cid]["mean_score"] >= 0.70:
+            redundancy_count += 1
+            
+        score = simulate_student_response(profile[cid], seed * 100 + turn)
+        if cid not in assessed:
+            assessed[cid] = {"attempts": 1, "scores": [score], "mean_score": score}
+        else:
+            assessed[cid]["attempts"] += 1
+            assessed[cid]["scores"].append(score)
+            assessed[cid]["mean_score"] = sum(assessed[cid]["scores"]) / len(assessed[cid]["scores"])
+            
+        if len(assessed) >= target_70 and turns_to_70 is None:
+            turns_to_70 = turn + 1
+            
+    coverage_pct = (len(assessed) / len(BENCHMARK_CONCEPTS)) * 100.0
+    redundancy_rate = (redundancy_count / TOTAL_TURNS) * 100.0
+    unresolved_prereqs = sum(1 for c in BENCHMARK_CONCEPTS if c["prereq_depth"] >= 0.8 and c["id"] not in assessed)
+    
+    return {
+        "coverage_pct": coverage_pct,
+        "turns_to_70": turns_to_70 if turns_to_70 else TOTAL_TURNS + 1,
+        "redundancy_rate": redundancy_rate,
+        "unresolved_prereqs": unresolved_prereqs
+    }
+
+# --- Strategy 5: Proposed UCS (Knowledge-Gap-Aware Selection) ---
 def run_ucs_selection(profile: dict, seed: int):
     engine = UCSEngine(w_gap=0.35, w_prereq=0.25, w_uncertainty=0.25, w_redundancy=0.15)
     engine.load_concept_graph(BENCHMARK_CONCEPTS, BENCHMARK_RELATIONSHIPS)
     
     assessed = {}
     turns_to_70 = None
-    target_70 = int(0.70 * len(BENCHMARK_CONCEPTS))
+    target_70 = get_target_70()
     redundancy_count = 0
     
     for turn in range(TOTAL_TURNS):
@@ -255,12 +309,14 @@ def run_ucs_selection(profile: dict, seed: int):
 def run_benchmark_e1():
     print("=" * 80)
     print("AIVA RESEARCH BENCHMARK E1: Question Selection Strategy Comparison")
+    print(f"Target >=70% coverage threshold: ceil(0.70 * {len(BENCHMARK_CONCEPTS)}) = {get_target_70()} concepts")
     print("=" * 80)
     
     strategies = {
         "Fixed-Order Sequential": run_fixed_order,
-        "Random / Round-Robin": run_random_selection,
-        "Difficulty-Only (Prior AIVA)": run_difficulty_only,
+        "Random Uniform Selection": run_random_selection,
+        "Difficulty-Only (Local Trapping Baseline)": run_difficulty_only,
+        "Greedy Knowledge-Gap Alone": run_greedy_gap_only,
         "Proposed UCS (Knowledge-Gap-Aware)": run_ucs_selection
     }
     
@@ -287,7 +343,7 @@ def run_benchmark_e1():
         
         print(f"\nStrategy: {s_name}")
         print(f"  Concept Coverage (at 10 turns):      {results[s_name]['mean_coverage_pct']:.1f}% ± {results[s_name]['std_coverage_pct']:.1f}%")
-        print(f"  Efficiency (Turns to >=70% Coverage): {results[s_name]['mean_turns_to_70pct']:.1f} turns")
+        print(f"  Efficiency (Turns to >=70% Coverage): {results[s_name]['mean_turns_to_70pct']:.2f} turns")
         print(f"  Redundancy Rate (% re-asking known):  {results[s_name]['mean_redundancy_rate_pct']:.1f}%")
         print(f"  Unresolved Core Prerequisites (avg):  {results[s_name]['mean_unresolved_prereqs']:.2f}")
 
@@ -297,8 +353,11 @@ def run_benchmark_e1():
             "execution_timestamp": datetime.datetime.now().isoformat(),
             "concepts_evaluated": len(BENCHMARK_CONCEPTS),
             "turns_per_viva": TOTAL_TURNS,
+            "target_70pct_concepts": get_target_70(),
+            "target_70pct_rule": "math.ceil(0.70 * N_concepts)",
             "seeds_per_profile": NUM_SEEDS,
             "profiles_tested": list(STUDENT_PROFILES.keys()),
+            "study_type": "Controlled Monte Carlo MDP Simulation across Defined Student Mastery Archetypes",
             "ucs_weights": {"w_gap": 0.35, "w_prereq": 0.25, "w_uncertainty": 0.25, "w_redundancy": 0.15}
         },
         "comparative_metrics": results
