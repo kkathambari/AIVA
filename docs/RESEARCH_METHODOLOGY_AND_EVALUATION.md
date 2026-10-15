@@ -22,7 +22,7 @@ This document establishes the scientific foundations, empirical baselines, bench
 
 ### 1.3 Central Contribution Statement
 Rather than presenting hybrid RAG, multi-agent AI, knowledge graphs, and reinforcement learning as an uncoordinated list of technologies, AIVA's primary scientific contribution is **Knowledge-Gap-Aware Adaptive Assessment** formalized through the **Unresolved Concept Selection (UCS)** algorithm:
-> *"We formulate and evaluate the Unresolved Concept Selection (UCS) algorithm, which models dynamic student understanding over a directed dissertation concept graph to systematically identify and probe high-priority knowledge gaps. We demonstrate that UCS overcomes the 'local semantic trapping' failure mode inherent in standard conversational RAG vivas, achieving 83.33% syllabus coverage with 0.0% circular redundancy, while reducing unassessed core prerequisites by 67% over conventional baselines."*
+> *"We formulate and evaluate the Unresolved Concept Selection (UCS) algorithm, which models dynamic student understanding over a directed dissertation concept graph to systematically identify and probe high-priority knowledge gaps. We demonstrate that UCS overcomes the 'local semantic trapping' failure mode inherent in standard conversational RAG vivas, achieving a macro average of 89.39% ± 6.86% syllabus coverage with 0.0% circular redundancy and 100.0% target-reached compliance across four diverse graph topologies (and 83.33% coverage on the 12-concept project architecture DAG), while reducing unassessed core prerequisites by 80% (down to 0.25 ± 0.43) over conventional baselines."*
 
 ---
 
@@ -64,6 +64,7 @@ At each turn $t$, AIVA selects $c^* = \arg\max_{c \in \mathcal{V}} S(c)$, querie
 
 *Topology Highlights:*
 - **Branching Architecture DAG (12 Concepts):** Proposed UCS achieves $83.3\%$ coverage and cuts unassessed prerequisites to $1.00$ (vs $2.00$ for Fixed-Order/Greedy Gap, $6.00$ for Difficulty-Only).
+- **Linear Prerequisite Chain (10 Concepts):** Proposed UCS achieves **$100.0\%$ coverage** and **$0.00$ unassessed prerequisites** (matching Fixed-Order/Greedy Gap at $0.00$ on linear paths, vs $4.70$ for Difficulty-Only).
 - **Modular Disconnected Clusters (12 Concepts):** Proposed UCS achieves **$0.00$ unassessed prerequisites** (vs $2.00$ for Fixed-Order/Greedy Gap, $4.40$ for Difficulty-Only).
 - **Diamond Bottleneck Hierarchy (11 Concepts):** Proposed UCS achieves **$0.00$ unassessed prerequisites** (vs $1.00$ for Fixed-Order/Greedy Gap, $3.70$ for Difficulty-Only).
 

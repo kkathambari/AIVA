@@ -37,7 +37,7 @@ EXPECTED_STRATEGIES = [
 ]
 
 def validate_results_artifact():
-    print("[1/3] Validating results_question_selection.json structure & integrity...")
+    print("[1/3] Validating results_question_selection.json structure & mathematical integrity...")
     if not os.path.exists(RESULTS_PATH):
         raise FileNotFoundError(f"Missing results artifact: {RESULTS_PATH}")
         
@@ -59,22 +59,51 @@ def validate_results_artifact():
             if s not in t_strats:
                 raise AssertionError(f"Strategy '{s}' missing from topology '{t}'.")
             s_data = t_strats[s]
-            # Ensure target_reached_rate_pct is numeric
+            # Ensure target_reached_rate_pct is numeric and bounded [0, 100]
             assert isinstance(s_data["target_reached_rate_pct"], (int, float))
+            assert 0.0 <= s_data["target_reached_rate_pct"] <= 100.0
+            assert 0.0 <= s_data["mean_coverage_pct"] <= 100.0
+            assert 0.0 <= s_data["mean_redundancy_rate_pct"] <= 100.0
+            assert s_data["mean_unresolved_prereqs"] >= 0.0
             # Ensure no arbitrary 11 turns sentinel masking failure
             if s_data["target_reached_rate_pct"] == 0.0:
                 assert s_data["mean_turns_to_target"] is None, f"Expected None turns for 0% reached, got {s_data['mean_turns_to_target']}"
+            else:
+                assert s_data["mean_turns_to_target"] is not None
+                assert 1.0 <= s_data["mean_turns_to_target"] <= meta.get("turns_per_viva", 10)
 
     macro = data.get("comparative_metrics", {})
     for s in EXPECTED_STRATEGIES:
         if s not in macro:
             raise AssertionError(f"Strategy '{s}' missing from comparative_metrics.")
             
-    print(f"  -> Successfully verified all {len(EXPECTED_TOPOLOGIES)} topologies and {len(EXPECTED_STRATEGIES)} strategies across 600 runs.")
+    # Independent mathematical audit: recompute macro averages from topology breakdowns
+    print("  -> Performing independent mathematical recomputation of macro statistics...")
+    num_topos = len(EXPECTED_TOPOLOGIES)
+    for s in EXPECTED_STRATEGIES:
+        macro_s = macro[s]
+        
+        # 1. Macro Mean Coverage %
+        recomputed_cov = sum(breakdown[t]["strategies"][s]["mean_coverage_pct"] for t in EXPECTED_TOPOLOGIES) / num_topos
+        assert abs(macro_s["mean_coverage_pct"] - recomputed_cov) < 0.05, f"Macro coverage recomputation mismatch for {s}: {macro_s['mean_coverage_pct']} vs {recomputed_cov}"
+        
+        # 2. Macro Target Reached Rate %
+        recomputed_reach = sum(breakdown[t]["strategies"][s]["target_reached_rate_pct"] for t in EXPECTED_TOPOLOGIES) / num_topos
+        assert abs(macro_s["target_reached_rate_pct"] - recomputed_reach) < 0.05, f"Macro target reached recomputation mismatch for {s}: {macro_s['target_reached_rate_pct']} vs {recomputed_reach}"
+        
+        # 3. Macro Mean Unresolved Prerequisites
+        recomputed_prereqs = sum(breakdown[t]["strategies"][s]["mean_unresolved_prereqs"] for t in EXPECTED_TOPOLOGIES) / num_topos
+        assert abs(macro_s["mean_unresolved_prereqs"] - recomputed_prereqs) < 0.05, f"Macro prereqs recomputation mismatch for {s}: {macro_s['mean_unresolved_prereqs']} vs {recomputed_prereqs}"
+        
+        # 4. Macro Mean Redundancy Rate %
+        recomputed_red = sum(breakdown[t]["strategies"][s]["mean_redundancy_rate_pct"] for t in EXPECTED_TOPOLOGIES) / num_topos
+        assert abs(macro_s["mean_redundancy_rate_pct"] - recomputed_red) < 0.05, f"Macro redundancy recomputation mismatch for {s}: {macro_s['mean_redundancy_rate_pct']} vs {recomputed_red}"
+            
+    print(f"  -> Successfully verified mathematical audit across all {len(EXPECTED_TOPOLOGIES)} topologies and {len(EXPECTED_STRATEGIES)} strategies (600 sessions).")
     return data
 
 def validate_manuscript_consistency(data: dict):
-    print("\n[2/3] Validating Manuscript Table 1 and Topology Breakdown consistency against generated data...")
+    print("\n[2/3] Validating Manuscript Table 1, Abstract, and 4-Topology Breakdown consistency...")
     if not os.path.exists(MANUSCRIPT_PATH):
         raise FileNotFoundError(f"Missing manuscript: {MANUSCRIPT_PATH}")
         
@@ -95,7 +124,6 @@ def validate_manuscript_consistency(data: dict):
         raise AssertionError("Manuscript Table 1 still contains sentinel '11 turns' instead of explicit Target-Not-Reached / Target Reached %.")
         
     # 3. Assert Table 1 numbers match results_question_selection.json comparative_metrics
-    # Normalize LaTeX escaped percent signs (\% -> %)
     clean_table = table_str.replace(r"\%", "%")
     clean_manuscript = manuscript_text.replace(r"\%", "%")
     
@@ -124,45 +152,63 @@ def validate_manuscript_consistency(data: dict):
     assert f"{ucs['mean_turns_to_target']:.2f} turns" in clean_table, f"Proposed UCS turns {ucs['mean_turns_to_target']:.2f} missing from Table 1"
     assert f"{ucs['mean_unresolved_prereqs']:.2f}" in clean_table, f"Proposed UCS prereqs {ucs['mean_unresolved_prereqs']:.2f} missing from Table 1"
     
-    # 4. Topology Breakdown Verification (Branching DAG, Modular Clusters, Diamond Bottleneck)
+    # 4. Topology Breakdown Verification for ALL 4 Topologies
+    # A. Branching Architecture DAG
     b_dag = breakdown["Branching Architecture DAG"]["strategies"]
     b_ucs_prereqs = f"{b_dag['Proposed UCS (Knowledge-Gap-Aware)']['mean_unresolved_prereqs']:.2f}"
     b_diff_prereqs = f"{b_dag['Difficulty-Only (Local Trapping Baseline)']['mean_unresolved_prereqs']:.2f}"
     b_base_prereqs = f"{b_dag['Fixed-Order Sequential']['mean_unresolved_prereqs']:.2f}"
-    assert f"Branching Architecture DAG" in clean_manuscript, "Branching DAG section missing from manuscript"
-    assert b_ucs_prereqs in clean_manuscript, f"Branching DAG UCS prereqs {b_ucs_prereqs} missing from manuscript"
-    assert b_diff_prereqs in clean_manuscript, f"Branching DAG Diff-Only prereqs {b_diff_prereqs} missing from manuscript"
-    assert b_base_prereqs in clean_manuscript, f"Branching DAG Base prereqs {b_base_prereqs} missing from manuscript"
+    assert "Branching Architecture DAG" in clean_manuscript
+    assert b_ucs_prereqs in clean_manuscript
+    assert b_diff_prereqs in clean_manuscript
+    assert b_base_prereqs in clean_manuscript
     
+    # B. Linear Prerequisite Chain
+    l_chain = breakdown["Linear Prerequisite Chain"]["strategies"]
+    l_ucs_cov = f"{l_chain['Proposed UCS (Knowledge-Gap-Aware)']['mean_coverage_pct']:.1f}%"
+    l_ucs_prereqs = f"{l_chain['Proposed UCS (Knowledge-Gap-Aware)']['mean_unresolved_prereqs']:.2f}"
+    l_diff_prereqs = f"{l_chain['Difficulty-Only (Local Trapping Baseline)']['mean_unresolved_prereqs']:.2f}"
+    assert "Linear Prerequisite Chain" in clean_manuscript
+    assert l_ucs_cov in clean_manuscript
+    assert l_ucs_prereqs in clean_manuscript
+    assert l_diff_prereqs in clean_manuscript
+    
+    # C. Modular Disconnected Clusters
     m_clust = breakdown["Modular Disconnected Clusters"]["strategies"]
     m_ucs_prereqs = f"{m_clust['Proposed UCS (Knowledge-Gap-Aware)']['mean_unresolved_prereqs']:.2f}"
     m_diff_prereqs = f"{m_clust['Difficulty-Only (Local Trapping Baseline)']['mean_unresolved_prereqs']:.2f}"
     m_base_prereqs = f"{m_clust['Fixed-Order Sequential']['mean_unresolved_prereqs']:.2f}"
-    assert f"Modular Disconnected Clusters" in clean_manuscript, "Modular Clusters section missing from manuscript"
-    assert m_ucs_prereqs in clean_manuscript, f"Modular Clusters UCS prereqs {m_ucs_prereqs} missing from manuscript"
-    assert m_diff_prereqs in clean_manuscript, f"Modular Clusters Diff-Only prereqs {m_diff_prereqs} missing from manuscript"
-    assert m_base_prereqs in clean_manuscript, f"Modular Clusters Base prereqs {m_base_prereqs} missing from manuscript"
+    assert "Modular Disconnected Clusters" in clean_manuscript
+    assert m_ucs_prereqs in clean_manuscript
+    assert m_diff_prereqs in clean_manuscript
+    assert m_base_prereqs in clean_manuscript
     
+    # D. Diamond Bottleneck Hierarchy
     d_bottleneck = breakdown["Diamond Bottleneck Hierarchy"]["strategies"]
     d_ucs_prereqs = f"{d_bottleneck['Proposed UCS (Knowledge-Gap-Aware)']['mean_unresolved_prereqs']:.2f}"
     d_diff_prereqs = f"{d_bottleneck['Difficulty-Only (Local Trapping Baseline)']['mean_unresolved_prereqs']:.2f}"
     d_base_prereqs = f"{d_bottleneck['Fixed-Order Sequential']['mean_unresolved_prereqs']:.2f}"
-    assert f"Diamond Bottleneck Hierarchy" in clean_manuscript, "Diamond Bottleneck section missing from manuscript"
-    assert d_ucs_prereqs in clean_manuscript, f"Diamond Bottleneck UCS prereqs {d_ucs_prereqs} missing from manuscript"
-    assert d_diff_prereqs in clean_manuscript, f"Diamond Bottleneck Diff-Only prereqs {d_diff_prereqs} missing from manuscript"
-    assert d_base_prereqs in clean_manuscript, f"Diamond Bottleneck Base prereqs {d_base_prereqs} missing from manuscript"
+    assert "Diamond Bottleneck Hierarchy" in clean_manuscript
+    assert d_ucs_prereqs in clean_manuscript
+    assert d_diff_prereqs in clean_manuscript
+    assert d_base_prereqs in clean_manuscript
     
-    # Also verify docs/RESEARCH_METHODOLOGY_AND_EVALUATION.md if present
+    # 5. Abstract & Contribution Reconciliation
+    assert "89.4%" in clean_manuscript[:3000], "Macro coverage 89.4% missing from Abstract/Introduction"
+    assert "83.3%" in clean_manuscript[:3000], "Project DAG coverage 83.3% missing from Abstract/Introduction"
+    
+    # 6. Verify docs/RESEARCH_METHODOLOGY_AND_EVALUATION.md consistency
     methodology_path = os.path.join(ROOT_DIR, "docs", "RESEARCH_METHODOLOGY_AND_EVALUATION.md")
     if os.path.exists(methodology_path):
         with open(methodology_path, "r", encoding="utf-8") as f:
             meth_text = f.read().replace(r"\%", "%")
-        assert f"{ucs['mean_unresolved_prereqs']:.2f}" in meth_text, "UCS prereq missing from methodology doc"
-        assert f"{ucs['mean_coverage_pct']:.1f}%" in meth_text, "Macro coverage missing from methodology doc"
-        assert d_diff_prereqs in meth_text, f"Diamond Bottleneck Diff-Only prereqs {d_diff_prereqs} missing from methodology doc"
-        assert m_diff_prereqs in meth_text, f"Modular Clusters Diff-Only prereqs {m_diff_prereqs} missing from methodology doc"
+        assert f"{ucs['mean_unresolved_prereqs']:.2f}" in meth_text
+        assert f"{ucs['mean_coverage_pct']:.1f}%" in meth_text
+        assert d_diff_prereqs in meth_text
+        assert m_diff_prereqs in meth_text
+        assert l_diff_prereqs in meth_text
         
-    print("  -> Manuscript verification passed: Table 1 and Topology Breakdown figures strictly reconcile with results_question_selection.json.")
+    print("  -> Manuscript verification passed: Table 1, Abstract, and all 4 Topology Breakdown figures strictly reconcile with results_question_selection.json.")
 
 def validate_secret_hygiene():
     print("\n[3/3] Scanning repository for exposed API keys or secrets in source files...")
