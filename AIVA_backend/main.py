@@ -82,11 +82,23 @@ def startup_event():
     print("AIVA Backend: All services and ML models loaded successfully.")
 
 
+class AsyncThreadLock:
+    """Thread-safe and asyncio-compatible lock for concurrent requests across event loops and OS threads."""
+    def __init__(self):
+        self._lock = threading.RLock()
+
+    async def __aenter__(self):
+        self._lock.acquire()
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        self._lock.release()
+
 class VivaSession:
     def __init__(self, session_id: str = "default"):
         self.session_id = session_id
         self.created_at = datetime.datetime.now().isoformat()
-        self.lock = asyncio.Lock()
+        self.lock = AsyncThreadLock()
         self.ucs_engine = UCSEngine()
         self.reset()
         

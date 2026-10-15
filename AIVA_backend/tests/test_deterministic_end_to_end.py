@@ -140,6 +140,7 @@ class TestDeterministicEndToEnd(unittest.TestCase):
     def test_concurrent_session_safety(self, mock_extract_text, mock_extract_kg):
         """
         Verifies thread/async concurrency safety when multiple clients submit viva turns simultaneously.
+        Uses isolated client instances per thread and a strict timeout to guarantee deadlock freedom.
         """
         mock_extract_text.return_value = "Concurrent testing report."
         
@@ -147,32 +148,47 @@ class TestDeterministicEndToEnd(unittest.TestCase):
         sessions = ["conc_sess_1", "conc_sess_2", "conc_sess_3"]
         for sid in sessions:
             mock_extract_kg.return_value = self._create_mock_kg_extraction(sid)
-            self.client.post(
+            resp = self.client.post(
                 "/upload_and_build_kg",
                 files={"file": (f"{sid}.txt", b"Content", "text/plain")},
                 data={"session_id": sid}
             )
+            self.assertEqual(resp.status_code, 200)
 
-        def make_turn_request(sid):
-            return self.client.post(
+        def make_turn_request(sid, turn_idx):
+            # Use dedicated TestClient instance to avoid cross-thread transport contention
+            thread_client = TestClient(app)
+            return thread_client.post(
                 "/multi_agent_question",
                 json={
                     "session_id": sid,
-                    "conversation_history": [],
+                    "conversation_history": [{"role": "user", "content": f"Answer from turn {turn_idx}"}] if turn_idx > 0 else [],
                     "agent_type": "Examiner",
                     "question_selection_strategy": "ucs"
                 }
             )
 
-        # Dispatch 6 concurrent requests across the sessions
+        # Dispatch 6 concurrent requests across the sessions with a strict 10-second timeout
         with concurrent.futures.ThreadPoolExecutor(max_workers=6) as executor:
-            futures = [executor.submit(make_turn_request, sessions[i % len(sessions)]) for i in range(6)]
-            results = [f.result() for f in futures]
+            futures = [
+                executor.submit(make_turn_request, sessions[i % len(sessions)], i)
+                for i in range(6)
+            ]
+            # Enforce timeout on each future to prevent any test execution hanging
+            results = [f.result(timeout=10.0) for f in futures]
 
         for resp in results:
             self.assertEqual(resp.status_code, 200)
-            self.assertIn("selected_concept", resp.json())
-            self.assertIn(resp.json()["session_id"], sessions)
+            data = resp.json()
+            self.assertIn("selected_concept", data)
+            self.assertIn(data["session_id"], sessions)
+
+        # Verify that each session's state is preserved and correctly updated
+        for sid in sessions:
+            audit = self.client.get(f"/audit_trail?session_id={sid}").json()
+            self.assertEqual(audit["session_id"], sid)
+            # Exactly 2 turns dispatched per session (6 total / 3 sessions)
+            self.assertEqual(audit["total_turns"], 2)
 
     @patch("core.knowledge_graph.KGBuilder.extract_graph_from_text")
     @patch("core.parser.DocumentParser.extract_text")
