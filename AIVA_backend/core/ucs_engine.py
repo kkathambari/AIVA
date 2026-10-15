@@ -45,6 +45,9 @@ class UCSEngine:
         w_uncertainty: float = 0.25,
         w_redundancy: float = 0.15
     ):
+        total = w_gap + w_prereq + w_uncertainty + w_redundancy
+        if not math.isclose(total, 1.0, rel_tol=1e-3):
+            raise ValueError(f"UCS weights must sum to 1.0, got {total:.4f}")
         self.w1 = w_gap
         self.w2 = w_prereq
         self.w3 = w_uncertainty
@@ -54,6 +57,52 @@ class UCSEngine:
         # concept_id -> {"attempts": int, "scores": List[float], "last_turn": int, "type": str}
         self.concept_states: Dict[str, dict] = {}
         self.current_turn = 0
+
+    def get_weights(self) -> dict:
+        """Returns the active weight configuration for scientific audit logs."""
+        return {
+            "w_gap": self.w1,
+            "w_prereq": self.w2,
+            "w_uncertainty": self.w3,
+            "w_redundancy": self.w4
+        }
+
+    def is_valid_concept(self, concept_id: Optional[str]) -> bool:
+        """Validates if a concept ID exists in the active knowledge graph."""
+        if not concept_id or not isinstance(concept_id, str):
+            return False
+        return concept_id in self.concept_states or any(c.lower() == concept_id.lower() for c in self.concept_states)
+
+    def reconcile_concept(self, suggested_concept: Optional[str], fallback_concept: Optional[str]) -> Tuple[str, str]:
+        """
+        Validates evaluated concept against intended concept.
+        Returns (reconciled_concept_id, validation_status).
+        """
+        # Exact match in graph
+        if suggested_concept and suggested_concept in self.concept_states:
+            return suggested_concept, "matched_exact"
+            
+        # Case-insensitive match in graph
+        if suggested_concept:
+            for cid in self.concept_states:
+                if cid.lower() == suggested_concept.lower():
+                    return cid, "matched_case_insensitive"
+                    
+        # Check fallback concept
+        if fallback_concept and fallback_concept in self.concept_states:
+            return fallback_concept, "reconciled_from_probed_fallback"
+            
+        if fallback_concept:
+            for cid in self.concept_states:
+                if cid.lower() == fallback_concept.lower():
+                    return cid, "reconciled_from_probed_fallback"
+                    
+        # If graph has concepts, pick the root or first concept
+        if self.concept_states:
+            first_c = list(self.concept_states.keys())[0]
+            return first_c, "fallback_to_root"
+            
+        return suggested_concept or fallback_concept or "General Architecture", "unregistered_dynamic"
 
     def load_concept_graph(self, nodes: List[dict], relationships: List[dict]):
         """Populates the directed NetworkX concept graph and initializes state tracking."""

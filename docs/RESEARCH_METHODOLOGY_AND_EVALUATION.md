@@ -51,22 +51,27 @@ Where:
 
 At each turn $t$, AIVA selects $c^* = \arg\max_{c \in \mathcal{V}} S(c)$, queries the hybrid RAG index for grounding context specific to $c^*$, and assigns the optimal examiner persona.
 
-#### Empirical Benchmark Results (`experiments/results_question_selection.json`):
-*Evaluated across $N=20$ randomized simulation seeds, 3 student mastery archetypes (Low: 0.30, Medium: 0.60, High: 0.85), fixed 10-turn question budget over 12 dissertation syllabus concepts. Efficiency targets $\ge 70\%$ syllabus coverage ($\lceil 0.70 \times 12 \rceil = 9$ concepts, representing $75.0\%$ coverage).*
+#### Empirical Benchmark Results (experiments/results_question_selection.json):
+*Evaluated across 4 graph topologies (Branching DAG, Linear Prerequisite Chain, Modular Disconnected Clusters, and Diamond Bottleneck Hierarchy), 3 student mastery archetypes (Competent, Struggling, Uneven), and 10 random seeds (600 total simulated viva sessions; 120 runs per strategy). Assessment target is strictly defined as $\lceil 0.70 \times N_{\text{concepts}} \rceil$. Rather than substituting artificial sentinel turns when a target is unreached within 10 turns, we report explicit Target Reached Rate (%) and compute Mean Turns to Target exclusively over successful sessions.*
 
-| Question Selection Strategy | Mean Concept Coverage % | Redundancy Rate % | Turns to $\ge 70\%$ Coverage ($\ge 9$ Concepts) | Unresolved Core Prerequisites | Failure Mode Observed |
-| :--- | :---: | :---: | :---: | :---: | :--- |
-| **Fixed-Order Sequential** | 83.33% | **0.00%** | 9.00 | 2.00 | Blind to candidate struggle / fixed rigidity |
-| **Random Uniform Selection** | 57.92% | 12.83% | 11.00 | 3.10 | Stochastic omission of critical milestones |
-| **Difficulty-Only (Local Trapping Baseline)** | 24.17% | 41.83% | 11.00 | 6.10 | **Local Semantic Trapping** in tight subgraphs |
-| **Greedy Knowledge-Gap Alone ($S(c)=G_c$)** | 83.33% | **0.00%** | 9.00 | 2.00 | Lacks topological prerequisite prioritization |
-| **Proposed UCS (Knowledge-Gap-Aware)** | **83.33%** | **0.00%** | **9.00** | **1.00** | **Optimal coverage & prerequisite resolution** |
+| Question Selection Strategy | Mean Concept Coverage % | Target $\ge 70\%$ Reached % | Mean Turns to Target (when reached) | Redundancy Rate % | Unresolved Core Prerequisites | Primary Failure Mode Observed |
+| :--- | :---: | :---: | :---: | :---: | :---: | :--- |
+| **Fixed-Order Sequential** | .4\% \pm 6.9\%$ | **100.0%** | 8.25 turns | **0.0%** | .25 \pm 0.83$ | Rigid syllabus sequence; blind to candidate struggle |
+| **Random Uniform Selection** | .8\% \pm 7.0\%$ | 35.0% | 9.29 turns | .0\% \pm 12.3\%$ | .42 \pm 1.00$ | Stochastic omission; high variance and unreached targets |
+| **Difficulty-Only (Local Trapping Baseline)** | .6\% \pm 12.1\%$ | 2.5% | 9.00 turns | .7\% \pm 29.9\%$ | .70 \pm 1.05$ | **Local Semantic Trapping** in tight keyword subgraphs |
+| **Greedy Knowledge-Gap Alone ((c)=G_c$)** | .4\% \pm 6.9\%$ | **100.0%** | 8.25 turns | **0.0%** | .25 \pm 0.83$ | Lacks topological prerequisite prioritization |
+| **Proposed UCS (Knowledge-Gap-Aware)** | **.4\% \pm 6.9\%$** | **100.0%** | **8.25 turns** | **0.0%** | **.25 \pm 0.43$** | **Optimal coverage & 80% prerequisite resolution reduction** |
+
+*Topology Highlights:*
+- **Branching Architecture DAG (12 Concepts):** Proposed UCS achieves .3\%$ coverage and cuts unassessed prerequisites to .00$ (vs .00$ for Fixed-Order/Greedy Gap, .00$ for Difficulty-Only).
+- **Modular Disconnected Clusters (12 Concepts):** Proposed UCS achieves **.00$ unassessed prerequisites** (vs .00$ for Fixed-Order/Greedy Gap, .40$ for Difficulty-Only).
+- **Diamond Bottleneck Hierarchy (11 Concepts):** Proposed UCS achieves **.00$ unassessed prerequisites** (vs .00$ for Fixed-Order/Greedy Gap, .70$ for Difficulty-Only).
 
 > [!IMPORTANT]
 > **Key Scientific Takeaway:**
-> 1. When question selection depends solely on conversational semantic similarity (Difficulty-Only / Local Trapping), the examiner covers only $24.2\%$ of the syllabus and repeats questions $41.8\%$ of the time.
-> 2. While Greedy Knowledge-Gap ($G_c$) and Fixed-Order achieve high gross coverage ($83.33\%$), they leave late-occurring foundational modules unaddressed ($2.00$ unresolved prerequisites).
-> 3. Proposed UCS cuts unresolved core prerequisites in half ($1.00$) by leveraging prerequisite depth and out-degree centrality ($P_c$), while preventing circular repetition via $R_c$ and uncertainty pacing via $U_c$.
+> 1. When question selection depends solely on conversational semantic similarity (Difficulty-Only / Local Trapping), the examiner covers only .6\%$ of the syllabus, succeeds in reaching target coverage in only .5\%$ of sessions, and repeats questions .7\%$ of the time.
+> 2. While Greedy Knowledge-Gap ($) and Fixed-Order achieve high gross coverage (.4\%$), they leave late-occurring foundational modules unaddressed (.25$ unresolved prerequisites).
+> 3. Proposed UCS cuts unresolved core prerequisites by **80% (down to .25 \pm 0.43$)** across all topologies by leveraging prerequisite depth and out-degree centrality ($), while preventing circular repetition via $ and uncertainty pacing via $.
 
 ---
 

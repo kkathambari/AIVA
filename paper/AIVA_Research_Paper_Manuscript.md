@@ -152,22 +152,28 @@ Where $C_{\text{corr}}$ is Technical Correctness, $C_{\text{comp}}$ is Completen
 
 ## 4. Empirical Evaluation & Results
 
-### 4.1 Question Selection Strategy Comparison (E1)
-We evaluated whether knowledge-gap-aware selection prevents local semantic trapping and improves assessment efficiency across 12 core project concepts evaluated over 10 viva turns across 20 random seeds per student profile (`results_question_selection.json`). Efficiency is defined as the number of turns required to achieve $\ge 70\%$ syllabus coverage ($\lceil 0.70 \times 12 \rceil = 9$ concepts, representing $75.0\%$ coverage).
+### 4.1 Multi-Topology Question Selection Strategy Comparison (E1)
+We evaluated whether knowledge-gap-aware selection prevents local semantic trapping and improves assessment efficiency across four diverse concept graph topologies (Branching Architecture DAG, Linear Prerequisite Chain, Modular Disconnected Clusters, and Diamond Bottleneck Hierarchy). The benchmark evaluates 600 complete simulated viva sessions (120 sessions per strategy across 3 student mastery archetypes and 10 random seeds; see 
+esults_question_selection.json). Assessment target is strictly defined as $\lceil 0.70 \times N_{\text{concepts}} \rceil$. Rather than substituting artificial sentinel turn counts when a strategy fails to achieve target coverage within the 10-turn budget, we explicitly report Target Reached Rate (%) and compute Mean Turns to Target exclusively over successful trials.
 
-**Table 1: Question Selection Strategy Comparison ($N=10$ Turns, 12 Core Concepts)**
-| Question Selection Strategy | Mean Coverage % (at 10 turns) | Turns to $\ge 70\%$ Coverage ($\ge 9$ Concepts) | Circular Redundancy % | Unresolved Core Prerequisites |
-| :--- | :---: | :---: | :---: | :---: |
-| **Fixed-Order Sequential** | $83.3\% \pm 0.0\%$ | 9.0 turns | **0.0%** | 2.00 |
-| **Random Uniform Selection** | $57.9\% \pm 9.3\%$ | 11.0 turns | 12.8% | 3.10 |
-| **Difficulty-Only (Local Trapping Baseline)** | $24.2\% \pm 2.5\%$ | 11.0 turns | 41.8% | 6.10 |
-| **Greedy Knowledge-Gap Alone ($S(c)=G_c$)** | $83.3\% \pm 0.0\%$ | 9.0 turns | **0.0%** | 2.00 |
-| **Proposed UCS (Knowledge-Gap-Aware)** | **$83.3\% \pm 0.0\%$** | **9.0 turns** | **0.0%** | **1.00** |
+**Table 1: Multi-Topology Question Selection Strategy Comparison (Macro Mean across 4 Graph Topologies, 120 Runs per Strategy)**
+| Question Selection Strategy | Mean Coverage % (at 10 turns) | Target $\ge 70\%$ Reached % | Mean Turns to Target (when reached) | Circular Redundancy % | Unresolved Core Prerequisites |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Fixed-Order Sequential** | .4\% \pm 6.9\%$ | **100.0%** | 8.25 turns | **0.0%** | .25 \pm 0.83$ |
+| **Random Uniform Selection** | .8\% \pm 7.0\%$ | 35.0% | 9.29 turns | .0\% \pm 12.3\%$ | .42 \pm 1.00$ |
+| **Difficulty-Only (Local Trapping Baseline)** | .6\% \pm 12.1\%$ | 2.5% | 9.00 turns | .7\% \pm 29.9\%$ | .70 \pm 1.05$ |
+| **Greedy Knowledge-Gap Alone (=G_c$)** | .4\% \pm 6.9\%$ | **100.0%** | 8.25 turns | **0.0%** | .25 \pm 0.83$ |
+| **Proposed UCS (Knowledge-Gap-Aware)** | **.4\% \pm 6.9\%$** | **100.0%** | **8.25 turns** | **0.0%** | **.25 \pm 0.43$** |
+
+*Topology Breakdown Highlights:*
+- **Branching Architecture DAG (12 Concepts):** Proposed UCS achieves .3\%$ coverage and leaves only .00$ unassessed core prerequisite (vs .00$ for Fixed-Order and Greedy Gap, and .00$ for Difficulty-Only).
+- **Modular Disconnected Clusters (12 Concepts):** Proposed UCS achieves **.00$ unassessed core prerequisites** (vs .00$ for Fixed-Order and Greedy Gap, and .40$ for Difficulty-Only).
+- **Diamond Bottleneck Hierarchy (11 Concepts):** Proposed UCS achieves **.00$ unassessed core prerequisites** (vs .00$ for Fixed-Order and Greedy Gap, and .70$ for Difficulty-Only).
 
 **Analysis:**
-1. **Local Semantic Trapping Pathology:** When question selection relies purely on conversational utterance similarity (Difficulty-Only / Local Trapping), the examiner gets trapped in localized semantic sub-graphs (e.g., containerization details), covering only $24.2\%$ of the syllabus, repeating questions $41.8\%$ of the time, and leaving $6.10$ foundational prerequisites unassessed.
-2. **Random Uniform Stochastic Omission:** Random selection lacks topological awareness, achieving only $57.9\%$ coverage and leaving $3.10$ core prerequisites unexamined due to stochastic duplicate inquiries ($12.8\%$ redundancy).
-3. **The Distinctive Value of Full UCS over Greedy Gap ($G_c$):** Selecting solely based on unassessed gap ($S(c) = G_c$) achieves high gross coverage ($83.3\%$), but because it lacks graph topological guidance ($P_c$), it probes concepts in arbitrary order and leaves late-occurring foundational modules unassessed ($2.00$ unresolved prerequisites). AIVA's Proposed UCS cuts unresolved core prerequisites in half ($1.00$) by leveraging prerequisite depth and out-degree centrality ($P_c$), while utilizing $U_c$ and $R_c$ to pace inquiries.
+1. **Local Semantic Trapping Pathology:** When question selection relies purely on conversational utterance similarity (Difficulty-Only / Local Trapping), the examiner gets trapped in localized semantic sub-graphs, achieving only .6\%$ mean coverage, reaching the 70% threshold in only .5\%$ of sessions, repeating questions .7\%$ of the time, and leaving .70$ foundational prerequisites unassessed.
+2. **Random Uniform Stochastic Omission:** Random selection lacks topological awareness, achieving only .8\%$ coverage, reaching the target threshold in only .0\%$ of sessions, and leaving .42$ core prerequisites unexamined due to stochastic duplicate inquiries (.0\%$ redundancy).
+3. **The Distinctive Value of Full UCS over Greedy Gap ($):** While selecting solely based on unassessed gap ((c) = G_c$) matches gross syllabus coverage (.4\%$), it lacks graph topological guidance ($) and leaves foundational modules unassessed (.25$ unresolved prerequisites). AIVA's Proposed UCS cuts unresolved core prerequisites by **80% (down to .25 \pm 0.43$)** across all topologies by leveraging prerequisite depth and topological centrality ($), while utilizing $ and $ to pace inquiries.
 
 ### 4.2 Adaptive Difficulty Controller Comparison (E4)
 We simulated 300 complete viva sessions (20 turns each) across 5 independent random seeds ($42, 101, 2024, 777, 999$) evaluating three student skill cohorts: Low ($0.30$), Medium ($0.60$), and High ($0.85$).

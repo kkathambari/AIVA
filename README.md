@@ -111,14 +111,32 @@ npm run dev
 
 ## 🧪 Automated Testing & Empirical Research Benchmarks
 
-### 1. Backend Integration Verification
-Runs the core smoke test checking RAG, RL, analytics, and multi-agent routing:
+### 1. Deterministic Unit & Integration Test Suites (Offline, Zero-Quota)
+Runs the offline test suite with mocked external dependencies to verify session state isolation, HTTP viva lifecycle, and UCS edge cases:
+```bash
+cd AIVA_backend
+
+# 1. Deterministic End-to-End HTTP Integration & Multi-Session Isolation Test
+python tests/test_deterministic_end_to_end.py
+
+# 2. UCS Knowledge-Gap Engine Unit Tests & Topological Edge Cases
+python tests/test_ucs_selection.py
+
+# 3. Multi-Agent Persona Sequential Alternation Test
+python tests/test_routing_sequence.py
+
+# 4. Automated Research Artifact & Manuscript Consistency Validation Gate
+python experiments/validate_experiment_artifacts.py
+```
+
+### 2. Backend Integration Verification
+Runs the live model smoke test checking RAG, RL, analytics, and multi-agent routing:
 ```bash
 cd AIVA_backend
 python verify_backend.py
 ```
 
-### 2. Research Benchmark Experiments
+### 3. Research Benchmark Experiments
 To reproduce all empirical tables and baseline comparisons published in the research manuscript:
 ```bash
 cd AIVA_backend

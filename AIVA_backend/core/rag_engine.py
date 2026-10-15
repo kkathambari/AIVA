@@ -1,7 +1,7 @@
 import os
 import json
 import re
-from typing import List
+from typing import List, Optional
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 import chromadb
@@ -124,8 +124,8 @@ class RAGEngine:
                     else:
                         raise e
         
-        ids = [f"{document_id}_chunk_{i}" for i in range(len(chunks))]
-        metadatas = [{"document_id": document_id} for _ in chunks]
+        ids = [f"{session_id or 'default'}_{document_id}_chunk_{i}" for i in range(len(chunks))]
+        metadatas = [{"document_id": document_id, "session_id": session_id or "default"} for _ in chunks]
         
         self.collection.add(
             embeddings=embeddings_list,
@@ -145,9 +145,23 @@ class RAGEngine:
         
         return len(chunks)
 
-    def query_dense(self, query_text: str, n_results: int = 3) -> list:
-        """Dense semantic retrieval via ChromaDB embeddings."""
+    def query_dense(self, query_text: str, n_results: int = 3, session_id: Optional[str] = None) -> list:
+        """Dense semantic retrieval via ChromaDB embeddings with optional session scoping."""
         query_embedding = self.embeddings.embed_query(query_text)
+        where_filter = {"session_id": session_id} if session_id else None
+        
+        try:
+            chroma_results = self.collection.query(
+                query_embeddings=[query_embedding],
+                n_results=max(n_results, 1),
+                where=where_filter
+            )
+            if chroma_results['documents'] and chroma_results['documents'][0]:
+                return chroma_results['documents'][0][:n_results]
+        except Exception as e:
+            # Fallback without session filter if no docs found or filter error
+            pass
+            
         chroma_results = self.collection.query(
             query_embeddings=[query_embedding],
             n_results=max(n_results, 1)
@@ -167,7 +181,7 @@ class RAGEngine:
         top_indices = sorted(range(len(doc_scores)), key=lambda i: doc_scores[i], reverse=True)[:n_results]
         return [self.corpus[i] for i in top_indices if doc_scores[i] > 0]
 
-    def query_hybrid(self, query_text: str, n_results: int = 3, k: int = 60) -> list:
+    def query_hybrid(self, query_text: str, n_results: int = 3, k: int = 60, session_id: Optional[str] = None) -> list:
         """
         Hybrid retrieval combining Dense Semantic search and Sparse BM25 via Reciprocal Rank Fusion (RRF).
         RRF Score: sum(1 / (k + rank_i)) across retrieved candidate sets.
@@ -177,13 +191,7 @@ class RAGEngine:
         # 1. Dense search
         dense_hits = []
         try:
-            query_embedding = self.embeddings.embed_query(query_text)
-            chroma_results = self.collection.query(
-                query_embeddings=[query_embedding],
-                n_results=candidates_to_retrieve
-            )
-            if chroma_results['documents'] and chroma_results['documents'][0]:
-                dense_hits = chroma_results['documents'][0]
+            dense_hits = self.query_dense(query_text, n_results=candidates_to_retrieve, session_id=session_id)
         except Exception as e:
             print(f"RAGEngine dense search fallback error: {e}")
 
@@ -215,7 +223,7 @@ class RAGEngine:
         sorted_docs = sorted(rrf_scores.keys(), key=lambda d: rrf_scores[d], reverse=True)
         return sorted_docs[:n_results]
 
-    def query(self, query_text: str, n_results: int = 3) -> list:
-        """Default query method using Hybrid RRF."""
-        return self.query_hybrid(query_text, n_results=n_results, k=60)
+    def query(self, query_text: str, n_results: int = 3, session_id: Optional[str] = None) -> list:
+        """Default query method using Hybrid RRF with optional session scoping."""
+        return self.query_hybrid(query_text, n_results=n_results, k=60, session_id=session_id)
 

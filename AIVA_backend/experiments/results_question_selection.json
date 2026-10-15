@@ -1,18 +1,19 @@
 {
   "benchmark_metadata": {
-    "benchmark_name": "E1: Question Selection Strategy Comparison",
-    "execution_timestamp": "2026-10-15T16:03:40.370760",
-    "concepts_evaluated": 12,
-    "turns_per_viva": 10,
-    "target_70pct_concepts": 9,
-    "target_70pct_rule": "math.ceil(0.70 * N_concepts)",
-    "seeds_per_profile": 20,
-    "profiles_tested": [
-      "Competent_Student",
-      "Struggling_Student",
-      "Uneven_Student"
+    "benchmark_name": "E1: Comprehensive Multi-Topology Question Selection Comparison",
+    "execution_timestamp": "2026-10-15T16:42:00.828342",
+    "topologies_evaluated": [
+      "Branching Architecture DAG",
+      "Linear Prerequisite Chain",
+      "Modular Disconnected Clusters",
+      "Diamond Bottleneck Hierarchy"
     ],
-    "study_type": "Controlled Monte Carlo MDP Simulation across Defined Student Mastery Archetypes",
+    "total_topologies": 4,
+    "total_runs_per_strategy": 120,
+    "turns_per_viva": 10,
+    "coverage_rule": "Strict math.ceil(0.70 * N_concepts)",
+    "sentinel_handling": "No arbitrary sentinel turns. target_reached is boolean; turns_to_target is null when target is unreached.",
+    "study_type": "Multi-Topology Monte Carlo MDP Simulation across Defined Student Mastery Archetypes",
     "ucs_weights": {
       "w_gap": 0.35,
       "w_prereq": 0.25,
@@ -20,41 +21,247 @@
       "w_redundancy": 0.15
     }
   },
+  "topology_breakdown": {
+    "Branching Architecture DAG": {
+      "concepts_count": 12,
+      "target_threshold": 9,
+      "strategies": {
+        "Fixed-Order Sequential": {
+          "mean_coverage_pct": 83.33,
+          "std_coverage_pct": 0.0,
+          "target_reached_rate_pct": 100.0,
+          "mean_turns_to_target": 9.0,
+          "mean_redundancy_rate_pct": 0.0,
+          "mean_unresolved_prereqs": 2.0
+        },
+        "Random Uniform Selection": {
+          "mean_coverage_pct": 62.5,
+          "std_coverage_pct": 5.59,
+          "target_reached_rate_pct": 0.0,
+          "mean_turns_to_target": null,
+          "mean_redundancy_rate_pct": 12.67,
+          "mean_unresolved_prereqs": 3.0
+        },
+        "Difficulty-Only (Local Trapping Baseline)": {
+          "mean_coverage_pct": 25.0,
+          "std_coverage_pct": 0.0,
+          "target_reached_rate_pct": 0.0,
+          "mean_turns_to_target": null,
+          "mean_redundancy_rate_pct": 46.33,
+          "mean_unresolved_prereqs": 6.0
+        },
+        "Greedy Knowledge-Gap Alone": {
+          "mean_coverage_pct": 83.33,
+          "std_coverage_pct": 0.0,
+          "target_reached_rate_pct": 100.0,
+          "mean_turns_to_target": 9.0,
+          "mean_redundancy_rate_pct": 0.0,
+          "mean_unresolved_prereqs": 2.0
+        },
+        "Proposed UCS (Knowledge-Gap-Aware)": {
+          "mean_coverage_pct": 83.33,
+          "std_coverage_pct": 0.0,
+          "target_reached_rate_pct": 100.0,
+          "mean_turns_to_target": 9.0,
+          "mean_redundancy_rate_pct": 0.0,
+          "mean_unresolved_prereqs": 1.0
+        }
+      }
+    },
+    "Linear Prerequisite Chain": {
+      "concepts_count": 10,
+      "target_threshold": 7,
+      "strategies": {
+        "Fixed-Order Sequential": {
+          "mean_coverage_pct": 100.0,
+          "std_coverage_pct": 0.0,
+          "target_reached_rate_pct": 100.0,
+          "mean_turns_to_target": 7.0,
+          "mean_redundancy_rate_pct": 0.0,
+          "mean_unresolved_prereqs": 0.0
+        },
+        "Random Uniform Selection": {
+          "mean_coverage_pct": 71.0,
+          "std_coverage_pct": 7.0,
+          "target_reached_rate_pct": 90.0,
+          "mean_turns_to_target": 9.11,
+          "mean_redundancy_rate_pct": 13.67,
+          "mean_unresolved_prereqs": 1.7
+        },
+        "Difficulty-Only (Local Trapping Baseline)": {
+          "mean_coverage_pct": 41.0,
+          "std_coverage_pct": 15.13,
+          "target_reached_rate_pct": 10.0,
+          "mean_turns_to_target": 9.0,
+          "mean_redundancy_rate_pct": 39.33,
+          "mean_unresolved_prereqs": 4.7
+        },
+        "Greedy Knowledge-Gap Alone": {
+          "mean_coverage_pct": 100.0,
+          "std_coverage_pct": 0.0,
+          "target_reached_rate_pct": 100.0,
+          "mean_turns_to_target": 7.0,
+          "mean_redundancy_rate_pct": 0.0,
+          "mean_unresolved_prereqs": 0.0
+        },
+        "Proposed UCS (Knowledge-Gap-Aware)": {
+          "mean_coverage_pct": 100.0,
+          "std_coverage_pct": 0.0,
+          "target_reached_rate_pct": 100.0,
+          "mean_turns_to_target": 7.0,
+          "mean_redundancy_rate_pct": 0.0,
+          "mean_unresolved_prereqs": 0.0
+        }
+      }
+    },
+    "Modular Disconnected Clusters": {
+      "concepts_count": 12,
+      "target_threshold": 9,
+      "strategies": {
+        "Fixed-Order Sequential": {
+          "mean_coverage_pct": 83.33,
+          "std_coverage_pct": 0.0,
+          "target_reached_rate_pct": 100.0,
+          "mean_turns_to_target": 9.0,
+          "mean_redundancy_rate_pct": 0.0,
+          "mean_unresolved_prereqs": 2.0
+        },
+        "Random Uniform Selection": {
+          "mean_coverage_pct": 62.5,
+          "std_coverage_pct": 5.59,
+          "target_reached_rate_pct": 0.0,
+          "mean_turns_to_target": null,
+          "mean_redundancy_rate_pct": 12.67,
+          "mean_unresolved_prereqs": 2.6
+        },
+        "Difficulty-Only (Local Trapping Baseline)": {
+          "mean_coverage_pct": 30.0,
+          "std_coverage_pct": 5.53,
+          "target_reached_rate_pct": 0.0,
+          "mean_turns_to_target": null,
+          "mean_redundancy_rate_pct": 42.33,
+          "mean_unresolved_prereqs": 4.4
+        },
+        "Greedy Knowledge-Gap Alone": {
+          "mean_coverage_pct": 83.33,
+          "std_coverage_pct": 0.0,
+          "target_reached_rate_pct": 100.0,
+          "mean_turns_to_target": 9.0,
+          "mean_redundancy_rate_pct": 0.0,
+          "mean_unresolved_prereqs": 2.0
+        },
+        "Proposed UCS (Knowledge-Gap-Aware)": {
+          "mean_coverage_pct": 83.33,
+          "std_coverage_pct": 0.0,
+          "target_reached_rate_pct": 100.0,
+          "mean_turns_to_target": 9.0,
+          "mean_redundancy_rate_pct": 0.0,
+          "mean_unresolved_prereqs": 0.0
+        }
+      }
+    },
+    "Diamond Bottleneck Hierarchy": {
+      "concepts_count": 11,
+      "target_threshold": 8,
+      "strategies": {
+        "Fixed-Order Sequential": {
+          "mean_coverage_pct": 90.91,
+          "std_coverage_pct": 0.0,
+          "target_reached_rate_pct": 100.0,
+          "mean_turns_to_target": 8.0,
+          "mean_redundancy_rate_pct": 0.0,
+          "mean_unresolved_prereqs": 1.0
+        },
+        "Random Uniform Selection": {
+          "mean_coverage_pct": 67.27,
+          "std_coverage_pct": 6.03,
+          "target_reached_rate_pct": 50.0,
+          "mean_turns_to_target": 9.6,
+          "mean_redundancy_rate_pct": 13.0,
+          "mean_unresolved_prereqs": 2.4
+        },
+        "Difficulty-Only (Local Trapping Baseline)": {
+          "mean_coverage_pct": 46.36,
+          "std_coverage_pct": 6.36,
+          "target_reached_rate_pct": 0.0,
+          "mean_turns_to_target": null,
+          "mean_redundancy_rate_pct": 30.67,
+          "mean_unresolved_prereqs": 3.7
+        },
+        "Greedy Knowledge-Gap Alone": {
+          "mean_coverage_pct": 90.91,
+          "std_coverage_pct": 0.0,
+          "target_reached_rate_pct": 100.0,
+          "mean_turns_to_target": 8.0,
+          "mean_redundancy_rate_pct": 0.0,
+          "mean_unresolved_prereqs": 1.0
+        },
+        "Proposed UCS (Knowledge-Gap-Aware)": {
+          "mean_coverage_pct": 90.91,
+          "std_coverage_pct": 0.0,
+          "target_reached_rate_pct": 100.0,
+          "mean_turns_to_target": 8.0,
+          "mean_redundancy_rate_pct": 0.0,
+          "mean_unresolved_prereqs": 0.0
+        }
+      }
+    }
+  },
   "comparative_metrics": {
     "Fixed-Order Sequential": {
-      "mean_coverage_pct": 83.33,
-      "std_coverage_pct": 0.0,
-      "mean_turns_to_70pct": 9.0,
+      "mean_coverage_pct": 89.39,
+      "std_coverage_pct": 6.86,
+      "target_reached_rate_pct": 100.0,
+      "mean_turns_to_target": 8.25,
       "mean_redundancy_rate_pct": 0.0,
-      "mean_unresolved_prereqs": 2.0
+      "std_redundancy_rate_pct": 0.0,
+      "mean_unresolved_prereqs": 1.25,
+      "std_unresolved_prereqs": 0.83,
+      "total_runs_evaluated": 120
     },
     "Random Uniform Selection": {
-      "mean_coverage_pct": 57.92,
-      "std_coverage_pct": 9.31,
-      "mean_turns_to_70pct": 11.0,
-      "mean_redundancy_rate_pct": 12.83,
-      "mean_unresolved_prereqs": 3.1
+      "mean_coverage_pct": 65.82,
+      "std_coverage_pct": 7.05,
+      "target_reached_rate_pct": 35.0,
+      "mean_turns_to_target": 9.29,
+      "mean_redundancy_rate_pct": 13.0,
+      "std_redundancy_rate_pct": 12.29,
+      "mean_unresolved_prereqs": 2.42,
+      "std_unresolved_prereqs": 1.0,
+      "total_runs_evaluated": 120
     },
     "Difficulty-Only (Local Trapping Baseline)": {
-      "mean_coverage_pct": 24.17,
-      "std_coverage_pct": 2.5,
-      "mean_turns_to_70pct": 11.0,
-      "mean_redundancy_rate_pct": 41.83,
-      "mean_unresolved_prereqs": 6.1
+      "mean_coverage_pct": 35.59,
+      "std_coverage_pct": 12.13,
+      "target_reached_rate_pct": 2.5,
+      "mean_turns_to_target": 9.0,
+      "mean_redundancy_rate_pct": 39.67,
+      "std_redundancy_rate_pct": 29.86,
+      "mean_unresolved_prereqs": 4.7,
+      "std_unresolved_prereqs": 1.05,
+      "total_runs_evaluated": 120
     },
     "Greedy Knowledge-Gap Alone": {
-      "mean_coverage_pct": 83.33,
-      "std_coverage_pct": 0.0,
-      "mean_turns_to_70pct": 9.0,
+      "mean_coverage_pct": 89.39,
+      "std_coverage_pct": 6.86,
+      "target_reached_rate_pct": 100.0,
+      "mean_turns_to_target": 8.25,
       "mean_redundancy_rate_pct": 0.0,
-      "mean_unresolved_prereqs": 2.0
+      "std_redundancy_rate_pct": 0.0,
+      "mean_unresolved_prereqs": 1.25,
+      "std_unresolved_prereqs": 0.83,
+      "total_runs_evaluated": 120
     },
     "Proposed UCS (Knowledge-Gap-Aware)": {
-      "mean_coverage_pct": 83.33,
-      "std_coverage_pct": 0.0,
-      "mean_turns_to_70pct": 9.0,
+      "mean_coverage_pct": 89.39,
+      "std_coverage_pct": 6.86,
+      "target_reached_rate_pct": 100.0,
+      "mean_turns_to_target": 8.25,
       "mean_redundancy_rate_pct": 0.0,
-      "mean_unresolved_prereqs": 1.0
+      "std_redundancy_rate_pct": 0.0,
+      "mean_unresolved_prereqs": 0.25,
+      "std_unresolved_prereqs": 0.43,
+      "total_runs_evaluated": 120
     }
   }
 }
