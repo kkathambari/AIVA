@@ -101,6 +101,8 @@ def run_ablation_grounding(panel: MultiAgentPanel):
     
     grounded_questions = []
     ungrounded_questions = []
+    grounded_provenance = []
+    ungrounded_provenance = []
     
     for item in EVALUATION_TURNS:
         # 1. Grounded Run (with retrieved chunk)
@@ -112,13 +114,17 @@ def run_ablation_grounding(panel: MultiAgentPanel):
                 agent_type="Examiner"
             )
             q_g = res_g.get("question", "")
+            src_g = res_g.get("generation_source", "live_llm")
         except Exception:
             q_g = ""
+            src_g = "calibrated_fallback"
             
         if not q_g:
             # Deterministic fallback matched to grounded chunk
             q_g = f"In your {item['phase']} design, how does {item['context_chunk'].split('.')[0].strip()} operate under peak load?"
+            src_g = "calibrated_fallback"
         grounded_questions.append(q_g)
+        grounded_provenance.append(src_g)
         
         # 2. Ungrounded Run (No-RAG, empty context)
         try:
@@ -129,13 +135,17 @@ def run_ablation_grounding(panel: MultiAgentPanel):
                 agent_type="Examiner"
             )
             q_u = res_u.get("question", "")
+            src_u = res_u.get("generation_source", "live_llm")
         except Exception:
             q_u = ""
+            src_u = "calibrated_fallback"
             
         if not q_u:
             # Ungrounded examiner defaults to generic conversational boilerplate
             q_u = f"Can you elaborate on your overall approach to {item['phase'].lower()} and why you chose this design?"
+            src_u = "calibrated_fallback"
         ungrounded_questions.append(q_u)
+        ungrounded_provenance.append(src_u)
 
     # Evaluation Metrics
     rep_terms = DISSERTATION_PROJECT["reported_technologies"]
@@ -155,12 +165,19 @@ def run_ablation_grounding(panel: MultiAgentPanel):
     g_fidelity, g_hallucination = evaluate_questions(grounded_questions)
     u_fidelity, u_hallucination = evaluate_questions(ungrounded_questions)
     
+    g_live = sum(1 for s in grounded_provenance if s == "live_llm")
+    g_fall = sum(1 for s in grounded_provenance if s == "calibrated_fallback")
+    u_live = sum(1 for s in ungrounded_provenance if s == "live_llm")
+    u_fall = sum(1 for s in ungrounded_provenance if s == "calibrated_fallback")
+    
     print(f"Grounded System (Full AIVA):")
     print(f"  Technical Term Fidelity:        {g_fidelity:.1f}%")
     print(f"  Unsupported Hallucination Rate: {g_hallucination:.1f}%")
+    print(f"  Provenance:                     {g_live} live LLM, {g_fall} calibrated fallback")
     print(f"Ungrounded Baseline (No-RAG):")
     print(f"  Technical Term Fidelity:        {u_fidelity:.1f}%")
     print(f"  Unsupported Hallucination Rate: {u_hallucination:.1f}%")
+    print(f"  Provenance:                     {u_live} live LLM, {u_fall} calibrated fallback")
     
     return {
         "trials_evaluated": len(EVALUATION_TURNS),
@@ -169,6 +186,13 @@ def run_ablation_grounding(panel: MultiAgentPanel):
         "fidelity_gain_pct": round(g_fidelity - u_fidelity, 1),
         "grounded_hallucination_rate_pct": round(g_hallucination, 1),
         "ungrounded_hallucination_rate_pct": round(u_hallucination, 1),
+        "provenance_breakdown": {
+            "grounded_live_llm_count": g_live,
+            "grounded_fallback_count": g_fall,
+            "ungrounded_live_llm_count": u_live,
+            "ungrounded_fallback_count": u_fall,
+            "disclosure": "Google Generative AI free-tier quota (20 req/day). When quota is exceeded, deterministic context-anchored fallback executes."
+        },
         "sample_grounded_question": grounded_questions[0],
         "sample_ungrounded_question": ungrounded_questions[0]
     }
@@ -182,6 +206,8 @@ def run_ablation_personas(panel: MultiAgentPanel):
     personas_cycle = ["Professor", "Industry Expert", "Critic", "Examiner"] * 2
     multi_agent_questions = []
     monolithic_questions = []
+    multi_provenance = []
+    mono_provenance = []
     
     # Run 8 turns across the dialogue
     for i in range(8):
@@ -197,8 +223,10 @@ def run_ablation_personas(panel: MultiAgentPanel):
                 agent_type=selected_persona
             )
             q_m = res_m.get("question", "")
+            src_m = res_m.get("generation_source", "live_llm")
         except Exception:
             q_m = ""
+            src_m = "calibrated_fallback"
             
         if not q_m:
             persona_templates = {
@@ -208,7 +236,9 @@ def run_ablation_personas(panel: MultiAgentPanel):
                 "Examiner": f"Walk me through the integration data flow of your {turn_data['phase'].lower()} within the overall architecture."
             }
             q_m = persona_templates[selected_persona]
+            src_m = "calibrated_fallback"
         multi_agent_questions.append(q_m)
+        multi_provenance.append(src_m)
         
         # 2. Monolithic Examiner Turn
         try:
@@ -219,12 +249,16 @@ def run_ablation_personas(panel: MultiAgentPanel):
                 agent_type="Examiner"
             )
             q_mono = res_mono.get("question", "")
+            src_mono = res_mono.get("generation_source", "live_llm")
         except Exception:
             q_mono = ""
+            src_mono = "calibrated_fallback"
             
         if not q_mono:
             q_mono = f"Can you explain the main technical components and implementation of your {turn_data['phase'].lower()}?"
+            src_mono = "calibrated_fallback"
         monolithic_questions.append(q_mono)
+        mono_provenance.append(src_mono)
 
     # 1. Type-Token Ratio (Lexical Diversity)
     def calculate_ttr(questions):
@@ -259,12 +293,19 @@ def run_ablation_personas(panel: MultiAgentPanel):
     ent_multi, counts_multi = calculate_domain_entropy(multi_agent_questions)
     ent_mono, counts_mono = calculate_domain_entropy(monolithic_questions)
     
+    m_live = sum(1 for s in multi_provenance if s == "live_llm")
+    m_fall = sum(1 for s in multi_provenance if s == "calibrated_fallback")
+    mono_live = sum(1 for s in mono_provenance if s == "live_llm")
+    mono_fall = sum(1 for s in mono_provenance if s == "calibrated_fallback")
+    
     print(f"Multi-Agent Persona Panel (4 Personas):")
     print(f"  Type-Token Ratio (TTR):        {ttr_multi:.4f}")
     print(f"  Domain Coverage Entropy:       {ent_multi:.3f} / 2.000 bits (Counts: {counts_multi})")
+    print(f"  Provenance:                    {m_live} live LLM, {m_fall} calibrated fallback")
     print(f"Monolithic General Examiner:")
     print(f"  Type-Token Ratio (TTR):        {ttr_mono:.4f}")
     print(f"  Domain Coverage Entropy:       {ent_mono:.3f} / 2.000 bits (Counts: {counts_mono})")
+    print(f"  Provenance:                    {mono_live} live LLM, {mono_fall} calibrated fallback")
     
     return {
         "turns_evaluated": len(multi_agent_questions),
@@ -274,7 +315,14 @@ def run_ablation_personas(panel: MultiAgentPanel):
         "multi_agent_domain_entropy_bits": round(ent_multi, 3),
         "monolithic_domain_entropy_bits": round(ent_mono, 3),
         "domain_distribution_multi_agent": {"theory": counts_multi[0], "production": counts_multi[1], "trade_offs": counts_multi[2], "architecture": counts_multi[3]},
-        "domain_distribution_monolithic": {"theory": counts_mono[0], "production": counts_mono[1], "trade_offs": counts_mono[2], "architecture": counts_mono[3]}
+        "domain_distribution_monolithic": {"theory": counts_mono[0], "production": counts_mono[1], "trade_offs": counts_mono[2], "architecture": counts_mono[3]},
+        "provenance_breakdown": {
+            "multi_agent_live_count": m_live,
+            "multi_agent_fallback_count": m_fall,
+            "monolithic_live_count": mono_live,
+            "monolithic_fallback_count": mono_fall,
+            "disclosure": "Google Generative AI free-tier quota (20 req/day). When quota is exceeded, deterministic persona templates maintain persona differentiation."
+        }
     }
 
 # --- Ablation 3: Knowledge Graph Concept Guidance vs Flat Lexical Search ---

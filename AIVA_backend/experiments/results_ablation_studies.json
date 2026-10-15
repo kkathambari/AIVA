@@ -1,7 +1,7 @@
 {
   "benchmark_metadata": {
     "benchmark_name": "AIVA Controlled Multi-Factor Ablation Suite",
-    "execution_timestamp": "2026-10-15T15:18:20.631180",
+    "execution_timestamp": "2026-10-15T15:28:48.823740",
     "protocol_version": "2.0-controlled",
     "project_context": "AIVA: Autonomous Intelligent Viva Assessment Framework"
   },
@@ -12,6 +12,13 @@
     "fidelity_gain_pct": 100.0,
     "grounded_hallucination_rate_pct": 0.0,
     "ungrounded_hallucination_rate_pct": 0.0,
+    "provenance_breakdown": {
+      "grounded_live_llm_count": 0,
+      "grounded_fallback_count": 6,
+      "ungrounded_live_llm_count": 0,
+      "ungrounded_fallback_count": 6,
+      "disclosure": "Google Generative AI free-tier quota (20 req/day). When quota is exceeded, deterministic context-anchored fallback executes."
+    },
     "sample_grounded_question": "Based on your report stating that 'The AIVA platform implements FastAPI as an asynchronous microservices gateway running on Uvicorn worker loops', walk me through how this component integrates into your architecture.",
     "sample_ungrounded_question": "Can you elaborate on your general architectural choices, programming frameworks, and development challenges?"
   },
@@ -33,6 +40,13 @@
       "production": 2,
       "trade_offs": 0,
       "architecture": 6
+    },
+    "provenance_breakdown": {
+      "multi_agent_live_count": 0,
+      "multi_agent_fallback_count": 8,
+      "monolithic_live_count": 0,
+      "monolithic_fallback_count": 8,
+      "disclosure": "Google Generative AI free-tier quota (20 req/day). When quota is exceeded, deterministic persona templates maintain persona differentiation."
     }
   },
   "ablation_knowledge_graph": {

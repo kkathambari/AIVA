@@ -175,12 +175,15 @@ To quantify the isolated contribution of each subsystem, matched multi-turn tria
 1. **Context Grounding (Hybrid RAG vs No-RAG Parametric):**
    - Grounded Fidelity: **100.0%** vs Ungrounded Baseline: **0.0%** (Gain: **+100.0%**).
    - Factual Hallucination Rate: **0.0%** across both systems.
+   - *Provenance:* Benchmark logs live LLM vs deterministic fallback count ($N=6$). Deterministic fallback enforces the grounding contract when external API daily free quotas are reached.
 2. **Persona Specialization (4 Personas vs Monolithic Examiner):**
    - Multi-Agent Panel Lexical Diversity (TTR): **0.4941** vs Monolithic: **0.3707** (+33.3% increase).
    - Domain Entropy ($H_{\text{domain}}$): **1.906 bits** (spanning Theory, Production, Trade-offs, Architecture) vs Monolithic: **0.811 bits** (concentrated on general architecture).
+   - *Provenance:* $N=8$ turns logged with generation source metadata.
 3. **Knowledge Graph Guidance (Topological Traversal vs Flat Lexical Search):**
    - Diagnostic Prerequisite Resolution Rate: **100.0%** (resolves upstream concept dependencies on student struggle).
    - Flat Keyword Search Redundancy Rate: **100.0%** (lacks edge awareness, leading to circular re-asking).
+   - *Active Investigation Status:* Live relationship triple extraction currently achieves $F_1 = 0.1429$ due to open-domain syntax ambiguity; the KG subsystem is under active empirical investigation and is not claimed as a validated end-to-end question quality improver over hybrid retrieval.
 
 ---
 

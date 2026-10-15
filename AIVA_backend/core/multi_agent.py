@@ -16,6 +16,8 @@ class AgentState(TypedDict):
     generated_question: str
     asked_questions: List[str]  # Prevents repeated questions
     is_final_turn: bool
+    is_fallback: bool
+    generation_source: str
 
 class MultiAgentPanel:
     def __init__(self, api_key: str = None):
@@ -216,7 +218,11 @@ class MultiAgentPanel:
             
         try:
             response = self.llm.invoke([HumanMessage(content=prompt)])
-            return {"generated_question": response.content.strip()}
+            return {
+                "generated_question": response.content.strip(),
+                "is_fallback": False,
+                "generation_source": "live_llm"
+            }
         except Exception as e:
             print(f"Warning: MultiAgent LLM invocation error ({e.__class__.__name__}). Using persona fallback.")
             persona = state.get("selected_agent", "Examiner")
@@ -240,7 +246,11 @@ class MultiAgentPanel:
                 }
                 fallback_q = ungrounded_fallbacks.get(persona, "Can you elaborate on your general architectural design choices?")
                 
-            return {"generated_question": fallback_q}
+            return {
+                "generated_question": fallback_q,
+                "is_fallback": True,
+                "generation_source": "calibrated_fallback"
+            }
 
     def examiner_node(self, state: AgentState):
         prompt = "You are an Examiner. Ask normal, balanced viva questions assessing the student's overall understanding of the project flow, design, and implementation."
@@ -295,6 +305,8 @@ class MultiAgentPanel:
             "question": final_state.get("generated_question", ""),
             "selected_agent": final_state.get("selected_agent", "Examiner"),
             "routing_reason": final_state.get("routing_reason", "Default routing"),
-            "routing_strategy": routing_strategy
+            "routing_strategy": routing_strategy,
+            "is_fallback": final_state.get("is_fallback", False),
+            "generation_source": final_state.get("generation_source", "live_llm")
         }
 
