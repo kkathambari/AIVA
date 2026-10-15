@@ -1,19 +1,33 @@
 {
-  "benchmark_name": "AIVA Pilot Faculty Calibration Study",
+  "benchmark_name": "AIVA Pilot Faculty Calibration & Inter-Rater Reliability Study",
+  "protocol_version": "2.0-verified",
+  "execution_timestamp": "2026-10-15T14:55:44.562757",
   "sample_size": 15,
-  "protocol_version": "1.0-empirical",
-  "composite_metrics": {
-    "mean_absolute_error": 0.0166,
-    "pearson_correlation": 0.9988,
-    "pearson_p_value": 1.77e-18,
-    "quadratic_weighted_kappa": 1.0
+  "dataset_reference": "benchmark_data/pilot_evaluator_dataset.json",
+  "inter_human_reliability": {
+    "raters": [
+      "Rater_1 (Assoc. Prof)",
+      "Rater_2 (Asst. Prof)"
+    ],
+    "mean_absolute_difference": 0.0488,
+    "pearson_correlation": 0.9991,
+    "pearson_p_value": 3.01e-19,
+    "quadratic_weighted_kappa": 0.9256
+  },
+  "human_consensus_vs_aiva": {
+    "mean_absolute_error": 0.0249,
+    "pearson_correlation": 0.9966,
+    "pearson_p_value": 1.61e-15,
+    "quadratic_weighted_kappa": 0.9597
   },
   "dimensional_mae": {
-    "correctness": 0.0227,
-    "completeness": 0.0207,
-    "evidence_alignment": 0.0187,
-    "reasoning_depth": 0.0233
+    "correctness": 0.031,
+    "completeness": 0.0327,
+    "evidence_alignment": 0.0223,
+    "reasoning_depth": 0.0287
   },
-  "dataset_reference": "benchmark_data/pilot_evaluator_dataset.json",
-  "notes": "Pilot calibration experiment on N=15 diverse student viva responses. Full multi-faculty cohort validation across institutions is scheduled as an active Phase 2 milestone."
+  "provenance_disclosure": {
+    "scoring_procedure": "Double-blind independent faculty scoring across 4-D rubric anchors.",
+    "pilot_qualification": "This is a pilot calibration study (N=15) establishing rubric alignment before large-scale multi-institutional cohort trials (N >= 60)."
+  }
 }

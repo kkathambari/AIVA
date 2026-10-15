@@ -124,13 +124,30 @@ def run_adaptive_controller_benchmark():
             results[ctrl][prof_name] = summary
             print(f"  [{prof_name}] -> Flow%: {summary['flow_band_percentage']}%, Transitions: {summary['avg_transitions_per_session']}, Reward: {summary['mean_cumulative_reward']}")
 
-    # Save output JSON
-    os.makedirs("experiments", exist_ok=True)
-    out_file = os.path.join("experiments", "results_adaptive_controllers.json")
-    with open(out_file, "w", encoding="utf-8") as f:
+    import datetime
+    results["benchmark_metadata"] = {
+        "execution_timestamp": datetime.datetime.now().isoformat(),
+        "episodes_per_profile": len(all_scores),
+        "steps_per_episode": steps_per_episode,
+        "dqn_model_path": "models/dqn_difficulty_model.zip"
+    }
+
+    # Save to both AIVA_backend/experiments and root experiments
+    backend_out_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "experiments"))
+    os.makedirs(backend_out_dir, exist_ok=True)
+    backend_file = os.path.join(backend_out_dir, "results_adaptive_controllers.json")
+    with open(backend_file, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2)
         
-    print(f"\nBenchmark completed successfully! Results written to {out_file}")
+    root_out_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "experiments"))
+    os.makedirs(root_out_dir, exist_ok=True)
+    root_file = os.path.join(root_out_dir, "results_adaptive_controllers.json")
+    with open(root_file, "w", encoding="utf-8") as f:
+        json.dump(results, f, indent=2)
+        
+    print(f"\nBenchmark completed successfully! Results written to:")
+    print(f"  1. {backend_file}")
+    print(f"  2. {root_file}")
     return results
 
 if __name__ == "__main__":

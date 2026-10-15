@@ -1,0 +1,49 @@
+{
+  "benchmark_metadata": {
+    "benchmark_name": "AIVA Live Knowledge Graph Extraction Benchmark",
+    "execution_timestamp": "2026-10-15T14:59:50.991505",
+    "live_system_execution": true,
+    "llm_model": "gemini-2.5-flash",
+    "execution_time_sec": 56.16,
+    "input_text_characters": 2683
+  },
+  "concepts": {
+    "ground_truth_count": 18,
+    "extracted_count": 30,
+    "true_positives": 10,
+    "false_positives": 20,
+    "false_negatives": 8,
+    "precision": 0.3333,
+    "recall": 0.5556,
+    "f1_score": 0.4167
+  },
+  "strict_directed_triples": {
+    "ground_truth_count": 13,
+    "extracted_count": 29,
+    "true_positives": 3,
+    "false_positives": 26,
+    "false_negatives": 10,
+    "precision": 0.1034,
+    "recall": 0.2308,
+    "f1_score": 0.1429
+  },
+  "inversion_invariant_relational_adjacency": {
+    "ground_truth_count": 13,
+    "extracted_count": 29,
+    "true_positives": 3,
+    "false_positives": 26,
+    "false_negatives": 10,
+    "precision": 0.1034,
+    "recall": 0.2308,
+    "f1_score": 0.1429
+  },
+  "linguistic_error_analysis": {
+    "passive_voice_inversions_recovered": 0,
+    "inversion_examples": [
+      "Ground Truth: (Deep Q-Network, CONTROLS, Adaptive Difficulty) <-> Extracted: (Adaptive Difficulty, CONTROLLED_BY, Deep Q-Network)",
+      "Ground Truth: (XGBoost, CLASSIFIES, Weakness) <-> Extracted: (Weakness Classification, PERFORMED_BY, XGBoost Classifier)"
+    ],
+    "fine_grained_node_splitting": "LLM extracted granular protocol nodes (HTTP, WebSocket) as children of API Gateway rather than direct triples.",
+    "hierarchical_mediators": "Dissertation mentions 'architecture containerized using Docker'; LLM introduced intermediate 'Microservices Infrastructure' node."
+  }
+}

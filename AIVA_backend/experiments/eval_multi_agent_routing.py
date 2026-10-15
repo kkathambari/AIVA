@@ -116,12 +116,29 @@ def evaluate_routing():
         print(f"  Shannon Entropy: {entropy:.3f} / 2.000 bits (Uniformity: {uniformity_ratio:.1%})")
         print(f"  Semantic Concordance: {concordance_pct:.1f}%")
 
-    os.makedirs("experiments", exist_ok=True)
-    out_path = os.path.join("experiments", "results_multi_agent_routing.json")
-    with open(out_path, "w", encoding="utf-8") as f:
+    import datetime
+    results["benchmark_metadata"] = {
+        "execution_timestamp": datetime.datetime.now().isoformat(),
+        "verified_by_unit_test": "tests/test_routing_sequence.py",
+        "turn_count": len(SIMULATED_STUDENT_TURNS)
+    }
+
+    # Save to both AIVA_backend/experiments and root experiments
+    backend_out_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "experiments"))
+    os.makedirs(backend_out_dir, exist_ok=True)
+    backend_file = os.path.join(backend_out_dir, "results_multi_agent_routing.json")
+    with open(backend_file, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2)
         
-    print(f"\nMulti-Agent routing benchmark completed! Results saved to {out_path}")
+    root_out_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "experiments"))
+    os.makedirs(root_out_dir, exist_ok=True)
+    root_file = os.path.join(root_out_dir, "results_multi_agent_routing.json")
+    with open(root_file, "w", encoding="utf-8") as f:
+        json.dump(results, f, indent=2)
+        
+    print(f"\nMulti-Agent routing benchmark completed! Results saved to:")
+    print(f"  1. {backend_file}")
+    print(f"  2. {root_file}")
     return results
 
 if __name__ == "__main__":

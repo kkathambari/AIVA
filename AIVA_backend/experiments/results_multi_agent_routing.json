@@ -22,5 +22,10 @@
     "uniformity_ratio": 0.875,
     "semantic_concordance_percentage": 87.5,
     "sample_turns": 8
+  },
+  "benchmark_metadata": {
+    "execution_timestamp": "2026-10-15T15:00:35.297739",
+    "verified_by_unit_test": "tests/test_routing_sequence.py",
+    "turn_count": 8
   }
 }

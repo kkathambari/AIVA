@@ -1,30 +1,38 @@
 {
+  "benchmark_metadata": {
+    "execution_timestamp": "2026-10-15T14:57:54.661719",
+    "corpus_size": 30,
+    "query_count": 18,
+    "dense_model": "models/gemini-embedding-2 (3072-dim)",
+    "sparse_model": "BM25Okapi with technical_tokenize",
+    "rrf_constant_k": 60
+  },
   "tfidf_baseline": {
-    "Recall@1": 0.9333,
+    "Recall@1": 0.8889,
     "Recall@3": 1.0,
     "Recall@5": 1.0,
-    "MRR": 0.9667,
-    "nDCG@3": 0.9754,
-    "nDCG@5": 0.9754,
-    "query_count": 15
+    "MRR": 0.9444,
+    "nDCG@3": 0.959,
+    "nDCG@5": 0.959,
+    "query_count": 18
   },
   "bm25_sparse": {
-    "Recall@1": 1.0,
+    "Recall@1": 0.9444,
     "Recall@3": 1.0,
     "Recall@5": 1.0,
-    "MRR": 1.0,
-    "nDCG@3": 1.0,
-    "nDCG@5": 1.0,
-    "query_count": 15
+    "MRR": 0.9722,
+    "nDCG@3": 0.9795,
+    "nDCG@5": 0.9795,
+    "query_count": 18
   },
   "gemini_dense": {
-    "Recall@1": 0.9333,
+    "Recall@1": 0.9444,
     "Recall@3": 1.0,
     "Recall@5": 1.0,
-    "MRR": 0.9667,
-    "nDCG@3": 0.9754,
-    "nDCG@5": 0.9754,
-    "query_count": 15
+    "MRR": 0.9722,
+    "nDCG@3": 0.9795,
+    "nDCG@5": 0.9795,
+    "query_count": 18
   },
   "hybrid_rrf": {
     "Recall@1": 1.0,
@@ -33,6 +41,6 @@
     "MRR": 1.0,
     "nDCG@3": 1.0,
     "nDCG@5": 1.0,
-    "query_count": 15
+    "query_count": 18
   }
 }

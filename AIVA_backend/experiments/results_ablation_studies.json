@@ -2,10 +2,10 @@
   "benchmark_name": "AIVA System Ablation Studies",
   "description": "Empirical ablation evaluation assessing context grounding fidelity and multi-agent persona vocabulary diversity.",
   "ablation_grounding": {
-    "execution_mode": "validated_system_transcripts",
+    "execution_mode": "live_panel",
     "sample_questions_evaluated": 3,
     "grounded_questions": [
-      "How do you theoretically model the trade-offs between event time and processing time semantics in your FastAPI and Kafka distributed stream analytics engine, and what specific algorithms manage out-of-order events?",
+      "Can you explain the theoretical computational complexity and mathematical formulation underlying this component?",
       "Explain how the Kubernetes Horizontal Pod Autoscaler interacts with your Docker microservices when API latency spikes under high concurrent WebSocket load.",
       "What loss function and exploration schedule were configured for your Deep Q-Network difficulty controller, and how does Reciprocal Rank Fusion rank candidate chunks?"
     ],
@@ -14,9 +14,9 @@
       "What programming languages and frameworks did you decide to use during development, and what were the main challenges?",
       "How did you test and validate your software application during the development process?"
     ],
-    "grounded_rag_fidelity_pct": 100.0,
+    "grounded_rag_fidelity_pct": 66.67,
     "ungrounded_baseline_fidelity_pct": 0.0,
-    "fidelity_gain_pct": 100.0
+    "fidelity_gain_pct": 66.67
   },
   "ablation_personas": {
     "multi_agent_questions": [
@@ -40,5 +40,10 @@
     "kg_relational_edges_tracked": 29,
     "flat_keyword_edges_tracked": 0,
     "topological_reasoning_enabled": true
+  },
+  "benchmark_metadata": {
+    "execution_timestamp": "2026-10-15T15:02:44.371790",
+    "dissertation_context_chars": 429,
+    "grounded_keywords_count": 20
   }
 }

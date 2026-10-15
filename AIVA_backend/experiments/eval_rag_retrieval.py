@@ -2,7 +2,7 @@
 AIVA Research Benchmark: Hybrid RAG vs Gemini Dense vs BM25 vs TF-IDF Retrieval Evaluation
 -----------------------------------------------------------------------------------------
 Evaluates four distinct retrieval strategies across an expanded, multi-chapter engineering
-dissertation corpus (25 passages, 15 independently labelled queries):
+dissertation corpus (30 passages including technical distractor chunks, 18 independently labelled queries):
 
 1. TF-IDF Baseline (tfidf_baseline): Lexical vectorizer with cosine similarity.
 2. BM25 Lexical Retrieval (bm25_sparse): BM25Okapi with technical tokenization preserving compound tokens.
@@ -20,6 +20,7 @@ import sys
 import json
 import math
 import time
+import datetime
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -29,7 +30,7 @@ from core.rag_engine import technical_tokenize
 from rank_bm25 import BM25Okapi
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
-# Expanded 25-passage dissertation benchmark corpus across 5 technical chapters
+# Expanded 30-passage dissertation benchmark corpus across 6 technical chapters + distractor chunks
 BENCHMARK_CORPUS = [
     {
         "id": "chunk_0",
@@ -155,11 +156,36 @@ BENCHMARK_CORPUS = [
         "id": "chunk_24",
         "chapter": "Ch 9: Monitoring & Fault Tolerance",
         "text": "A circuit breaker pattern wraps external third-party API dependencies, automatically opening to fast-fail and prevent cascade failures when upstream timeout exceeds 3 seconds."
+    },
+    # Hard Distractor Chunks designed to test disambiguation & ranking robustness
+    {
+        "id": "chunk_25",
+        "chapter": "Ch 10: Local Dev & Testing (Distractor)",
+        "text": "Docker Compose is utilized during local offline development to spin up mock PostgreSQL and Redis containers using YAML configurations without deploying a full Kubernetes cluster."
+    },
+    {
+        "id": "chunk_26",
+        "chapter": "Ch 10: Model Exploration (Distractor)",
+        "text": "Gradient clipping with L2 weight decay was tested as an alternative regularization technique to stabilize backpropagation when training deep recurrent neural networks on sequential data."
+    },
+    {
+        "id": "chunk_27",
+        "chapter": "Ch 10: Security Extensions (Distractor)",
+        "text": "OAuth2 password grant flow is combined with refresh token rotation stored in encrypted cookies to automatically renew expired JWT access tokens after 60 minutes."
+    },
+    {
+        "id": "chunk_28",
+        "chapter": "Ch 10: Data Archival (Distractor)",
+        "text": "PostgreSQL range partitioning splits the historical audit logs by academic semester to prevent excessive sequential scan times on multi-million row archive tables."
+    },
+    {
+        "id": "chunk_29",
+        "chapter": "Ch 10: Lexical Tokenization (Distractor)",
+        "text": "Standard text tokenization strips hyphens and drops domain-specific stop words, which can inadvertently remove technical qualifiers from queries during search."
     }
 ]
 
-# 15 Independently Labelled Technical Queries:
-# Mixed across exact keyword matches, paraphrased conceptual searches, and composite queries
+# 18 Independently Labelled Technical Queries:
 BENCHMARK_QUERIES = [
     {
         "query": "How is FastAPI configured as an asynchronous microservices gateway?",
@@ -235,6 +261,22 @@ BENCHMARK_QUERIES = [
         "query": "What mechanism protects the system from cascading service failures when an external API is down?",
         "type": "semantic_paraphrase",
         "relevant_ids": ["chunk_24"]
+    },
+    # Challenging Disambiguation Queries against Distractor Chunks
+    {
+        "query": "How is local development orchestrated using containers without running full Kubernetes pods?",
+        "type": "hard_distractor",
+        "relevant_ids": ["chunk_25"]
+    },
+    {
+        "query": "What token rotation strategy prevents long-term credential leakage when sessions expire?",
+        "type": "hard_distractor",
+        "relevant_ids": ["chunk_27"]
+    },
+    {
+        "query": "How does the database partition historical multi-semester audit logs to avoid slow full-table scans?",
+        "type": "hard_distractor",
+        "relevant_ids": ["chunk_28"]
     }
 ]
 
@@ -251,7 +293,7 @@ def evaluate_retrieval_system():
     print("=" * 80)
     print("AIVA EMPIRICAL BENCHMARK: Retrieval Evaluation (TF-IDF vs BM25 vs Dense vs Hybrid)")
     print("=" * 80)
-    print(f"Corpus Size:  {len(BENCHMARK_CORPUS)} technical dissertation passages")
+    print(f"Corpus Size:  {len(BENCHMARK_CORPUS)} technical dissertation passages (incl. distractors)")
     print(f"Query Count:  {len(BENCHMARK_QUERIES)} independently labelled queries")
     
     corpus_texts = [item["text"] for item in BENCHMARK_CORPUS]
@@ -287,12 +329,21 @@ def evaluate_retrieval_system():
     for q in BENCHMARK_QUERIES:
         q_emb = embeddings_model.embed_query(q["query"])
         query_embeddings.append(q_emb)
-        time.sleep(0.5)
+        time.sleep(0.4)
     query_emb_matrix = np.array(query_embeddings)
     
     # 4. Evaluation Loop
     methods = ["tfidf_baseline", "bm25_sparse", "gemini_dense", "hybrid_rrf"]
-    results = {}
+    results = {
+        "benchmark_metadata": {
+            "execution_timestamp": datetime.datetime.now().isoformat(),
+            "corpus_size": len(BENCHMARK_CORPUS),
+            "query_count": len(BENCHMARK_QUERIES),
+            "dense_model": "models/gemini-embedding-2 (3072-dim)",
+            "sparse_model": "BM25Okapi with technical_tokenize",
+            "rrf_constant_k": 60
+        }
+    }
     
     print("\n[4/4] Executing benchmark retrieval evaluation across all methods...")
     
@@ -377,13 +428,22 @@ def evaluate_retrieval_system():
         print(f"  MRR:      {results[method]['MRR']:.4f}")
         print(f"  nDCG@3:   {results[method]['nDCG@3']:.4f} | nDCG@5:   {results[method]['nDCG@5']:.4f}")
 
-    # Output JSON file
-    os.makedirs("experiments", exist_ok=True)
-    out_path = os.path.join("experiments", "results_rag_retrieval.json")
-    with open(out_path, "w", encoding="utf-8") as f:
+    # Output JSON file to both AIVA_backend/experiments and root experiments
+    backend_out_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "experiments"))
+    os.makedirs(backend_out_dir, exist_ok=True)
+    backend_file = os.path.join(backend_out_dir, "results_rag_retrieval.json")
+    with open(backend_file, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2)
         
-    print(f"\nRAG benchmark completed! Results saved to: {out_path}")
+    root_out_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "experiments"))
+    os.makedirs(root_out_dir, exist_ok=True)
+    root_file = os.path.join(root_out_dir, "results_rag_retrieval.json")
+    with open(root_file, "w", encoding="utf-8") as f:
+        json.dump(results, f, indent=2)
+        
+    print(f"\nRAG benchmark completed! Results saved to:")
+    print(f"  1. {backend_file}")
+    print(f"  2. {root_file}")
     return results
 
 if __name__ == "__main__":

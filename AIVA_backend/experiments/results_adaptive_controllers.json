@@ -76,5 +76,11 @@
       "mean_cumulative_reward": 0.36,
       "sample_episodes": 100
     }
+  },
+  "benchmark_metadata": {
+    "execution_timestamp": "2026-10-15T15:01:16.451732",
+    "episodes_per_profile": 100,
+    "steps_per_episode": 20,
+    "dqn_model_path": "models/dqn_difficulty_model.zip"
   }
 }

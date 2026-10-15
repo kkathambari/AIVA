@@ -113,13 +113,13 @@ $$\text{RRF Score}(d) = \sum_{m \in \{\text{dense}, \text{sparse}\}} \frac{1}{k 
 - **TF-IDF Baseline:** Term Frequency - Inverse Document Frequency vectorizer with cosine similarity.
 
 #### Empirical Benchmark Results (`experiments/results_rag_retrieval.json`):
-*Evaluated across 25 technical engineering dissertation passages and 15 independently labelled queries spanning exact keyword lookups, conceptual paraphrases, and composite systems questions.*
+*Evaluated across 30 technical engineering dissertation passages (including hard distractor chunks) and 18 independently labelled queries spanning exact keyword lookups, conceptual paraphrases, and distractor disambiguation.*
 
 | Retrieval Strategy | Embedding / Representation | Recall@1 | Recall@3 | Recall@5 | MRR | nDCG@3 | nDCG@5 |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **TF-IDF Baseline** | Unigram + Bigram TF-IDF Vectors | 0.9333 | 1.0000 | 1.0000 | 0.9667 | 0.9754 | 0.9754 |
-| **BM25 Sparse** | Technical Tokenizer + BM25Okapi | **1.0000** | 1.0000 | 1.0000 | **1.0000** | **1.0000** | **1.0000** |
-| **Gemini Dense** | `models/gemini-embedding-2` (3072-d) | 0.9333 | 1.0000 | 1.0000 | 0.9667 | 0.9754 | 0.9754 |
+| **TF-IDF Baseline** | Unigram + Bigram TF-IDF Vectors | 0.8889 | 1.0000 | 1.0000 | 0.9444 | 0.9590 | 0.9590 |
+| **BM25 Sparse** | Technical Tokenizer + BM25Okapi | 0.9444 | 1.0000 | 1.0000 | 0.9722 | 0.9795 | 0.9795 |
+| **Gemini Dense** | `models/gemini-embedding-2` (3072-d) | 0.9444 | 1.0000 | 1.0000 | 0.9722 | 0.9795 | 0.9795 |
 | **Hybrid RRF** | Dense Cosine + Sparse BM25 ($k=60$) | **1.0000** | 1.0000 | 1.0000 | **1.0000** | **1.0000** | **1.0000** |
 
 ---
@@ -133,8 +133,9 @@ Knowledge graphs are extracted from ingested project text using structured Pydan
 
 | Extraction Task | Ground Truth Count | Extracted Count (Live) | True Positives | Precision | Recall | F1 Score |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Technical Concepts / Entities** | 18 | 30 | 10 | 0.3333 | 0.5556 | 0.4167 |
-| **Typed Relationship Triples** | 13 | 29 | 3 | 0.1034 | 0.2308 | 0.1429 |
+| **Technical Concepts / Nodes** | 18 | 30 | 10 | 0.3333 | 0.5556 | 0.4167 |
+| **Strict Directed Relational Triples** | 13 | 29 | 3 | 0.1034 | 0.2308 | 0.1429 |
+| **Inversion-Invariant Relational Adjacency** | 13 | 29 | 3 | 0.1034 | 0.2308 | 0.1429 |
 
 ---
 
@@ -150,11 +151,11 @@ A critical distinction is established:
 
 $$\text{Composite Score} = 0.35 \cdot C_{\text{corr}} + 0.25 \cdot C_{\text{comp}} + 0.20 \cdot E_{\text{align}} + 0.20 \cdot R_{\text{depth}}$$
 
-#### Pilot Faculty Calibration Study (`benchmark_data/pilot_evaluator_dataset.json`, `experiments/results_rubric_agreement.json`):
-Agreement between independent university computing faculty evaluations and AIVA's structured rubric across $N=15$ diverse viva answer responses:
-- **Mean Absolute Error (MAE):** **$0.0166$** (on continuous 0.0–1.0 score scale)
-- **Pearson Correlation ($r$):** **$0.9988$** ($p = 1.77 \times 10^{-18}$)
-- **Quadratic Weighted Cohen's Kappa:** **$1.0000$** (across 5 academic grade bands)
+#### Double-Blind Faculty Calibration Study (`benchmark_data/pilot_evaluator_dataset.json`, `experiments/results_rubric_agreement.json`):
+Evaluated on $N=15$ diverse viva answer responses independently scored by two academic faculty raters (Associate Professor, CSE & Assistant Professor, IT):
+- **Inter-Human Reliability (R1 vs R2):** Mean Absolute Diff = **$0.0488$**, Pearson $r = \mathbf{0.9991}$ ($p = 3.01 \times 10^{-19}$), Cohen's $\kappa = \mathbf{0.9256}$.
+- **Human Consensus vs AIVA:** $\text{MAE} = \mathbf{0.0249}$, Pearson $r = \mathbf{0.9966}$ ($p = 1.61 \times 10^{-15}$), Cohen's $\kappa = \mathbf{0.9597}$.
+- **Dimensional MAE (vs Human Consensus):** Correctness ($0.0310$), Completeness ($0.0327$), Evidence Alignment ($0.0223$), Reasoning Depth ($0.0287$).
 - **Study Scope:** Initial pilot calibration ($N=15$). Large-scale multi-faculty cohort validation ($N \ge 60$) across institutions is an active Phase 2 research task.
 
 ---

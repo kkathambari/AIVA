@@ -195,12 +195,29 @@ def run_all_ablations():
         "ablation_knowledge_graph": res_kg
     }
     
-    os.makedirs("experiments", exist_ok=True)
-    out_file = os.path.join("experiments", "results_ablation_studies.json")
-    with open(out_file, "w", encoding="utf-8") as f:
+    import datetime
+    full_results["benchmark_metadata"] = {
+        "execution_timestamp": datetime.datetime.now().isoformat(),
+        "dissertation_context_chars": len(PROJECT_DISSERTATION_CONTEXT),
+        "grounded_keywords_count": len(GROUNDED_TECHNICAL_TERMS)
+    }
+
+    # Save to both AIVA_backend/experiments and root experiments
+    backend_out_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "experiments"))
+    os.makedirs(backend_out_dir, exist_ok=True)
+    backend_file = os.path.join(backend_out_dir, "results_ablation_studies.json")
+    with open(backend_file, "w", encoding="utf-8") as f:
         json.dump(full_results, f, indent=2)
         
-    print(f"\nAblation benchmarks completed! Results written to: {out_file}")
+    root_out_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "experiments"))
+    os.makedirs(root_out_dir, exist_ok=True)
+    root_file = os.path.join(root_out_dir, "results_ablation_studies.json")
+    with open(root_file, "w", encoding="utf-8") as f:
+        json.dump(full_results, f, indent=2)
+        
+    print(f"\nAblation benchmarks completed! Results written to:")
+    print(f"  1. {backend_file}")
+    print(f"  2. {root_file}")
     return full_results
 
 if __name__ == "__main__":
