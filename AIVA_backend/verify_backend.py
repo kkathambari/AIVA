@@ -5,6 +5,7 @@ from core.rag_engine import RAGEngine
 from core.analytics_engine import AnalyticsEngine
 from core.adaptive_engine import AdaptiveEngine
 from core.multi_agent import MultiAgentPanel
+from core.ucs_engine import UCSEngine
 
 def test_rag_engine():
     print("\n--- Testing Hybrid RAG Engine ---")
@@ -106,6 +107,22 @@ def test_multi_agent_panel():
     print("Question routed to Industry Expert: SUCCESS")
     print("Multi-Agent Panel Routing: SUCCESS")
 
+def test_ucs_engine():
+    print("\n--- Testing Unresolved Concept Selection (UCS) Engine ---")
+    ucs = UCSEngine(w_gap=0.35, w_prereq=0.25, w_uncertainty=0.25, w_redundancy=0.15)
+    nodes = [
+        {"id": "Architecture", "type": "Core", "prereq_depth": 0.9},
+        {"id": "API Gateway", "type": "Networking", "prereq_depth": 0.6}
+    ]
+    edges = [{"source": "Architecture", "target": "API Gateway", "type": "PREREQUISITE_FOR"}]
+    ucs.load_concept_graph(nodes, edges)
+    decision = ucs.select_next_concept(turn=0)
+    assert decision["selected_concept"] == "Architecture"
+    ucs.update_concept_score("Architecture", 0.9, turn=0)
+    decision_next = ucs.select_next_concept(turn=1)
+    assert decision_next["selected_concept"] == "API Gateway"
+    print("UCS Engine Selection & Redundancy Prevention: SUCCESS")
+
 if __name__ == "__main__":
     print("==================================================")
     print("               AIVA BACKEND TEST SUITE            ")
@@ -119,6 +136,7 @@ if __name__ == "__main__":
     test_analytics_engine()
     test_adaptive_difficulty()
     test_multi_agent_panel()
+    test_ucs_engine()
     
     print("\n==================================================")
     print("          ALL TEST SUITE CHECKS COMPLETED         ")
