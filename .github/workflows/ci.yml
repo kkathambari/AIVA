@@ -10,6 +10,8 @@ jobs:
   test-and-verify:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      GOOGLE_API_KEY: "mock_ci_api_key_for_offline_deterministic_testing"
 
     steps:
       - name: Checkout repository

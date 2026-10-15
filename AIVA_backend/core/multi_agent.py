@@ -22,10 +22,15 @@ class AgentState(TypedDict):
     generation_source: str
 
 class MultiAgentPanel:
-    def __init__(self, api_key: str = None):
+    def __init__(self, api_key: str = None, llm=None):
         if api_key:
             os.environ["GEMINI_API_KEY"] = api_key
-        self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.7, max_retries=1, timeout=10)
+        if llm is not None:
+            self.llm = llm
+        else:
+            if not os.environ.get("GOOGLE_API_KEY") and not os.environ.get("GEMINI_API_KEY"):
+                os.environ["GOOGLE_API_KEY"] = "mock_api_key_for_offline_testing"
+            self.llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.7, max_retries=1, timeout=10)
         self.graph = self._build_graph()
 
     def router_node(self, state: AgentState) -> dict:

@@ -1,17 +1,24 @@
 """
 Unit test asserting the strict four-persona sequence for baseline round-robin routing
 and testing keyword routing behavior against labelled test cases.
+Purely offline test verifying routing logic without requiring external API credentials.
 """
 
 import os
 import sys
+from unittest.mock import MagicMock
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from core.multi_agent import MultiAgentPanel
 
+def get_test_panel() -> MultiAgentPanel:
+    """Creates a MultiAgentPanel instance with a mocked LLM for offline testing."""
+    mock_llm = MagicMock()
+    return MultiAgentPanel(llm=mock_llm)
+
 def test_round_robin_sequence():
-    panel = MultiAgentPanel()
+    panel = get_test_panel()
     expected_sequence = ["Examiner", "Critic", "Industry Expert", "Professor", "Examiner", "Critic", "Industry Expert", "Professor"]
     actual_sequence = []
     
@@ -36,7 +43,7 @@ def test_round_robin_sequence():
     print("[PASS] Round-robin sequence unit test succeeded!")
 
 def test_keyword_routing_accuracy():
-    panel = MultiAgentPanel()
+    panel = get_test_panel()
     test_cases = [
         ("We analyzed the time complexity and mathematical formula of the big-o bound.", "Professor"),
         ("We deployed Docker containers into AWS cloud Kubernetes pods with low latency.", "Industry Expert"),
