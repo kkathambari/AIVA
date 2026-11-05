@@ -1,0 +1,23 @@
+{
+  "DQN_Reinforcement_Learning": {
+    "difficulty_appropriateness": 0.25,
+    "over_challenging_rate": 0.0,
+    "under_challenging_rate": 0.47,
+    "mean_adaptation_latency_turns": 7.75,
+    "mean_zpd_tracking_error": 1.695
+  },
+  "Rule_Based_Heuristic": {
+    "difficulty_appropriateness": 0.6283,
+    "over_challenging_rate": 0.0,
+    "under_challenging_rate": 0.05,
+    "mean_adaptation_latency_turns": 2.27,
+    "mean_zpd_tracking_error": 0.4467
+  },
+  "Fixed_Difficulty_Static": {
+    "difficulty_appropriateness": 0.25,
+    "over_challenging_rate": 0.225,
+    "under_challenging_rate": 0.25,
+    "mean_adaptation_latency_turns": 5.75,
+    "mean_zpd_tracking_error": 1.25
+  }
+}

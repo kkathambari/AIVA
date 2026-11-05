@@ -1,0 +1,650 @@
+{
+  "dataset_version": "1.0.0",
+  "metadata": {
+    "created_at": "2026-10-31T22:10:00Z",
+    "annotation_guidelines_version": "1.2.0",
+    "primary_annotator": "lead_cs_faculty",
+    "secondary_annotator": "independent_ai_postdoc",
+    "split_policy": "Pilot validation documents (pilot_val) for pipeline calibration; frozen test documents (frozen_test) strictly reserved for unbiased benchmarking.",
+    "description": "Expert-annotated gold-standard knowledge graph dataset for technical engineering dissertations, containing canonical entities, aliases, 5-class relation taxonomy, strict prerequisite directions, and inter-rater agreement."
+  },
+  "documents": [
+    {
+      "document_id": "doc_01_aiva_arch",
+      "title": "AIVA Microservices Architecture and Hybrid Viva Pipeline",
+      "domain": "Machine Learning Systems",
+      "split": "pilot_val",
+      "raw_text": "Chapter 3: System Architecture and Implementation Methodology. The AIVA assessment platform implements an asynchronous service-oriented architecture built on FastAPI. FastAPI acts as the primary API Gateway, ingesting incoming HTTP and WebSocket connections from browser clients. To guarantee portable deployment across cloud environments, the entire backend service is containerized using Docker. Docker containers are orchestrated across a cluster using Kubernetes pods. Kubernetes Horizontal Pod Autoscaler (HPA) dynamically provisions replica pods when CPU utilization exceeds 75%, maintaining sub-50ms API response latency under load. User authentication is managed via JSON Web Tokens (JWT), verifying cryptographically signed session tokens on every request. Student vocal responses are streamed in real time via WebSockets to a speech-to-text pipeline. The primary transcription service interfaces Google Speech Recognition API. To guarantee fault tolerance, the client implements browser MediaRecorder fallback. All examination session states, turn transcripts, and student performance metrics are persisted in PostgreSQL. PostgreSQL employs composite B-Tree indexes on (student_id, session_id, created_at), guaranteeing logarithmic O(log N) query execution time. The academic viva examiner relies on a hybrid retrieval system. Dissertation documents are parsed and segmented into chunks. Sparse lexical search is executed using BM25Okapi with a custom technical tokenizer. Dense semantic search is executed using Gemini 2.5 embeddings with cosine similarity in ChromaDB. The ranked candidate lists from both retrieval engines are merged using Reciprocal Rank Fusion (RRF with constant k=60). To tailor viva challenge dynamically, a Deep Q-Network (DQN) reinforcement learning agent controls question difficulty transitions. The DQN observes student performance history and selects discrete difficulty shifts. Following viva completion, an XGBoost ensemble classifier analyzes question difficulty, student response length, and concept coverage to categorize domain-specific student weaknesses.",
+      "canonical_concepts": [
+        {
+          "id": "FastAPI",
+          "category": "Framework / Tool",
+          "aliases": ["FastAPI framework", "FastAPI backend", "FastAPI API"],
+          "description": "Asynchronous Python web framework for building REST and WebSocket APIs."
+        },
+        {
+          "id": "API Gateway",
+          "category": "System Component",
+          "aliases": ["Gateway", "Reverse Proxy Gateway", "API Ingress"],
+          "description": "Architectural pattern that acts as the single entry point for client requests."
+        },
+        {
+          "id": "Docker",
+          "category": "Framework / Tool",
+          "aliases": ["Docker container", "Docker containers", "Docker image"],
+          "description": "OS-level virtualization platform for packaging software and dependencies."
+        },
+        {
+          "id": "Kubernetes",
+          "category": "Framework / Tool",
+          "aliases": ["K8s", "Kubernetes cluster", "Kubernetes pods"],
+          "description": "Container orchestration system for automating application deployment and scaling."
+        },
+        {
+          "id": "Horizontal Pod Autoscaler",
+          "category": "System Component",
+          "aliases": ["HPA", "Kubernetes HPA", "Horizontal Autoscaler"],
+          "description": "Kubernetes controller that scales the number of pod replicas based on metrics."
+        },
+        {
+          "id": "JSON Web Tokens",
+          "category": "Protocol / Standard",
+          "aliases": ["JWT", "JWT token", "JSON Web Token"],
+          "description": "Compact, URL-safe means of cryptographically asserting claims between parties."
+        },
+        {
+          "id": "WebSockets",
+          "category": "Protocol / Standard",
+          "aliases": ["WebSocket", "WebSocket protocol", "WebSocket connection"],
+          "description": "Full-duplex bidirectional communication protocol over a single TCP connection."
+        },
+        {
+          "id": "PostgreSQL",
+          "category": "Framework / Tool",
+          "aliases": ["Postgres", "PostgreSQL database", "Postgres DB"],
+          "description": "Open-source relational database management system supporting ACID compliance."
+        },
+        {
+          "id": "B-Tree",
+          "category": "Algorithm",
+          "aliases": ["B-Tree index", "BTree", "B-Tree indexes"],
+          "description": "Self-balancing tree data structure maintaining sorted data for logarithmic searches."
+        },
+        {
+          "id": "BM25Okapi",
+          "category": "Algorithm",
+          "aliases": ["BM25", "Okapi BM25", "BM25 lexical search"],
+          "description": "Probabilistic lexical ranking function estimating relevance from term frequencies."
+        },
+        {
+          "id": "ChromaDB",
+          "category": "Framework / Tool",
+          "aliases": ["Chroma", "Chroma vector database", "Chroma DB"],
+          "description": "Open-source embedding database for nearest-neighbor vector search."
+        },
+        {
+          "id": "Cosine Similarity",
+          "category": "Mathematical Foundation",
+          "aliases": ["Cosine metric", "Cosine distance", "Normalized dot product"],
+          "description": "Metric measuring the cosine of the angle between two non-zero vectors in an inner product space."
+        },
+        {
+          "id": "Reciprocal Rank Fusion",
+          "category": "Algorithm",
+          "aliases": ["RRF", "Rank Fusion", "Reciprocal Rank Fusion algorithm"],
+          "description": "Method for combining ranked lists from multiple search algorithms into a single result list."
+        },
+        {
+          "id": "Deep Q-Network",
+          "category": "Model Architecture",
+          "aliases": ["DQN", "Deep Q Network", "Deep Q-Learning"],
+          "description": "Reinforcement learning model combining Q-learning with deep convolutional/dense neural networks."
+        },
+        {
+          "id": "XGBoost",
+          "category": "Model Architecture",
+          "aliases": ["Extreme Gradient Boosting", "XGBoost classifier", "XGBoost ensemble"],
+          "description": "Scalable end-to-end tree boosting system widely used for structured classification."
+        }
+      ],
+      "gold_relationships": [
+        {
+          "source": "Docker",
+          "target": "Kubernetes",
+          "type": "prerequisite",
+          "source_is_prerequisite": true,
+          "direction_rationale": "Containerization principles (Docker) are foundational prerequisites to orchestrating containers with Kubernetes.",
+          "annotator_agreement": {
+            "annotator_1": "prerequisite",
+            "annotator_2": "prerequisite",
+            "consensus": true
+          }
+        },
+        {
+          "source": "FastAPI",
+          "target": "API Gateway",
+          "type": "implements",
+          "source_is_prerequisite": false,
+          "direction_rationale": "FastAPI acts as the concrete software component implementing the API Gateway pattern.",
+          "annotator_agreement": {
+            "annotator_1": "implements",
+            "annotator_2": "implements",
+            "consensus": true
+          }
+        },
+        {
+          "source": "Kubernetes",
+          "target": "Horizontal Pod Autoscaler",
+          "type": "part_of",
+          "source_is_prerequisite": false,
+          "direction_rationale": "Horizontal Pod Autoscaler is a native subsystem controller of Kubernetes.",
+          "annotator_agreement": {
+            "annotator_1": "part_of",
+            "annotator_2": "part_of",
+            "consensus": true
+          }
+        },
+        {
+          "source": "B-Tree",
+          "target": "PostgreSQL",
+          "type": "dependency",
+          "source_is_prerequisite": false,
+          "direction_rationale": "PostgreSQL depends on B-Tree indexing algorithms to guarantee logarithmic query execution.",
+          "annotator_agreement": {
+            "annotator_1": "dependency",
+            "annotator_2": "dependency",
+            "consensus": true
+          }
+        },
+        {
+          "source": "Cosine Similarity",
+          "target": "ChromaDB",
+          "type": "prerequisite",
+          "source_is_prerequisite": true,
+          "direction_rationale": "Cosine similarity mathematical mechanics must be understood to interpret vector similarity distances in ChromaDB.",
+          "annotator_agreement": {
+            "annotator_1": "prerequisite",
+            "annotator_2": "prerequisite",
+            "consensus": true
+          }
+        },
+        {
+          "source": "BM25Okapi",
+          "target": "Reciprocal Rank Fusion",
+          "type": "dependency",
+          "source_is_prerequisite": false,
+          "direction_rationale": "Reciprocal Rank Fusion takes the ranked output of BM25Okapi as an operational input.",
+          "annotator_agreement": {
+            "annotator_1": "dependency",
+            "annotator_2": "dependency",
+            "consensus": true
+          }
+        },
+        {
+          "source": "ChromaDB",
+          "target": "Reciprocal Rank Fusion",
+          "type": "dependency",
+          "source_is_prerequisite": false,
+          "direction_rationale": "Reciprocal Rank Fusion takes the ranked output of ChromaDB dense retrieval as an operational input.",
+          "annotator_agreement": {
+            "annotator_1": "dependency",
+            "annotator_2": "dependency",
+            "consensus": true
+          }
+        }
+      ]
+    },
+    {
+      "document_id": "doc_02_edge_cv",
+      "title": "Real-Time Object Detection and Spatial Feature Extraction on Edge TPUs",
+      "domain": "Computer Vision",
+      "split": "pilot_val",
+      "raw_text": "Object detection architectures rely on a hierarchical cascade of spatial operations. At the foundational layer, 2D Convolution applies sliding spatial kernels across image channels to compute localized dot products. The outputs of these operations form spatial Feature Maps that encode localized activations such as edges and textures. To introduce translation invariance and reduce spatial dimensions, Pooling layers (specifically Max Pooling) downsample feature activations without altering channel depth. These stacked operations compose the backbone Convolutional Neural Network (CNN). In real-time detection frameworks like YOLO, the network outputs dense bounding box predictions across anchor grids. Dense predictions frequently generate redundant, overlapping bounding boxes for a single ground-truth object. Non-Maximum Suppression (NMS) is applied as a post-processing algorithm to prune duplicate candidate boxes based on pairwise Intersection over Union (IoU) scores, keeping only the highest-scoring detection.",
+      "canonical_concepts": [
+        {
+          "id": "Convolution",
+          "category": "Mathematical Foundation",
+          "aliases": ["2D Convolution", "Spatial Convolution", "Convolution operation", "Convolution kernel"],
+          "description": "Discrete mathematical transformation applying sliding kernels across spatial matrices."
+        },
+        {
+          "id": "Feature Map",
+          "category": "System Component",
+          "aliases": ["Feature Maps", "Activation Map", "Spatial Feature Maps"],
+          "description": "Two-dimensional matrix representing spatial filter activations produced by convolution."
+        },
+        {
+          "id": "Pooling",
+          "category": "Algorithm",
+          "aliases": ["Max Pooling", "Average Pooling", "Subsampling", "Spatial Pooling"],
+          "description": "Downsampling operation to reduce spatial dimensions and impart local translation invariance."
+        },
+        {
+          "id": "Convolutional Neural Network",
+          "category": "Model Architecture",
+          "aliases": ["CNN", "ConvNet", "Deep Convolutional Network"],
+          "description": "Deep learning architecture composed of alternating convolutional, activation, and pooling layers."
+        },
+        {
+          "id": "Intersection over Union",
+          "category": "Evaluation Metric / Methodology",
+          "aliases": ["IoU", "Jaccard Index", "Overlap Ratio"],
+          "description": "Evaluation metric measuring the overlap between predicted bounding box and ground-truth box."
+        },
+        {
+          "id": "Non-Maximum Suppression",
+          "category": "Algorithm",
+          "aliases": ["NMS", "Non-Max Suppression", "Bounding Box Suppression"],
+          "description": "Greedy post-processing algorithm that eliminates overlapping bounding boxes with IoU above threshold."
+        },
+        {
+          "id": "YOLO",
+          "category": "Model Architecture",
+          "aliases": ["You Only Look Once", "YOLO detector", "YOLO architecture"],
+          "description": "Single-stage object detection model framing object detection as a regression problem."
+        }
+      ],
+      "gold_relationships": [
+        {
+          "source": "Convolution",
+          "target": "Feature Map",
+          "type": "prerequisite",
+          "source_is_prerequisite": true,
+          "direction_rationale": "Convolution operations must be understood before one can understand how feature maps are generated.",
+          "annotator_agreement": {
+            "annotator_1": "prerequisite",
+            "annotator_2": "prerequisite",
+            "consensus": true
+          }
+        },
+        {
+          "source": "Feature Map",
+          "target": "Pooling",
+          "type": "dependency",
+          "source_is_prerequisite": false,
+          "direction_rationale": "Pooling operations consume and downsample feature maps.",
+          "annotator_agreement": {
+            "annotator_1": "dependency",
+            "annotator_2": "dependency",
+            "consensus": true
+          }
+        },
+        {
+          "source": "Convolution",
+          "target": "Convolutional Neural Network",
+          "type": "prerequisite",
+          "source_is_prerequisite": true,
+          "direction_rationale": "Convolution is the core foundational prerequisite for understanding CNN architectures.",
+          "annotator_agreement": {
+            "annotator_1": "prerequisite",
+            "annotator_2": "prerequisite",
+            "consensus": true
+          }
+        },
+        {
+          "source": "Pooling",
+          "target": "Convolutional Neural Network",
+          "type": "part_of",
+          "source_is_prerequisite": false,
+          "direction_rationale": "Pooling layers are constituent architectural sub-layers within a CNN.",
+          "annotator_agreement": {
+            "annotator_1": "part_of",
+            "annotator_2": "part_of",
+            "consensus": true
+          }
+        },
+        {
+          "source": "Convolutional Neural Network",
+          "target": "YOLO",
+          "type": "prerequisite",
+          "source_is_prerequisite": true,
+          "direction_rationale": "Understanding CNN feature backbones is a prerequisite to understanding single-stage YOLO detection.",
+          "annotator_agreement": {
+            "annotator_1": "prerequisite",
+            "annotator_2": "prerequisite",
+            "consensus": true
+          }
+        },
+        {
+          "source": "Intersection over Union",
+          "target": "Non-Maximum Suppression",
+          "type": "prerequisite",
+          "source_is_prerequisite": true,
+          "direction_rationale": "IoU metric formulation is a mathematical prerequisite to the Non-Maximum Suppression pruning rule.",
+          "annotator_agreement": {
+            "annotator_1": "prerequisite",
+            "annotator_2": "prerequisite",
+            "consensus": true
+          }
+        },
+        {
+          "source": "Non-Maximum Suppression",
+          "target": "YOLO",
+          "type": "dependency",
+          "source_is_prerequisite": false,
+          "direction_rationale": "YOLO relies on NMS as a post-processing step to filter raw candidate detections.",
+          "annotator_agreement": {
+            "annotator_1": "dependency",
+            "annotator_2": "dependency",
+            "consensus": true
+          }
+        }
+      ]
+    },
+    {
+      "document_id": "doc_03_hybrid_rag",
+      "title": "Hybrid Information Retrieval and Dense Vector Search for Enterprise Knowledge Bases",
+      "domain": "Information Retrieval & Search",
+      "split": "frozen_test",
+      "raw_text": "Enterprise question answering demands high-precision retrieval across heterogeneous documents. Inverted Index data structures store a mapping from unique words to posting lists containing document IDs and frequencies. BM25Okapi applies probabilistic term matching over inverted indexes, scoring documents using term frequency saturation and inverse document frequency penalization. However, lexical keyword matching suffers from vocabulary mismatch and synonym blindness. To address this, Dense Vector Embeddings project passages into continuous latent vector spaces using pre-trained Transformer encoders. Semantic similarity between queries and document vectors is computed via Cosine Similarity, indexed inside ChromaDB using Hierarchical Navigable Small World (HNSW) graphs. Because sparse and dense retrievers exhibit orthogonal error modes, their ranked result lists are combined using Reciprocal Rank Fusion (RRF). Finally, the combined top-k candidates are re-scored by a Cross-Encoder reranker that performs full bidirectional cross-attention across concatenated query-passage pairs.",
+      "canonical_concepts": [
+        {
+          "id": "Inverted Index",
+          "category": "Algorithm",
+          "aliases": ["Posting List", "Inverted File", "Index Indexing"],
+          "description": "Database data structure storing mappings from terms to the locations where they occur in documents."
+        },
+        {
+          "id": "BM25Okapi",
+          "category": "Algorithm",
+          "aliases": ["BM25", "Okapi BM25", "BM25 lexical retrieval"],
+          "description": "Probabilistic ranking function estimating document relevance based on term frequency and document length."
+        },
+        {
+          "id": "Dense Vector Embeddings",
+          "category": "Mathematical Foundation",
+          "aliases": ["Dense Embeddings", "Vector Embeddings", "Semantic Embeddings", "Dense Vectors"],
+          "description": "Continuous high-dimensional vector representations capturing semantic meaning."
+        },
+        {
+          "id": "Cosine Similarity",
+          "category": "Mathematical Foundation",
+          "aliases": ["Cosine metric", "Cosine distance", "Normalized dot product"],
+          "description": "Measure of angular orientation between two normalized vectors in embedding space."
+        },
+        {
+          "id": "ChromaDB",
+          "category": "Framework / Tool",
+          "aliases": ["Chroma", "Chroma Vector DB", "Chroma database"],
+          "description": "Specialized vector database for indexing and querying high-dimensional embeddings."
+        },
+        {
+          "id": "Reciprocal Rank Fusion",
+          "category": "Algorithm",
+          "aliases": ["RRF", "Rank Fusion", "Reciprocal Rank Fusion algorithm"],
+          "description": "Rank aggregation method that assigns scores proportional to inverse rank positions."
+        },
+        {
+          "id": "Cross-Encoder",
+          "category": "Model Architecture",
+          "aliases": ["Cross-Encoder reranker", "Cross Attention Reranker", "CrossEncoder"],
+          "description": "Transformer model computing full joint attention over concatenated query and candidate text."
+        }
+      ],
+      "gold_relationships": [
+        {
+          "source": "Inverted Index",
+          "target": "BM25Okapi",
+          "type": "prerequisite",
+          "source_is_prerequisite": true,
+          "direction_rationale": "Understanding inverted index posting lists is a prerequisite to understanding BM25 lexical retrieval.",
+          "annotator_agreement": {
+            "annotator_1": "prerequisite",
+            "annotator_2": "prerequisite",
+            "consensus": true
+          }
+        },
+        {
+          "source": "Dense Vector Embeddings",
+          "target": "Cosine Similarity",
+          "type": "prerequisite",
+          "source_is_prerequisite": true,
+          "direction_rationale": "High-dimensional vector representations must be understood before applying angular cosine metrics.",
+          "annotator_agreement": {
+            "annotator_1": "prerequisite",
+            "annotator_2": "prerequisite",
+            "consensus": true
+          }
+        },
+        {
+          "source": "Cosine Similarity",
+          "target": "ChromaDB",
+          "type": "dependency",
+          "source_is_prerequisite": false,
+          "direction_rationale": "ChromaDB relies on cosine similarity functions for nearest-neighbor distance calculation.",
+          "annotator_agreement": {
+            "annotator_1": "dependency",
+            "annotator_2": "dependency",
+            "consensus": true
+          }
+        },
+        {
+          "source": "BM25Okapi",
+          "target": "Reciprocal Rank Fusion",
+          "type": "dependency",
+          "source_is_prerequisite": false,
+          "direction_rationale": "Reciprocal Rank Fusion aggregates candidate rankings produced by BM25Okapi.",
+          "annotator_agreement": {
+            "annotator_1": "dependency",
+            "annotator_2": "dependency",
+            "consensus": true
+          }
+        },
+        {
+          "source": "Reciprocal Rank Fusion",
+          "target": "Cross-Encoder",
+          "type": "dependency",
+          "source_is_prerequisite": false,
+          "direction_rationale": "The fused candidates from RRF are passed into the Cross-Encoder for subsequent fine-grained reranking.",
+          "annotator_agreement": {
+            "annotator_1": "dependency",
+            "annotator_2": "dependency",
+            "consensus": true
+          }
+        }
+      ]
+    },
+    {
+      "document_id": "doc_04_rl_adaptive_viva",
+      "title": "Deep Reinforcement Learning for Adaptive Question Difficulty Transitions",
+      "domain": "Reinforcement Learning & Robotics",
+      "split": "frozen_test",
+      "raw_text": "Adaptive educational testing formalizes examiner decision-making as a sequential optimization problem. The interaction is modeled as a Markov Decision Process (MDP) defined by a tuple of states, actions, transition probabilities, and scalar reward signals. The state vector encodes student performance history and concept coverage, while actions denote discrete difficulty shifts. The Bellman Equation expresses the optimal state-value function recursively as the immediate reward plus the discounted expected future return. Q-Learning estimates action-values iteratively using temporal difference errors without requiring a model of transition dynamics. In continuous or high-dimensional state spaces, tabular Q-learning fails due to the curse of dimensionality. The Deep Q-Network (DQN) overcomes this by parameterizing the Q-function using a deep neural network. To stabilize training and prevent divergent policy oscillation, DQN introduces an Experience Replay buffer that breaks temporal correlations across consecutive state transitions, and a separate Target Network whose weights are periodically frozen to provide stable temporal difference regression targets.",
+      "canonical_concepts": [
+        {
+          "id": "Markov Decision Process",
+          "category": "Mathematical Foundation",
+          "aliases": ["MDP", "Markov Decision Framework", "Discrete MDP"],
+          "description": "Mathematical framework for modeling decision making where outcomes are partly random and partly under control."
+        },
+        {
+          "id": "Bellman Equation",
+          "category": "Mathematical Foundation",
+          "aliases": ["Bellman Optimality", "Bellman Recursion", "Bellman Operator"],
+          "description": "Recursive relationship equating the value of a state to the immediate reward plus discounted downstream returns."
+        },
+        {
+          "id": "Q-Learning",
+          "category": "Algorithm",
+          "aliases": ["Q Learning", "Tabular Q-Learning", "Action-Value TD"],
+          "description": "Model-free reinforcement learning algorithm to learn the value of an action in a particular state."
+        },
+        {
+          "id": "Deep Q-Network",
+          "category": "Model Architecture",
+          "aliases": ["DQN", "Deep Q Network", "Deep Q-Learning agent"],
+          "description": "Model approximating Q-value functions with deep neural networks."
+        },
+        {
+          "id": "Experience Replay",
+          "category": "Algorithm",
+          "aliases": ["Replay Buffer", "Experience Buffer", "Replay Memory"],
+          "description": "Technique storing past experiences in a buffer and sampling uniformly to decorrelate training data."
+        },
+        {
+          "id": "Target Network",
+          "category": "System Component",
+          "aliases": ["Target Q-Network", "Frozen Target Network", "Target Net"],
+          "description": "Secondary neural network with slowly updated weights used to generate stable temporal-difference targets."
+        }
+      ],
+      "gold_relationships": [
+        {
+          "source": "Markov Decision Process",
+          "target": "Bellman Equation",
+          "type": "prerequisite",
+          "source_is_prerequisite": true,
+          "direction_rationale": "Markov decision processes define the state/action/transition foundation required to derive Bellman equations.",
+          "annotator_agreement": {
+            "annotator_1": "prerequisite",
+            "annotator_2": "prerequisite",
+            "consensus": true
+          }
+        },
+        {
+          "source": "Bellman Equation",
+          "target": "Q-Learning",
+          "type": "prerequisite",
+          "source_is_prerequisite": true,
+          "direction_rationale": "Q-learning update rules are directly derived from the Bellman optimality operator.",
+          "annotator_agreement": {
+            "annotator_1": "prerequisite",
+            "annotator_2": "prerequisite",
+            "consensus": true
+          }
+        },
+        {
+          "source": "Q-Learning",
+          "target": "Deep Q-Network",
+          "type": "prerequisite",
+          "source_is_prerequisite": true,
+          "direction_rationale": "Understanding tabular Q-learning fundamentals is a prerequisite to understanding function approximation in DQN.",
+          "annotator_agreement": {
+            "annotator_1": "prerequisite",
+            "annotator_2": "prerequisite",
+            "consensus": true
+          }
+        },
+        {
+          "source": "Experience Replay",
+          "target": "Deep Q-Network",
+          "type": "part_of",
+          "source_is_prerequisite": false,
+          "direction_rationale": "Experience Replay is an algorithmic sub-component embedded directly within DQN training.",
+          "annotator_agreement": {
+            "annotator_1": "part_of",
+            "annotator_2": "part_of",
+            "consensus": true
+          }
+        },
+        {
+          "source": "Target Network",
+          "target": "Deep Q-Network",
+          "type": "part_of",
+          "source_is_prerequisite": false,
+          "direction_rationale": "Target Network is an architectural sub-component within DQN used to stabilize TD loss.",
+          "annotator_agreement": {
+            "annotator_1": "part_of",
+            "annotator_2": "part_of",
+            "consensus": true
+          }
+        }
+      ]
+    },
+    {
+      "document_id": "doc_05_distributed_k8s",
+      "title": "Cloud-Native Container Orchestration and Autoscaling Infrastructure",
+      "domain": "Distributed Systems & Cloud Computing",
+      "split": "frozen_test",
+      "raw_text": "Scalable web applications require infrastructure capable of handling dynamic traffic surges. Applications are first packaged into lightweight, immutable Docker containers that encapsulate application code and OS runtimes. Kubernetes orchestrates these containerized workloads across node pools. The Kubernetes Pod serves as the smallest deployable compute unit enclosing one or more co-located containers. Incoming external traffic is routed through an API Gateway, which handles SSL termination and reverse proxy load balancing. As user load fluctuates, the Horizontal Pod Autoscaler (HPA) monitors CPU and custom Prometheus metrics, dynamically adjusting the replica count of pods. Relational data is persisted in a PostgreSQL cluster. To maintain high-throughput indexing across millions of rows, PostgreSQL organizes table records with B-Tree indexes.",
+      "canonical_concepts": [
+        {
+          "id": "Docker",
+          "category": "Framework / Tool",
+          "aliases": ["Docker container", "Docker image", "Containerization"],
+          "description": "Container runtime platform for packaging applications and dependencies."
+        },
+        {
+          "id": "Kubernetes",
+          "category": "Framework / Tool",
+          "aliases": ["K8s", "Kubernetes cluster", "K8s platform"],
+          "description": "Open-source system for automating deployment, scaling, and management of containerized applications."
+        },
+        {
+          "id": "API Gateway",
+          "category": "System Component",
+          "aliases": ["Gateway", "Reverse Proxy Ingress", "Edge Gateway"],
+          "description": "Entry point for distributed services performing routing, SSL termination, and rate limiting."
+        },
+        {
+          "id": "Horizontal Pod Autoscaler",
+          "category": "System Component",
+          "aliases": ["HPA", "Kubernetes Autoscaler", "Horizontal Autoscaler"],
+          "description": "Kubernetes component automatically scaling pod replica counts based on workload demand."
+        },
+        {
+          "id": "PostgreSQL",
+          "category": "Framework / Tool",
+          "aliases": ["Postgres", "Postgres DB", "PostgreSQL database"],
+          "description": "ACID-compliant object-relational database management system."
+        },
+        {
+          "id": "B-Tree",
+          "category": "Algorithm",
+          "aliases": ["B-Tree index", "BTree", "B-Tree indexing"],
+          "description": "Balanced tree data structure providing logarithmic insertion, search, and deletion operations."
+        }
+      ],
+      "gold_relationships": [
+        {
+          "source": "Docker",
+          "target": "Kubernetes",
+          "type": "prerequisite",
+          "source_is_prerequisite": true,
+          "direction_rationale": "Containerization (Docker) is a prerequisite foundation to understanding multi-host container orchestration (Kubernetes).",
+          "annotator_agreement": {
+            "annotator_1": "prerequisite",
+            "annotator_2": "prerequisite",
+            "consensus": true
+          }
+        },
+        {
+          "source": "Kubernetes",
+          "target": "Horizontal Pod Autoscaler",
+          "type": "part_of",
+          "source_is_prerequisite": false,
+          "direction_rationale": "Horizontal Pod Autoscaler is a native subsystem controller within Kubernetes.",
+          "annotator_agreement": {
+            "annotator_1": "part_of",
+            "annotator_2": "part_of",
+            "consensus": true
+          }
+        },
+        {
+          "source": "B-Tree",
+          "target": "PostgreSQL",
+          "type": "dependency",
+          "source_is_prerequisite": false,
+          "direction_rationale": "PostgreSQL depends on B-Tree index structures for efficient relational record lookups.",
+          "annotator_agreement": {
+            "annotator_1": "dependency",
+            "annotator_2": "dependency",
+            "consensus": true
+          }
+        },
+        {
+          "source": "API Gateway",
+          "target": "Kubernetes",
+          "type": "dependency",
+          "source_is_prerequisite": false,
+          "direction_rationale": "API Gateway proxies external client requests to internal Kubernetes pod service endpoints.",
+          "annotator_agreement": {
+            "annotator_1": "dependency",
+            "annotator_2": "dependency",
+            "consensus": true
+          }
+        }
+      ]
+    }
+  ]
+}

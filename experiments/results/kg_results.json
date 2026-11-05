@@ -1,0 +1,113 @@
+{
+  "benchmark_metadata": {
+    "benchmark_name": "AIVA Knowledge Graph Reliability Evaluation",
+    "timestamp": "2026-10-31T22:51:43.877936",
+    "gold_dataset_version": "1.0.0",
+    "documents_evaluated": 5,
+    "inter_annotator_cohens_kappa": 1.0
+  },
+  "baseline_unnormalized": {
+    "concept_precision": 0.15,
+    "concept_recall": 0.2195,
+    "concept_f1": 0.1782,
+    "relationship_precision": 0.4,
+    "relationship_recall": 0.7143,
+    "relationship_f1": 0.5128,
+    "prerequisite_direction_accuracy": 0.7273,
+    "prerequisite_cycles": 0
+  },
+  "improved_pipeline": {
+    "concept_precision": 0.4167,
+    "concept_recall": 0.6098,
+    "concept_f1": 0.495,
+    "relationship_precision": 0.2121,
+    "relationship_recall": 0.25,
+    "relationship_f1": 0.2295,
+    "prerequisite_direction_accuracy": 1.0,
+    "prerequisite_cycles_before": 0,
+    "prerequisite_cycles_after": 0,
+    "general_relations_preservation_rate": 0.3125
+  },
+  "per_document_breakdown": [
+    {
+      "document_id": "doc_01_aiva_arch",
+      "title": "AIVA Microservices Architecture and Hybrid Viva Pipeline",
+      "split": "pilot_val",
+      "concepts": {
+        "precision": 0.4333,
+        "recall": 0.8667,
+        "f1": 0.5778
+      },
+      "relationships": {
+        "precision": 0.1034,
+        "recall": 0.4286,
+        "f1": 0.1667
+      },
+      "cycles_resolved": 0
+    },
+    {
+      "document_id": "doc_02_edge_cv",
+      "title": "Real-Time Object Detection and Spatial Feature Extraction on Edge TPUs",
+      "split": "pilot_val",
+      "concepts": {
+        "precision": 0.375,
+        "recall": 0.4286,
+        "f1": 0.4
+      },
+      "relationships": {
+        "precision": 1.0,
+        "recall": 0.1429,
+        "f1": 0.25
+      },
+      "cycles_resolved": 0
+    },
+    {
+      "document_id": "doc_03_hybrid_rag",
+      "title": "Hybrid Information Retrieval and Dense Vector Search for Enterprise Knowledge Bases",
+      "split": "frozen_test",
+      "concepts": {
+        "precision": 0.375,
+        "recall": 0.4286,
+        "f1": 0.4
+      },
+      "relationships": {
+        "precision": 1.0,
+        "recall": 0.2,
+        "f1": 0.3333
+      },
+      "cycles_resolved": 0
+    },
+    {
+      "document_id": "doc_04_rl_adaptive_viva",
+      "title": "Deep Reinforcement Learning for Adaptive Question Difficulty Transitions",
+      "split": "frozen_test",
+      "concepts": {
+        "precision": 0.2857,
+        "recall": 0.3333,
+        "f1": 0.3077
+      },
+      "relationships": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "cycles_resolved": 0
+    },
+    {
+      "document_id": "doc_05_distributed_k8s",
+      "title": "Cloud-Native Container Orchestration and Autoscaling Infrastructure",
+      "split": "frozen_test",
+      "concepts": {
+        "precision": 0.5714,
+        "recall": 0.6667,
+        "f1": 0.6154
+      },
+      "relationships": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6667
+      },
+      "cycles_resolved": 0
+    }
+  ]
+}

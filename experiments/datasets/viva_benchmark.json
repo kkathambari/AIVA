@@ -1,0 +1,200 @@
+{
+  "benchmark_version": "1.0.0",
+  "created_at": "2026-10-31T22:30:00Z",
+  "description": "AIVA Standardized Viva Evaluation Benchmark containing multi-domain instances paired with student mastery profiles, prerequisite graphs, reference rubrics, and faculty judgments.",
+  "instances": [
+    {
+      "instance_id": "viva_001",
+      "document_id": "doc_01_aiva_arch",
+      "split": "pilot_val",
+      "domain": "Machine Learning Systems",
+      "student_profile": "intermediate",
+      "concepts": ["FastAPI", "API Gateway", "Docker", "Kubernetes", "Horizontal Pod Autoscaler"],
+      "prerequisite_graph": [
+        {"source": "Docker", "target": "Kubernetes", "type": "prerequisite"},
+        {"source": "Kubernetes", "target": "Horizontal Pod Autoscaler", "type": "part_of"}
+      ],
+      "question": "Why did you implement FastAPI as an asynchronous gateway rather than Flask, and how does it prevent I/O blocking?",
+      "expected_concepts": ["FastAPI", "ASGI", "Asyncio", "Event Loop", "Non-Blocking I/O"],
+      "difficulty": 2,
+      "reference_rubric": {
+        "correctness": 0.35,
+        "completeness": 0.25,
+        "evidence_alignment": 0.20,
+        "reasoning_depth": 0.20
+      },
+      "expert_assessment": {
+        "relevance": 0.96,
+        "correctness": 0.98,
+        "clarity": 0.94,
+        "consensus_score": 0.9025
+      }
+    },
+    {
+      "instance_id": "viva_002",
+      "document_id": "doc_01_aiva_arch",
+      "split": "pilot_val",
+      "domain": "Machine Learning Systems",
+      "student_profile": "advanced",
+      "concepts": ["BM25Okapi", "ChromaDB", "Cosine Similarity", "Reciprocal Rank Fusion"],
+      "prerequisite_graph": [
+        {"source": "Cosine Similarity", "target": "ChromaDB", "type": "prerequisite"},
+        {"source": "BM25Okapi", "target": "Reciprocal Rank Fusion", "type": "dependency"},
+        {"source": "ChromaDB", "target": "Reciprocal Rank Fusion", "type": "dependency"}
+      ],
+      "question": "How does Reciprocal Rank Fusion mitigate calibration differences between BM25 lexical scores and ChromaDB cosine distances?",
+      "expected_concepts": ["Reciprocal Rank Fusion", "BM25Okapi", "ChromaDB", "Rank vs Score", "Constant k=60"],
+      "difficulty": 3,
+      "reference_rubric": {
+        "correctness": 0.35,
+        "completeness": 0.25,
+        "evidence_alignment": 0.20,
+        "reasoning_depth": 0.20
+      },
+      "expert_assessment": {
+        "relevance": 0.98,
+        "correctness": 1.00,
+        "clarity": 0.96,
+        "consensus_score": 0.9500
+      }
+    },
+    {
+      "instance_id": "viva_003",
+      "document_id": "doc_02_edge_cv",
+      "split": "pilot_val",
+      "domain": "Computer Vision",
+      "student_profile": "beginner",
+      "concepts": ["Convolution", "Feature Map", "Pooling", "Convolutional Neural Network"],
+      "prerequisite_graph": [
+        {"source": "Convolution", "target": "Feature Map", "type": "prerequisite"},
+        {"source": "Convolution", "target": "Convolutional Neural Network", "type": "prerequisite"},
+        {"source": "Feature Map", "target": "Pooling", "type": "dependency"}
+      ],
+      "question": "What is the mathematical purpose of spatial convolution kernels in an image processing network?",
+      "expected_concepts": ["Convolution", "Sliding Kernel", "Feature Map", "Local Receptive Field"],
+      "difficulty": 1,
+      "reference_rubric": {
+        "correctness": 0.35,
+        "completeness": 0.25,
+        "evidence_alignment": 0.20,
+        "reasoning_depth": 0.20
+      },
+      "expert_assessment": {
+        "relevance": 0.97,
+        "correctness": 0.98,
+        "clarity": 0.95,
+        "consensus_score": 0.8500
+      }
+    },
+    {
+      "instance_id": "viva_004",
+      "document_id": "doc_02_edge_cv",
+      "split": "pilot_val",
+      "domain": "Computer Vision",
+      "student_profile": "struggling_foundations",
+      "concepts": ["Intersection over Union", "Non-Maximum Suppression", "YOLO"],
+      "prerequisite_graph": [
+        {"source": "Intersection over Union", "target": "Non-Maximum Suppression", "type": "prerequisite"},
+        {"source": "Non-Maximum Suppression", "target": "YOLO", "type": "dependency"}
+      ],
+      "question": "Explain how Non-Maximum Suppression prunes bounding boxes. What happens if the IoU threshold is set too low?",
+      "expected_concepts": ["Non-Maximum Suppression", "Intersection over Union", "Threshold Pruning", "False Negatives"],
+      "difficulty": 2,
+      "reference_rubric": {
+        "correctness": 0.35,
+        "completeness": 0.25,
+        "evidence_alignment": 0.20,
+        "reasoning_depth": 0.20
+      },
+      "expert_assessment": {
+        "relevance": 0.95,
+        "correctness": 0.96,
+        "clarity": 0.93,
+        "consensus_score": 0.8800
+      }
+    },
+    {
+      "instance_id": "viva_005",
+      "document_id": "doc_03_hybrid_rag",
+      "split": "frozen_test",
+      "domain": "Information Retrieval & Search",
+      "student_profile": "intermediate",
+      "concepts": ["Inverted Index", "BM25Okapi", "Dense Vector Embeddings", "Cross-Encoder"],
+      "prerequisite_graph": [
+        {"source": "Inverted Index", "target": "BM25Okapi", "type": "prerequisite"},
+        {"source": "Dense Vector Embeddings", "target": "Cosine Similarity", "type": "prerequisite"},
+        {"source": "Reciprocal Rank Fusion", "target": "Cross-Encoder", "type": "dependency"}
+      ],
+      "question": "Why does dense semantic search fail on exact technical identifiers, and how does your hybrid approach address it?",
+      "expected_concepts": ["Vocabulary Mismatch", "Out-of-Vocabulary", "BM25Okapi", "Inverted Index", "Hybrid RAG"],
+      "difficulty": 2,
+      "reference_rubric": {
+        "correctness": 0.35,
+        "completeness": 0.25,
+        "evidence_alignment": 0.20,
+        "reasoning_depth": 0.20
+      },
+      "expert_assessment": {
+        "relevance": 0.96,
+        "correctness": 0.98,
+        "clarity": 0.94,
+        "consensus_score": 0.8950
+      }
+    },
+    {
+      "instance_id": "viva_006",
+      "document_id": "doc_04_rl_adaptive_viva",
+      "split": "frozen_test",
+      "domain": "Reinforcement Learning & Robotics",
+      "student_profile": "advanced",
+      "concepts": ["Markov Decision Process", "Bellman Equation", "Q-Learning", "Deep Q-Network"],
+      "prerequisite_graph": [
+        {"source": "Markov Decision Process", "target": "Bellman Equation", "type": "prerequisite"},
+        {"source": "Bellman Equation", "target": "Q-Learning", "type": "prerequisite"},
+        {"source": "Q-Learning", "target": "Deep Q-Network", "type": "prerequisite"}
+      ],
+      "question": "Formulate the Bellman Optimality Equation for Q*(s, a) and explain why tabular Q-learning fails in continuous state spaces.",
+      "expected_concepts": ["Bellman Equation", "Q-Learning", "Curse of Dimensionality", "Function Approximation", "DQN"],
+      "difficulty": 4,
+      "reference_rubric": {
+        "correctness": 0.35,
+        "completeness": 0.25,
+        "evidence_alignment": 0.20,
+        "reasoning_depth": 0.20
+      },
+      "expert_assessment": {
+        "relevance": 0.99,
+        "correctness": 1.00,
+        "clarity": 0.96,
+        "consensus_score": 0.9650
+      }
+    },
+    {
+      "instance_id": "viva_007",
+      "document_id": "doc_05_distributed_k8s",
+      "split": "frozen_test",
+      "domain": "Distributed Systems & Cloud Computing",
+      "student_profile": "beginner",
+      "concepts": ["Docker", "Kubernetes", "Horizontal Pod Autoscaler", "PostgreSQL"],
+      "prerequisite_graph": [
+        {"source": "Docker", "target": "Kubernetes", "type": "prerequisite"},
+        {"source": "Kubernetes", "target": "Horizontal Pod Autoscaler", "type": "part_of"}
+      ],
+      "question": "What is the distinction between a Docker container and a Kubernetes pod?",
+      "expected_concepts": ["Docker", "Kubernetes", "Pod", "Co-located Containers", "Shared Network Namespace"],
+      "difficulty": 1,
+      "reference_rubric": {
+        "correctness": 0.35,
+        "completeness": 0.25,
+        "evidence_alignment": 0.20,
+        "reasoning_depth": 0.20
+      },
+      "expert_assessment": {
+        "relevance": 0.98,
+        "correctness": 0.98,
+        "clarity": 0.96,
+        "consensus_score": 0.8750
+      }
+    }
+  ]
+}

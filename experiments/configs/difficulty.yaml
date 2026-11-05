@@ -1,0 +1,36 @@
+experiment:
+  name: adaptive_difficulty_controller_evaluation
+  version: "1.0.0"
+  description: "Compares DQN reinforcement learning controller against rule-based and fixed difficulty baselines."
+
+dataset:
+  student_profiles: "experiments/datasets/student_profiles.json"
+  profiles_evaluated:
+    - beginner
+    - intermediate
+    - advanced
+    - struggling_foundations
+
+controllers:
+  - name: DQN_Reinforcement_Learning
+    model_path: "AIVA_backend/models/dqn_viva.zip"
+  - name: Rule_Based_Heuristic
+    thresholds:
+      low: 0.40
+      high: 0.70
+  - name: Fixed_Difficulty_Static
+    constant_level: 2
+
+simulation:
+  turns: 10
+  seeds: 30
+
+evaluation:
+  script: "experiments/evaluation/evaluate_difficulty.py"
+  output_artifact: "experiments/results/difficulty_evaluation.json"
+  metrics:
+    - difficulty_appropriateness
+    - over_challenging_rate
+    - under_challenging_rate
+    - mean_adaptation_latency_turns
+    - mean_zpd_tracking_error

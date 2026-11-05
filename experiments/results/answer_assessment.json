@@ -1,0 +1,52 @@
+{
+  "total_evaluations": 15,
+  "composite_mae": 0.0249,
+  "composite_rmse": 0.0272,
+  "composite_pearson_correlation": 0.9966,
+  "composite_spearman_correlation": 0.9803,
+  "composite_quadratic_weighted_kappa": 0.9755,
+  "expected_calibration_error": 0.0249,
+  "human_ai_agreement_rate": 1.0,
+  "dimension_breakdown": {
+    "correctness": {
+      "mae": 0.031,
+      "rmse": 0.0359,
+      "pearson_r": 0.994,
+      "spearman_rho": 0.9729,
+      "qwk": 1.0,
+      "calibration_error": 0.031
+    },
+    "completeness": {
+      "mae": 0.0327,
+      "rmse": 0.037,
+      "pearson_r": 0.9937,
+      "spearman_rho": 0.9738,
+      "qwk": 0.9136,
+      "calibration_error": 0.0327
+    },
+    "evidence_alignment": {
+      "mae": 0.0223,
+      "rmse": 0.0259,
+      "pearson_r": 0.9942,
+      "spearman_rho": 0.959,
+      "qwk": 0.978,
+      "calibration_error": 0.0223
+    },
+    "reasoning_depth": {
+      "mae": 0.0287,
+      "rmse": 0.0339,
+      "pearson_r": 0.9952,
+      "spearman_rho": 0.9865,
+      "qwk": 0.9362,
+      "calibration_error": 0.0287
+    },
+    "composite": {
+      "mae": 0.0249,
+      "rmse": 0.0272,
+      "pearson_r": 0.9966,
+      "spearman_rho": 0.9803,
+      "qwk": 0.9755,
+      "calibration_error": 0.0249
+    }
+  }
+}

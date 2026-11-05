@@ -1,0 +1,1155 @@
+================================================================================
+AIVA: ADAPTIVE MULTI-AGENT VIVA ASSESSMENT FRAMEWORK
+MASTER PROJECT HANDBOOK, RESEARCH METHODOLOGY & OPERATIONAL MANUAL
+================================================================================
+Document Version : 1.0.0 (Final Release)
+Classification   : Master Project Documentation & Handbook
+Output Path      : e:\AIVA\docs\AIVA_PROJECT_HANDBOOK.txt
+Target Audience  : Project Evaluators, Faculty Examiners, Developers, Researchers
+================================================================================
+
+================================================================================
+TABLE OF CONTENTS
+================================================================================
+1. EXECUTIVE PROJECT SUMMARY & MOTIVATION
+   1.1 The Academic Viva Voce Challenge
+   1.2 AIVA Solution & Core Value Proposition
+   1.3 Key Architectural Pillars
+
+2. COMPLETE CHRONOLOGICAL PROJECT PROGRESSION (WHAT WE HAVE DONE SO FAR)
+   2.1 Phase 0 (20% Milestone): System Requirements & Architectural Specification
+   2.2 Phase 1 (40% Milestone): Document Ingestion, Hybrid RAG & Knowledge Graph Engine
+   2.3 Phase 2 (60% Milestone): Multi-Agent Conversational Panel & Semantic Routing
+   2.4 Phase 3 (80% Milestone): Adaptive RL Difficulty, Voice & Predictive Analytics
+   2.5 Phase 4 (100% Milestone): Full Production Integration, Web UI & Benchmark Suite
+
+3. RESEARCH METHODOLOGY & MATHEMATICAL FOUNDATIONS
+   3.1 Primary Research Problems & Hypotheses
+   3.2 Unresolved Concept Selection (UCS) Algorithm
+   3.3 Adaptive Difficulty Control via Reinforcement Learning (Gymnasium MDP)
+   3.4 Four-Dimensional Rubric-Based Answer Evaluation
+   3.5 Multi-Agent Dialogue & Persona Differentiation
+   3.6 Hybrid Information Retrieval & Reciprocal Rank Fusion (RRF)
+   3.7 Empirical Benchmark Suites (E1 through E6) & Statistical Validation
+
+4. SYSTEM ARCHITECTURE & DATA FLOW
+   4.1 Complete Layered Microservice Architecture
+   4.2 Data Flow Diagram (DFD) Level 0: Macro Context
+   4.3 Data Flow Diagram (DFD) Level 1: Functional Decomposition
+   4.4 Stateful Session Management & Thread Safety
+
+5. TECHNOLOGY STACK SPECIFICATION
+   5.1 Backend Microservice & Runtime
+   5.2 Machine Learning, NLP & Reinforcement Learning Libraries
+   5.3 Graph Processing & Vector Database
+   5.4 Frontend Web Dashboard & Presentation
+   5.5 Cloud AI & Foundation Models
+
+6. COMPLETE REPOSITORY STRUCTURE & CODEBASE DIRECTORY
+   6.1 Root Directory Layout
+   6.2 Backend Core Modules & Responsibilities
+   6.3 Frontend Components & App Routes
+   6.4 Benchmark & Evaluation Harness Files
+
+7. COMPLETE COMMAND & EXECUTION REFERENCE
+   7.1 Prerequisites & System Requirements
+   7.2 Environment Variable Configuration
+   7.3 Backend Setup & Launch Commands
+   7.4 Frontend Setup & Launch Commands
+   7.5 Verification & Unit/Integration Test Commands
+   7.6 Benchmark Experiment Reproduction Commands
+
+8. COMPLETE REST API ENDPOINT SPECIFICATION
+   8.1 Ingestion & Graph Extraction Endpoints
+   8.2 Examination & Turn Management Endpoints
+   8.3 Audio & Speech Processing Endpoints
+   8.4 Diagnostic Analytics & Reporting Endpoints
+
+9. END-TO-END OPERATIONAL WORKFLOW (STEP-BY-STEP USER JOURNEY)
+   9.1 Stage 1: Document Upload & Grounding Pipeline
+   9.2 Stage 2: Knowledge Graph Visualization & Inspection
+   9.3 Stage 3: Live Viva Voce Examination (Voice & Text)
+   9.4 Stage 4: Post-Viva Performance Analytics & Feedback
+
+10. TROUBLESHOOTING, DIAGNOSTICS & FAQS
+   10.1 Port & Network Binding Issues
+   10.2 Audio MIME & Browser Fallback Troubleshooting
+   10.3 Gemini API Key & Rate Limit Diagnostics
+   10.4 Model Deserialization & Virtual Environment Issues
+
+================================================================================
+1. EXECUTIVE PROJECT SUMMARY & MOTIVATION
+================================================================================
+
+1.1 THE ACADEMIC VIVA VOCE CHALLENGE
+In higher education engineering and computer science curricula, the oral defense
+(viva voce) is the gold standard for verifying that a student genuinely designed,
+authored, and understood their technical dissertation. However, traditional
+human-led oral examinations suffer from three critical institutional pathologies:
+
+1. EVALUATOR SUBJECTIVITY & FATIGUE:
+   Faculty examiners frequently conduct 10 to 15 viva sessions sequentially in a
+   single day. Severe cognitive fatigue sets in, leading to subjective grading,
+   inconsistent scoring criteria, and arbitrary grade inflation or deflation.
+
+2. PROHIBITIVE DISSERTATION VOLUME:
+   Undergraduate and postgraduate dissertations span 60 to 150+ pages. Because
+   examiners lack the time to thoroughly read every technical nuance, they often
+   rely on generic question pools (e.g., "What are the limitations of your work?"),
+   failing to test deep project-specific architectural implementation details.
+
+3. LOCAL SEMANTIC TRAPPING & STATIC RIGIDITY:
+   In dialogue-based oral exams, follow-up questions often latch onto whatever
+   specific keyword the student just uttered. This causes conversational
+   "local semantic trapping" where 40% of the interview is spent circling
+   around a single peripheral library (e.g., Docker configuration) while core
+   theoretical concepts, algorithms, and architectural trade-offs remain
+   completely unassessed.
+
+1.2 AIVA SOLUTION & CORE VALUE PROPOSITION
+The Adaptive Multi-Agent Viva Assessment Framework (AIVA) is an autonomous,
+research-grade artificial intelligence examination platform designed to solve
+these challenges. AIVA ingests the candidate's actual report (PDF, DOCX, PPTX),
+extracts an interactive 3D Knowledge Graph of project concepts and relationships,
+indexes text chunks using Hybrid Retrieval (Dense Semantic Vector Search + Okapi
+BM25 Lexical Search fused via Reciprocal Rank Fusion), and deploys an explainable
+panel of four distinct academic examiner personas.
+
+During the viva, AIVA dynamically navigates the project syllabus using a novel
+Unresolved Concept Selection (UCS) algorithm that avoids conversational trapping,
+adapts question difficulty in real time via Reinforcement Learning (Gymnasium
+MDP + DQN), accepts multimodal voice/text answers, and produces post-examination
+diagnostic analytics detailing concept coverage, identified knowledge gaps, and
+rubric-calibrated readiness.
+
+1.3 KEY ARCHITECTURAL PILLARS
+- STRICT GROUNDING (ZERO HALLUCINATION):
+  Every single question generated is strictly anchored to chunks retrieved
+  directly from the candidate's submitted document.
+- TOPOLOGICAL PREREQUISITE AWARENESS:
+  Concepts are sequenced such that foundational dependencies (e.g., Matrix
+  Multiplication, Feature Extraction) are assessed before dependent modules
+  (e.g., Convolutional Layers, Transformer Heads).
+- REINFORCEMENT LEARNING DIFFICULTY CALIBRATION:
+  Question complexity moves along five discrete cognitive levels (0 to 4)
+  to keep the student in the "Zone of Proximal Development" (Target Score: 0.70).
+- MULTI-AGENT PERSONA SPECIALIZATION:
+  Instead of a generic chatbot, AIVA emulates an authentic examination committee:
+  The Professor, The Industry Expert, The Critic, and The General Examiner.
+- EXPLAINABLE DIAGNOSTICS:
+  Examiners and students receive mathematical diagnostic reports with TF-IDF
+  concept coverage radar, XGBoost weakness indicators, and rubric breakdowns.
+
+================================================================================
+2. COMPLETE CHRONOLOGICAL PROJECT PROGRESSION (WHAT WE HAVE DONE SO FAR)
+================================================================================
+
+The AIVA project has been engineered across a structured, five-phase milestone
+lifecycle, progressing from initial conceptual specification to full empirical
+publication and production software deployment.
+
+--------------------------------------------------------------------------------
+2.1 PHASE 0 (20% MILESTONE): SYSTEM REQUIREMENTS & ARCHITECTURAL SPECIFICATION
+--------------------------------------------------------------------------------
+Theme: Architectural Feasibility, Requirements Definition & System Design.
+
+What Was Delivered:
+- Formal Software Requirements Specification (SRS) detailing functional and
+  non-functional constraints (latency < 2.5s, 0 crashes on corrupted formats).
+- Academic Project Synopsis with comprehensive literature review covering RAG,
+  Knowledge Graph extraction, and Multi-Agent Conversational systems.
+- Master Architectural Blueprint and Data Flow Diagrams (DFD Level 0 Context,
+  DFD Level 1 Functional Decomposition).
+- Initial abstract interface stubs in Python establishing contract boundaries
+  for the RAG Engine, Knowledge Graph Builder, Adaptive Controller, and
+  Multi-Agent Dialogue Manager.
+- Evaluation methodology and dataset curation plan.
+
+Key Milestones Accomplished:
+* Verified that multi-agent routing and vector retrieval could be harmonized
+  within a single high-throughput FastAPI asynchronous event loop.
+* Established the mathematical formulations for Reciprocal Rank Fusion and
+  Markov Decision Process state-action spaces.
+
+--------------------------------------------------------------------------------
+2.2 PHASE 1 (40% MILESTONE): INGESTION, HYBRID RAG & KNOWLEDGE GRAPH ENGINE
+--------------------------------------------------------------------------------
+Theme: Grounding Foundation, Multi-Format Parsing & Structural Graph Extraction.
+
+What Was Delivered:
+- Multi-Format Document Ingestion Engine (`core/parser.py`):
+  * PDF Parsing: Implemented page-by-page text streaming and table parsing using
+    `pdfplumber`.
+  * DOCX Parsing: Hierarchical traversal of headings, runs, paragraphs, and
+    tables using `python-docx`.
+  * PPTX Parsing: Slide shape traversal, textbox text frames, and slide notes
+    extraction using `python-pptx`.
+  * Text Normalization: UTF-8 encoding cleanup, whitespace consolidation, and
+    clean text stream generation.
+- Hybrid Retrieval-Augmented Generation (RAG) Pipeline (`core/rag_engine.py`):
+  * Text Splitter: LangChain `RecursiveCharacterTextSplitter` configured at
+    `chunk_size = 1000` characters with `chunk_overlap = 200` characters.
+  * Dense Semantic Search: 3072-dimensional embeddings via Google Gemini
+    `models/gemini-embedding-2` indexed in an in-process `ChromaDB` vector store
+    with cosine distance metric space.
+  * Sparse Lexical Search: In-memory `Okapi BM25` (`rank-bm25`) index over tokenized
+    chunks to capture technical identifiers, variable names, and exact terms.
+  * Reciprocal Rank Fusion (RRF): Rank fusion with standard constant k = 60
+    combining dense semantic and sparse lexical rankings.
+- Entity-Relation Knowledge Graph Extractor (`core/knowledge_graph.py`):
+  * Structured LLM Extraction: Used Gemini 2.5 Flash with Pydantic schema
+    validation (`GraphExtraction`) to extract technical entities and directed
+    relationships directly from candidate report text.
+  * Node Typing: Classified entities into Concept, Framework, Algorithm, Tool,
+    Database, and System.
+  * Relationship Typing: Extracted semantic directed edges (DEPENDS_ON,
+    IMPLEMENTS, QUERIES, FUSES, OPTIMIZES, CONTAINERIZED_BY).
+  * Topological Metrics: Implemented `NetworkX` graph builder to compute
+    graph density, node count, edge count, and cycle checks.
+  * Interactive 3D Physics Rendering: Integrated `PyVis` using the `ForceAtlas2`
+    physics solver to render dynamic, draggable, zoomable HTML graphs.
+- Automated Ingestion Test Suite:
+  * Validated `/upload_and_build_kg` and `/query_rag` endpoints under 10 seconds.
+
+--------------------------------------------------------------------------------
+2.3 PHASE 2 (60% MILESTONE): MULTI-AGENT CONVERSATIONAL PANEL & SEMANTIC ROUTING
+--------------------------------------------------------------------------------
+Theme: Conversational Intelligence, Academic Personas & Intent Routing.
+
+What Was Delivered:
+- Four Specialized Examiner Personas (`core/multi_agent.py`):
+  1. THE PROFESSOR (Algorithmic Rigor & Theory):
+     Probes formal mathematical proofs, time/space complexity (Big-O),
+     underlying theorems, data structures, and foundational correctness.
+  2. THE INDUSTRY EXPERT (DevOps & Production Readiness):
+     Probes deployment architecture, Docker containerization, Kubernetes,
+     CI/CD pipelines, database indexing, horizontal scaling, and latency SLAs.
+  3. THE CRITIC (Adversarial Probing & Bottlenecks):
+     Probes single points of failure, security vulnerabilities, edge-case
+     breakdowns, memory leaks, algorithmic bottlenecks, and architectural trade-offs.
+  4. THE GENERAL EXAMINER (System Architecture & Pipeline):
+     Probes end-to-end workflows, problem statement alignment, design patterns,
+     and overall component interactions.
+- LangGraph Orchestration & Dynamic Intent Routing:
+  * Stateful `AgentState` managing dialogue history, context, and persona turns.
+  * Semantic Keyword Classifier: Inspects the candidate's previous response for
+    domain keywords to select the most appropriate examiner persona.
+  * Turn-History Balancing: Enforces conversational fairness and prevents
+    single-persona dominance using Shannon Entropy balancing.
+  * Anti-Looping Sliding Memory: Injects recent dialogue turns with negative
+    constraints to prevent repetitive question loops.
+
+--------------------------------------------------------------------------------
+2.4 PHASE 3 (80% MILESTONE): ADAPTIVE RL DIFFICULTY, VOICE & PREDICTIVE ANALYTICS
+--------------------------------------------------------------------------------
+Theme: Reinforcement Learning Adaptation, Speech Processing & Diagnostic ML.
+
+What Was Delivered:
+- Reinforcement Learning Adaptive Difficulty Engine (`core/adaptive_engine.py`):
+  * Custom Gymnasium Environment (`VivaEnv`): Formulates difficulty calibration
+    as a discrete Markov Decision Process (MDP).
+  * 5 Cognitive Difficulty Levels:
+    Level 0: Fundamentals (Basic syntax, terminology, high-level purpose)
+    Level 1: Easy (Standard library calls, basic operational flows)
+    Level 2: Medium (Intermediate design patterns, module interactions)
+    Level 3: Hard (Optimization strategies, concurrency, throughput)
+    Level 4: Research Level (Source code internals, mathematical proofs, edge cases)
+  * Pre-Trained DQN Agent: Trained Deep Q-Network policy network using
+    `stable-baselines3` across 15,000 steps with experience replay, saved to
+    `models/dqn_viva.zip` for instant runtime inference.
+  * Zone of Proximal Development (ZPD) Reward: Calibrated to keep student scores
+    in the optimal learning flow band [0.40, 0.70].
+- Resilient Multimodal Voice Pipeline (`core/voice_engine.py`):
+  * Web Speech API integration in the browser for client-side transcription.
+  * Google Gemini Multimodal Audio Fallback: Automatically catches browser
+    audio blobs (WebM, OGG, Opus) that cause native decoding failures and routes
+    them directly to the Gemini Multimodal Audio API for server-side transcription.
+  * Text-to-Speech (TTS) synthesizer providing voice output for all examiner questions.
+- Post-Viva Diagnostic Analytics Engine (`core/analytics_engine.py`):
+  * TF-IDF Concept Coverage: Computes cosine similarity between student answers
+    and extracted Knowledge Graph node concepts.
+  * 8-Dimensional XGBoost Weakness Classifier (`models/weakness_xgb.json`):
+    Identifies unmastered concept clusters and flags specific architectural gaps.
+  * Logistic Regression Readiness Predictor (`models/readiness_lr.joblib`):
+    Calculates calibrated probability of the candidate passing their defense.
+  * Four-Dimensional Answer Rubric: Automated scoring across Correctness (35%),
+    Completeness (25%), Evidence Alignment (20%), and Reasoning Depth (20%).
+
+--------------------------------------------------------------------------------
+2.5 PHASE 4 (100% MILESTONE): FULL INTEGRATION, WEB UI & BENCHMARK SUITE
+--------------------------------------------------------------------------------
+Theme: End-to-End System Integration, Dashboard UI, Scientific Research Benchmarks.
+
+What Was Delivered:
+- Production Next.js 16 Web Dashboard (`AIVA_frontend/`):
+  * Modern Glassmorphism UI built with React 19, Next.js App Router, TypeScript,
+    Tailwind CSS, and Lucide icons.
+  * Document Ingestion Card: Multi-format drag-and-drop file uploader with live
+    indexing progress bars.
+  * 3D Physics Graph Canvas: Embedded interactive PyVis canvas with dynamic node
+    inspection and metadata viewer.
+  * Live Examination Room: Multi-agent persona avatar dialogue cards, real-time
+    voice recording controls, waveform indicators, and audio playback.
+  * Diagnostic Analytics Radar: Visual pass/fail gauges, overall score gauges,
+    TF-IDF concept coverage progress bars, and red-flagged weakness alerts.
+- Unresolved Concept Selection (UCS) Engine (`core/ucs_engine.py`):
+  * Engineered and deployed the core scientific contribution: a Knowledge-Gap-Aware
+    sequencing algorithm that eliminates local semantic trapping (83.33% coverage,
+    0.0% redundancy, 9.0 turns to target).
+- Rigorous Empirical Research Benchmark Suite (`AIVA_backend/experiments/` & `experiments/`):
+  * Designed and executed 6 controlled empirical experiments (E1 to E6) plus
+    component ablation studies, generating verified publication-grade results.
+  * Created standardized evaluation benchmark protocol (`benchmark_protocol.md`
+    and `evaluation_protocol.json`).
+  * Double-blind faculty calibration study proving human-AI agreement (MAE = 0.0249,
+    Pearson r = 0.9966, Quadratic Weighted Kappa = 0.9755).
+- Academic Submission Artifacts:
+  * Complete 7-chapter Project Dissertation (`PROJECT_DISSERTATION.md`).
+  * Master Oral Defense Presentation Script (`FINAL_VIVA_DEFENSE_PPT.md`).
+  * Master All-Phases Project Report (`AIVA_MASTER_PROJECT_REPORT_ALL_PHASES.md`).
+
+================================================================================
+3. RESEARCH METHODOLOGY & MATHEMATICAL FOUNDATIONS
+================================================================================
+
+3.1 PRIMARY RESEARCH PROBLEMS & HYPOTHESES
+The AIVA project tests four fundamental research hypotheses:
+
+- HYPOTHESIS H1 (Knowledge-Gap Concept Sequencing):
+  A graph-informed question selection algorithm balancing knowledge gaps,
+  prerequisite topology, and recency penalties will achieve higher syllabus
+  coverage with lower question redundancy than traditional conversational
+  follow-up strategies that suffer from local semantic trapping.
+
+- HYPOTHESIS H2 (Dynamic Difficulty & Learning Flow):
+  Adaptive difficulty control governed by Reinforcement Learning or heuristic
+  feedback loops maintains examinees within their Zone of Proximal Development
+  (ZPD) significantly better than static fixed-difficulty examinations.
+
+- HYPOTHESIS H3 (Multi-Agent Persona Diversity):
+  Coordinated multi-agent examiner panels produce higher question vocabulary
+  diversity (Type-Token Ratio) and broader cognitive probing than single-agent
+  monolithic LLM prompts without introducing dialogue contradictions.
+
+- HYPOTHESIS H4 (Hybrid Retrieval Precision):
+  Fusing dense semantic vector search with sparse lexical inverted index
+  retrieval via Reciprocal Rank Fusion (RRF) delivers higher context retrieval
+  accuracy on technical engineering reports containing precise identifiers.
+
+--------------------------------------------------------------------------------
+3.2 UNRESOLVED CONCEPT SELECTION (UCS) ALGORITHM
+--------------------------------------------------------------------------------
+The primary algorithmic contribution of AIVA is the Unresolved Concept
+Selection (UCS) algorithm. Standard conversational agents generate follow-up
+questions based on the student's immediately preceding utterance, which causes
+them to become trapped in localized conceptual clusters.
+
+To prevent this, UCS computes an objective priority score S(c) for every
+concept node c in the project Knowledge Graph:
+
+    S(c) = w_1 * G_c + w_2 * P_c + w_3 * U_c - w_4 * R_c
+
+Where the weights satisfy:
+    w_1 + w_2 + w_3 + w_4 = 1.00
+    w_1 = 0.35 (Knowledge Gap Weight)
+    w_2 = 0.25 (Prerequisite Topological Centrality Weight)
+    w_3 = 0.25 (Epistemic Mastery Uncertainty Weight)
+    w_4 = 0.15 (Recency & Frequency Redundancy Penalty)
+
+Mathematical Definitions of Components:
+
+1. G_c (Estimated Knowledge Gap):
+   Quantifies the extent to which concept c has not been mastered:
+   - If concept c is unassessed:
+     G_c = 1.0
+   - If concept c has been assessed across n attempts with scores s_1, ..., s_n:
+     G_c = max(0.0, 1.0 - mean(s_c))
+
+2. P_c (Prerequisite Topological Importance):
+   Measures structural centrality in the project prerequisite DAG:
+   - Concepts that are foundational prerequisites for multiple downstream modules
+     must be verified first:
+     P_c = (out_degree(c) + 0.5 * in_degree(c)) / max_degree_normalization
+
+3. U_c (Epistemic Mastery Uncertainty):
+   Measures confidence in the candidate's current estimated mastery:
+   - If unassessed:
+     U_c = 1.0
+   - If assessed:
+     U_c = (1.0 / (1.0 + attempts_c)) + 0.5 * (1.0 - 2.0 * |mean_score_c - 0.5|)
+   - Uncertainty is maximized when attempts are low or when scores hover near 0.5.
+
+4. R_c (Recency & Frequency Redundancy Penalty):
+   Penalizes circular re-examination of recently asked concepts:
+     R_c = (attempts_c / (current_turn + 1.0)) + (0.5 if last_turn == current_turn - 1 else 0.0)
+
+--------------------------------------------------------------------------------
+3.3 ADAPTIVE DIFFICULTY CONTROL VIA REINFORCEMENT LEARNING
+--------------------------------------------------------------------------------
+AIVA models the examination as a Markov Decision Process (MDP) to adapt question
+difficulty dynamically:
+
+1. State Space (S_t in R^2 or R^3):
+   - Current Difficulty Level: D_t in {0, 1, 2, 3, 4} (normalized by 4.0)
+   - Last Answer Score: Score_t in [0.0, 1.0]
+   - Historical Moving Average: Sliding mean of past 3 answer scores
+
+2. Action Space (A = {0, 1, 2}):
+   - a = 0 : Decrease difficulty by 1 level (minimum: 0)
+   - a = 1 : Maintain current difficulty level
+   - a = 2 : Increase difficulty by 1 level (maximum: 4)
+
+3. Difficulty Level Semantics:
+   - Level 0 (Fundamentals): Definitions, syntax, high-level purpose
+   - Level 1 (Easy): Standard API calls, baseline workflows
+   - Level 2 (Medium): System interactions, design patterns, modular architecture
+   - Level 3 (Hard): Concurrency, latency optimization, fault tolerance, scaling
+   - Level 4 (Research Level): Source internals, mathematical proofs, edge cases
+
+4. Flow Channel / Zone of Proximal Development (ZPD) Reward Function:
+   The learning goal is to keep candidate response scores within [0.40, 0.70]:
+   - If Score_t < 0.40 (Candidate in Anxiety/Struggle Zone):
+     Action 0 (Decrease) -> Reward = +1.0
+     Action 1 or 2 (Keep/Inc) -> Reward = -1.0
+   - If Score_t > 0.70 (Candidate in Boredom/Trivial Zone):
+     Action 2 (Increase) -> Reward = +1.0
+     Action 0 or 1 (Dec/Keep) -> Reward = -1.0
+   - If 0.40 <= Score_t <= 0.70 (Optimal Flow Channel):
+     Action 1 (Maintain) -> Reward = +1.0
+     Action 0 or 2 (Disrupt) -> Reward = -0.5
+
+--------------------------------------------------------------------------------
+3.4 FOUR-DIMENSIONAL RUBRIC-BASED ANSWER EVALUATION
+--------------------------------------------------------------------------------
+Rather than subjective letter grading, AIVA evaluates candidate responses against
+a 4-dimensional objective rubric derived from academic oral defense criteria:
+
+    Composite Score = 0.35 * Correctness +
+                      0.25 * Completeness +
+                      0.20 * Evidence Alignment +
+                      0.20 * Reasoning Depth
+
+Dimension Definitions:
+1. CORRECTNESS (35%):
+   Technical accuracy of the facts, formulas, and mechanisms articulated.
+2. COMPLETENESS (25%):
+   The degree to which all key sub-facets of the examiner's inquiry were addressed.
+3. EVIDENCE ALIGNMENT (20%):
+   Consistency with the architectural claims and facts in the project report.
+4. REASONING DEPTH (20%):
+   The candidate's ability to explain "why" architectural choices were made and
+   justify trade-offs rather than simply reciting definitions.
+
+--------------------------------------------------------------------------------
+3.5 MULTI-AGENT DIALOGUE & PERSONA DIFFERENTIATION
+--------------------------------------------------------------------------------
+AIVA models four distinct academic personas coordinated via LangGraph:
+- The Professor: Focuses on algorithmic rigor, math, Big-O complexity.
+- The Industry Expert: Focuses on deployment, Docker, Redis, APIs, CI/CD, scalability.
+- The Critic: Focuses on bottlenecks, failure points, security, trade-offs.
+- The General Examiner: Focuses on system architecture, pipelines, overview.
+
+Turn Fairness & Diversity Metric (Shannon Entropy):
+To ensure all examiners participate fairly, persona turn distribution is
+monitored via Shannon Entropy H:
+
+    H = - sum_{i=1}^{M} p_i * log_2(p_i)
+
+Where M = 4 personas, and maximum entropy is log_2(4) = 2.000 bits (perfect balance).
+
+--------------------------------------------------------------------------------
+3.6 HYBRID INFORMATION RETRIEVAL & RECIPROCAL RANK FUSION (RRF)
+--------------------------------------------------------------------------------
+Technical reports contain both conceptual discussions (which vector search
+excels at) and specific variable names, constants, and function calls (which
+lexical search excels at).
+
+AIVA executes a two-stage hybrid retrieval strategy:
+1. Dense Retrieval: Computes 3072-dimensional embeddings via Gemini Embedding 2
+   and retrieves nearest neighbors from ChromaDB using cosine distance.
+2. Sparse Retrieval: Okapi BM25 searches an inverted index of normalized tokens.
+3. Reciprocal Rank Fusion (RRF): Merges the two ranked lists:
+
+    RRF_Score(d) = sum_{m in {Dense, BM25}} 1.0 / (k + r_m(d))
+
+Where r_m(d) is the 1-based rank position of chunk d in retriever m, and k = 60
+is the standard smoothing constant preventing rank outliers from dominating.
+
+--------------------------------------------------------------------------------
+3.7 EMPIRICAL BENCHMARK SUITES & STATISTICAL VALIDATION
+--------------------------------------------------------------------------------
+AIVA underwent rigorous empirical benchmarking across six controlled
+experiments (E1 to E6) and ablation studies:
+
+EXPERIMENT E1: QUESTION SELECTION STRATEGY COMPARISON (UCS vs BASELINES)
+Evaluated across N = 20 randomized simulation seeds, 3 student mastery
+archetypes (Low: 0.30, Medium: 0.60, High: 0.85), 10-turn question budget over
+12 dissertation syllabus concepts (Target: >= 70% coverage = >= 9 concepts):
+
+| Selection Strategy           | Mean Coverage % | Redundancy % | Turns to >=70% | Unresolved Prereqs |
+|------------------------------|----------------:|-------------:|---------------:|-------------------:|
+| Fixed-Order Sequential       | 83.33%          | 0.00%        | 9.00           | 2.00               |
+| Random Uniform               | 57.92%          | 12.83%       | 11.00          | 3.10               |
+| Difficulty-Only (Local Trap) | 24.17%          | 41.83%       | 11.00          | 6.10               |
+| Greedy Knowledge-Gap Alone   | 83.33%          | 0.00%        | 9.00           | 2.00               |
+| PROPOSED AIVA UCS            | 83.33%          | 0.00%        | 9.00           | 1.00               |
+
+Statistical Significance (Paired Student's t-test):
+- UCS vs Random: t = 42.03, p = 8.33e-181 (Statistically Significant)
+- UCS vs Difficulty-Only: Proves complete resolution of Local Semantic Trapping
+- UCS vs Greedy-Gap / Fixed: Halves unresolved foundational prerequisites (1.0 vs 2.0, p < 1e-10)
+
+EXPERIMENT E2: KNOWLEDGE GRAPH EXTRACTION FACTUALITY
+Evaluated against human-annotated expert ground-truth entities and relations:
+- Concept Extraction: Precision = 0.9091, Recall = 1.0000, F1 Score = 0.9524
+- Relational Triples: Precision = 0.8571, Recall = 0.8571, F1 Score = 0.8571
+- Prerequisite Direction Accuracy: 1.0000 (100% DAG acyclic consistency)
+
+EXPERIMENT E3: MULTI-AGENT PERSONA ROUTING COHERENCE
+- Persona Consistency Score: 1.0000 (100% role fidelity)
+- Role Differentiation Index: 0.9420
+- Dialogue Coherence Score: 0.9650
+- Contradiction Rate: 0.0000 (0 contradictions)
+- Duplicate Question Rate: 0.0000 (0 duplicate questions)
+- Shannon Entropy: 1.750 bits (Keyword Router) vs 0.544 bits (Monolithic baseline)
+
+EXPERIMENT E4: ADAPTIVE DIFFICULTY CONTROLLER EVALUATION
+Evaluated across 300 simulated viva sessions (5 seeds, 3 skill profiles):
+- Fixed Difficulty: Fails on non-average candidates (0.0% flow compliance)
+- Rule-Based Controller: Achieves 95.1% flow compliance (ZPD tracking error = 0.4467)
+- DQN Controller: Achieves 81.4% flow compliance, demonstrating learning curve
+
+EXPERIMENT E5: HYBRID RAG RETRIEVAL ACCURACY
+Evaluated across 30 technical passages and 18 technical queries with hard distractors:
+- Context Relevance: Hybrid RRF = 0.94 vs BM25 = 0.78 vs Dense = 0.85
+- Faithfulness Score: Hybrid RRF = 0.96 vs BM25 = 0.82 vs Dense = 0.88
+- Recall@3: 0.8000 across all retrievers; RRF eliminates out-of-context hallucinations
+
+EXPERIMENT E6: DOUBLE-BLIND FACULTY RUBRIC CALIBRATION
+Evaluated on N = 15 paired student responses independently graded by two faculty:
+- Inter-Human Agreement: MAD = 0.0488, Pearson r = 0.9991, Cohen's Kappa = 0.9256
+- AIVA vs Faculty Consensus: MAE = 0.0249, Pearson r = 0.9966, Cohen's Kappa = 0.9755
+
+================================================================================
+4. SYSTEM ARCHITECTURE & DATA FLOW
+================================================================================
+
+4.1 COMPLETE LAYERED MICROSERVICE ARCHITECTURE
+
++--------------------------------------------------------------------------+
+| 1. PRESENTATION LAYER (Next.js 16 / React 19 / TypeScript)               |
+|    - Document Upload Card (Drag-and-Drop, Real-time Processing Bar)      |
+|    - Interactive 3D Knowledge Graph Canvas (PyVis Physics Engine)        |
+|    - Live Viva Room (Audio Speech Recognition, Avatar Dialogue Cards)    |
+|    - Diagnostic Performance Dashboard (Pass %, Radar Chart, Weaknesses)  |
++--------------------------------------------------------------------------+
+                                    |
+                                    | HTTP / REST (JSON) + Audio Blobs
+                                    v
++--------------------------------------------------------------------------+
+| 2. API GATEWAY & SESSION MANAGER (FastAPI Microservice on Port 8000)     |
+|    - Asynchronous Event Loop & Multi-Thread Lock Management              |
+|    - Stateful VivaSession Store (Isolation across concurrent users)      |
+|    - Request / Response Serialization via Pydantic Schemas               |
++--------------------------------------------------------------------------+
+          |                         |                        |
+          v                         v                        v
++--------------------+    +--------------------+   +---------------------+
+| 3. INGESTION &     |    | 4. DIALOGUE &      |   | 5. ADAPTIVE RL &    |
+|    GROUNDING       |    |    PERSONA PANEL   |   |    DIAGNOSTICS      |
+|                    |    |                    |   |                     |
+| Multi-Format Parser|    | LangGraph Router   |   | Gymnasium MDP       |
+| (pdf, docx, pptx)  |    | - The Professor    |   | DQN Difficulty Agent|
+|       |            |    | - Industry Expert  |   | (Levels 0 to 4)     |
+| Hybrid RAG Engine  |    | - The Critic       |   |       |             |
+| - Gemini 2 (Dense) |    | - General Examiner |   | Analytics Engine    |
+| - BM25 (Sparse)    |    |       |            |   | - TF-IDF Coverage   |
+| - RRF (k=60)       |    | Sliding Memory     |   | - XGBoost Weakness  |
+|       |            |    | Turn Balancer      |   | - Logistic Reg Pass |
+| Knowledge Graph    |    |       |            |   | - 4D Rubric Scorer  |
+| - Gemini Extractor |    | Resilient Voice    |   |       |             |
+| - NetworkX DAG     |    | - Web Speech API   |   | UCS Engine          |
+| - PyVis Physics    |    | - Gemini Fallback  |   | - Gap-Aware Order   |
++--------------------+    +--------------------+   +---------------------+
+          |                         |                        |
+          +-------------------------+------------------------+
+                                    |
+                                    v
++--------------------------------------------------------------------------+
+| 6. PERSISTENCE & ARTIFACT LAYER                                          |
+|    - Vector Database: ChromaDB (in-process vector embeddings)            |
+|    - Graph Data: kg_data.json, graph_metadata.json, kg_visualization.html|
+|    - Serialized Models: dqn_viva.zip, weakness_xgb.json, readiness_lr.job|
++--------------------------------------------------------------------------+
+
+4.2 DATA FLOW DIAGRAM (DFD) LEVEL 0: MACRO CONTEXT
++----------------+                                        +----------------+
+|                |  1. Uploads Dissertation (PDF/DOCX)    |                |
+|                |--------------------------------------->|                |
+|                |  2. Speaks/Types Viva Responses        |                |
+|    STUDENT     |--------------------------------------->|      AIVA      |
+|                |  3. Receives Grounded Examiner Question|   AUTONOMOUS   |
+|                |<---------------------------------------|   ASSESSMENT   |
+|                |  4. Interacts with 3D Knowledge Graph  |     SYSTEM     |
+|                |<---------------------------------------|                |
++----------------+  5. Real-Time Difficulty Feedback      +----------------+
+                 |<---------------------------------------|        |
+                                                           |        | 6. Performance
+                                                           |        |    Report
+                                                           v        v
+                                                    +----------------+
+                                                    |    FACULTY /   |
+                                                    |   EVALUATORS   |
+                                                    +----------------+
+
+4.3 DATA FLOW DIAGRAM (DFD) LEVEL 1: FUNCTIONAL DECOMPOSITION
+[Student Dissertation]
+       |
+       v
+(1.0 Multi-Format Parsing & Text Normalization)
+       |
+       +---> [Clean Text Chunks] ---> (2.0 Hybrid Indexing: ChromaDB + BM25)
+       |
+       +---> [Normalized Report] ---> (3.0 Knowledge Graph Extraction: Gemini 2.5)
+                                                      |
+                                                      v
+                                        [Knowledge Graph Prerequisite DAG]
+                                                      |
+[Student Viva Answer]                                 v
+       |                               (4.0 UCS Question Selection)
+       v                                              |
+(5.0 Voice Transcription / Gemini Fallback)            |
+       |                                              v
+       +---> [Answer Text] ---------> (6.0 4D Rubric Evaluation & Scoring)
+       |                                              |
+       |                                              +---> [Score: 0.0 - 1.0]
+       |                                              |            |
+       |                                              v            v
+       +---> [Topic Keywords] ------> (7.0 Persona Router) (8.0 RL Adaptation)
+                                             |                     |
+                                             v                     v
+                                      [Chosen Persona]     [New Difficulty]
+                                             |                     |
+                                             +----------+----------+
+                                                        |
+                                                        v
+                                         (9.0 Grounded Question Synthesis)
+                                                        |
+                                                        v
+                                          [Next Viva Question & Audio]
+
+4.4 STATEFUL SESSION MANAGEMENT & THREAD SAFETY
+- Multi-Session Isolation:
+  Each candidate is allocated a dedicated `VivaSession` instance identified by
+  a unique UUID or `session_id`.
+- Concurrency Control:
+  Each session is protected by an asynchronous re-entrant lock (`AsyncThreadLock`),
+  guaranteeing thread safety across simultaneous turn requests and background tasks.
+
+================================================================================
+5. TECHNOLOGY STACK SPECIFICATION
+================================================================================
+
+5.1 BACKEND MICROSERVICE & RUNTIME
+- Python 3.10+: Core programming language.
+- FastAPI: High-throughput asynchronous REST API web framework.
+- Uvicorn: Lightning-fast ASGI web server implementation.
+- Pydantic v2: Data validation, settings management, and structured LLM outputs.
+- Threading & Asyncio: Concurrency primitives for thread-safe session execution.
+
+5.2 MACHINE LEARNING, NLP & REINFORCEMENT LEARNING
+- Gymnasium: Standard API for single-agent reinforcement learning environments.
+- Stable-Baselines3: Reliable implementations of Deep Q-Networks (DQN).
+- Scikit-Learn: Machine learning toolkit (TfidfVectorizer, LogisticRegression, metrics).
+- XGBoost: Gradient boosted decision trees for multi-feature weakness classification.
+- Rank-BM25: Two-stage Okapi BM25 sparse lexical search engine.
+- PyTorch: Underlying tensor computation engine for RL neural networks.
+
+5.3 GRAPH PROCESSING & VECTOR DATABASE
+- ChromaDB: Lightweight, in-process, embedding vector database.
+- NetworkX: Creation, manipulation, and topological study of complex directed graphs.
+- PyVis: Python library for interactive network visualizations via Vis.js.
+
+5.4 FRONTEND WEB DASHBOARD & PRESENTATION
+- Next.js 16 (App Router): React enterprise production framework.
+- React 19: Component-driven user interface library.
+- TypeScript: Type-safe modern JavaScript.
+- Tailwind CSS: Utility-first CSS framework with glassmorphism styling.
+- Lucide React: Modern icon set for clean UI indicators.
+- Axios: HTTP client for structured microservice API communication.
+
+5.5 CLOUD AI & FOUNDATION MODELS
+- Google Gemini 2.5 Flash: Document reasoning, KG extraction, persona dialogues.
+- Google Gemini Embedding 2: 3072-dimensional dense semantic vector representations.
+- Google Gemini Multimodal Audio API: Robust voice transcription fallback.
+
+================================================================================
+6. COMPLETE REPOSITORY STRUCTURE & CODEBASE DIRECTORY
+================================================================================
+
+The repository is organized into distinct, modular directories:
+
+e:\AIVA\
+├── AIVA_backend\                    # FastAPI Microservice & Machine Learning Core
+│   ├── chroma_db\                   # In-process ChromaDB vector database files
+│   ├── core\                        # Core logic, algorithms, and engines
+│   │   ├── adaptive_engine.py       # Gymnasium VivaEnv & DQN adaptive controller
+│   │   ├── analytics_engine.py      # TF-IDF, XGBoost weakness, LR pass, 4D rubric
+│   │   ├── kg_pipeline.py           # Robust KG pipeline with cycle resolution
+│   │   ├── knowledge_graph.py       # NetworkX builder & PyVis 3D visualizer
+│   │   ├── multi_agent.py           # LangGraph 4-persona panel & router
+│   │   ├── parser.py                # Multi-format document parser (PDF/DOCX/PPTX)
+│   │   ├── rag_engine.py            # Hybrid RAG: Gemini 2 + BM25 + RRF (k=60)
+│   │   ├── ucs_engine.py            # Unresolved Concept Selection (UCS) algorithm
+│   │   └── voice_engine.py          # Multimodal voice & Gemini audio fallback
+│   ├── models\                      # Pre-trained ML & RL model artifacts
+│   │   ├── dqn_viva.zip             # Serialized 15,000-step DQN RL agent
+│   │   ├── weakness_xgb.json        # Trained XGBoost weakness classifier
+│   │   └── readiness_lr.joblib      # Trained Logistic Regression pass predictor
+│   ├── tests\                       # Unit & deterministic integration test suites
+│   │   ├── test_deterministic_end_to_end.py  # Full offline HTTP lifecycle test
+│   │   ├── test_ucs_selection.py             # UCS gap engine edge cases
+│   │   └── test_routing_sequence.py          # Multi-agent persona sequence test
+│   ├── experiments\                 # Benchmark reproduction scripts
+│   ├── main.py                      # FastAPI server and endpoint definitions
+│   ├── requirements.txt             # Backend Python dependencies
+│   ├── verify_backend.py            # Automated smoke test suite
+│   ├── kg_data.json                 # Active session Knowledge Graph cache
+│   └── .env                         # Gemini API key and backend configuration
+│
+├── AIVA_frontend\                   # Next.js 16 / React 19 Web Dashboard
+│   ├── src\
+│   │   ├── app\                     # Next.js App Router (page.tsx, layout.tsx)
+│   │   ├── components\              # UI components (viva-panel.tsx, radar, etc.)
+│   │   └── lib\                     # Utilities and Axios API client (`api.ts`)
+│   ├── package.json                 # Frontend dependencies and npm scripts
+│   ├── tsconfig.json                # TypeScript compiler configuration
+│   └── tailwind.config.ts           # Tailwind CSS theme configuration
+│
+├── benchmark_data\                  # Standardized evaluation protocol datasets
+│   ├── evaluation_protocol.json     # Formal scientific evaluation protocol
+│   └── pilot_evaluator_dataset.json # Double-blind human faculty evaluation dataset
+│
+├── docs\                            # Comprehensive Project Documentation
+│   └── AIVA_PROJECT_HANDBOOK.txt    # This comprehensive handbook file
+│
+├── experiments\                     # Research benchmark runners & results
+│   ├── datasets\                    # Gold evaluation datasets & schemas
+│   ├── documentation\               # Protocol documentation (`benchmark_protocol.md`)
+│   ├── evaluation\                  # Modular evaluation scripts (eval_ucs, etc.)
+│   ├── results\                     # Output JSON & CSV results from experiments
+│   └── tracking\                    # Experiment logger and provenance auditor
+│
+├── AIVA_MASTER_PROJECT_REPORT_ALL_PHASES.md # Master comprehensive report
+├── README.md                        # Master repository README
+└── .gitignore                       # Git exclusion rules
+
+================================================================================
+7. COMPLETE COMMAND & EXECUTION REFERENCE
+================================================================================
+
+This section details all exact terminal commands needed to install, configure,
+verify, run, and benchmark the complete AIVA platform.
+
+--------------------------------------------------------------------------------
+7.1 PREREQUISITES & SYSTEM REQUIREMENTS
+--------------------------------------------------------------------------------
+- Operating System : Windows 10/11, macOS, or Ubuntu 20.04+ Linux
+- Python Version   : Python 3.10 or 3.11 (Python 3.10 recommended)
+- Node.js Version  : Node.js 18.x or 20.x LTS (with npm)
+- Hardware Specs   : Minimum 8 GB RAM (16 GB recommended), 4 CPU cores
+- Network Access   : Internet connection required for Google Gemini API calls
+
+--------------------------------------------------------------------------------
+7.2 ENVIRONMENT VARIABLE CONFIGURATION
+--------------------------------------------------------------------------------
+Create or verify the `.env` file inside `e:\AIVA\AIVA_backend\.env`:
+
+```env
+GEMINI_API_KEY="your-google-gemini-api-key-here"
+```
+
+--------------------------------------------------------------------------------
+7.3 BACKEND SETUP & LAUNCH COMMANDS
+--------------------------------------------------------------------------------
+Open a terminal (PowerShell on Windows, or Bash on macOS/Linux):
+
+```bash
+# 1. Navigate to the backend directory
+cd e:\AIVA\AIVA_backend
+
+# 2. Create a virtual environment
+python -m venv venv
+
+# 3. Activate the virtual environment
+# Windows (PowerShell):
+.\venv\Scripts\Activate.ps1
+# Windows (Command Prompt):
+.\venv\Scripts\activate.bat
+# macOS / Linux:
+source venv/bin/activate
+
+# 4. Upgrade pip and install all required dependencies
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+
+# 5. Run the FastAPI development server (Binds to Port 8000 with hot reload)
+python -m uvicorn main:app --port 8000 --reload
+```
+
+The backend server will initialize and display:
+"AIVA Backend: All services and ML models loaded successfully."
+Access OpenAPI documentation at: `http://127.0.0.1:8000/docs`
+
+--------------------------------------------------------------------------------
+7.4 FRONTEND SETUP & LAUNCH COMMANDS
+--------------------------------------------------------------------------------
+Open a separate terminal window:
+
+```bash
+# 1. Navigate to the frontend directory
+cd e:\AIVA\AIVA_frontend
+
+# 2. Install all Node.js package dependencies
+npm install
+
+# 3. Start the Next.js development server
+npm run dev
+```
+
+The Next.js dashboard will start on port 3000:
+Open your browser and navigate to: `http://localhost:3000`
+
+--------------------------------------------------------------------------------
+7.5 VERIFICATION & UNIT/INTEGRATION TEST COMMANDS
+--------------------------------------------------------------------------------
+Run these commands from `e:\AIVA\AIVA_backend` with the virtual environment activated:
+
+```bash
+cd e:\AIVA\AIVA_backend
+
+# 1. Deterministic End-to-End HTTP Integration & Multi-Session Isolation Test
+python tests/test_deterministic_end_to_end.py
+
+# 2. UCS Knowledge-Gap Engine Unit Tests & Topological Edge Cases
+python tests/test_ucs_selection.py
+
+# 3. Multi-Agent Persona Sequential Alternation Test
+python tests/test_routing_sequence.py
+
+# 4. Live Model Verification Smoke Test (RAG, RL, Analytics, Agents)
+python verify_backend.py
+```
+
+--------------------------------------------------------------------------------
+7.6 BENCHMARK EXPERIMENT REPRODUCTION COMMANDS
+--------------------------------------------------------------------------------
+To reproduce the empirical research tables and scientific findings:
+
+```bash
+cd e:\AIVA\AIVA_backend
+
+# Benchmark 1: Question Selection Strategy Comparison (UCS vs Baselines)
+python experiments/eval_question_selection.py
+
+# Benchmark 2: Adaptive Difficulty Controller Comparison (DQN vs Rule vs Fixed)
+python experiments/eval_adaptive_engine.py
+
+# Benchmark 3: Multi-Agent Persona Routing & Shannon Entropy
+python experiments/eval_multi_agent_routing.py
+
+# Benchmark 4: Hybrid RAG Retrieval Quality (Recall, MRR, nDCG)
+python experiments/eval_rag_retrieval.py
+
+# Benchmark 5: Knowledge Graph Extraction Factuality & Precision/Recall
+python experiments/eval_knowledge_graph.py
+
+# Benchmark 6: Double-Blind Faculty Rubric Calibration (Inter-Rater Reliability)
+python experiments/eval_rubric_agreement.py
+
+# Component Ablation Studies (Grounding, Personas, Graph Traversals)
+python experiments/eval_ablations.py
+
+# Consistency Gate: Validates all research tables match experiment outputs
+python experiments/validate_experiment_artifacts.py
+```
+
+================================================================================
+8. COMPLETE REST API ENDPOINT SPECIFICATION
+================================================================================
+
+All endpoints are hosted on `http://127.0.0.1:8000`.
+
+--------------------------------------------------------------------------------
+8.1 INGESTION & GRAPH EXTRACTION ENDPOINTS
+--------------------------------------------------------------------------------
+
+- POST `/upload_and_build_kg`
+  * Description: Ingests candidate dissertation report (PDF, DOCX, PPTX),
+    extracts chunks, generates embeddings, builds ChromaDB and BM25 indices,
+    extracts Knowledge Graph concepts and relationships via Gemini, and compiles
+    the interactive PyVis physics HTML canvas.
+  * Form Data:
+    - `file`: UploadFile (binary document stream)
+  * Response (JSON):
+    {
+      "status": "success",
+      "message": "File processed, Hybrid RAG indices built, and KG created.",
+      "nodes_count": 14,
+      "relationships_count": 18,
+      "graph_density": 0.0989,
+      "session_id": "default"
+    }
+
+- GET `/kg_visualization`
+  * Description: Returns the interactive 3D force-directed HTML graph canvas.
+  * Query Params: `session_id` (optional, defaults to "default")
+  * Response: HTMLResponse (`text/html`)
+
+- GET `/graph_metadata`
+  * Description: Returns quantitative graph topological metrics.
+  * Response (JSON):
+    {
+      "node_count": 14,
+      "edge_count": 18,
+      "density": 0.0989,
+      "extraction_time_seconds": 3.42,
+      "nodes": ["RAG", "ChromaDB", "BM25", "FastAPI", ...],
+      "relationships": [{"source": "RAG", "target": "ChromaDB", "relation": "QUERIES"}]
+    }
+
+- GET `/query_rag`
+  * Description: Performs hybrid retrieval over ingested document chunks.
+  * Query Params:
+    - `query`: string (search inquiry)
+    - `k`: int (number of chunks to retrieve, default: 3)
+  * Response (JSON):
+    {
+      "query": "How is Reciprocal Rank Fusion calculated?",
+      "results": [
+        {
+          "text": "Reciprocal Rank Fusion fuses the rankings of Dense and Sparse...",
+          "score": 0.0328,
+          "source": "AIVA_Report.pdf",
+          "chunk_index": 4
+        }
+      ]
+    }
+
+--------------------------------------------------------------------------------
+8.2 EXAMINATION & TURN MANAGEMENT ENDPOINTS
+--------------------------------------------------------------------------------
+
+- POST `/start_viva`
+  * Description: Resets session history, establishes initial difficulty (Level 1),
+    and synthesizes the opening foundational question from The General Examiner.
+  * Form Data / JSON:
+    - `session_id`: string (optional)
+  * Response (JSON):
+    {
+      "session_id": "default",
+      "question": "Welcome to your oral defense. To begin, please walk us through the high-level architecture of your project and the core problem it solves.",
+      "agent": "Examiner",
+      "agent_type": "examiner",
+      "difficulty": 1,
+      "difficulty_label": "Easy",
+      "turn": 1,
+      "target_concept": "System Architecture"
+    }
+
+- POST `/viva_turn`
+  * Description: Core conversational turn endpoint. Accepts the candidate's text
+    response, scores it against the 4D rubric, updates the UCS engine state,
+    determines the next difficulty via the adaptive engine, selects the next
+    examiner persona, retrieves grounded report context, and synthesizes the
+    next technical question.
+  * Form Data / JSON:
+    - `answer`: string (candidate's response text)
+    - `session_id`: string (optional)
+    - `agent_type`: string (optional override: "auto", "professor", "industry", "critic", "examiner")
+  * Response (JSON):
+    {
+      "question": "Could you explain the algorithmic complexity of your RRF fusion and how you chose k=60?",
+      "agent": "Professor",
+      "agent_type": "professor",
+      "difficulty": 2,
+      "difficulty_label": "Medium",
+      "score": 0.78,
+      "rubric": {
+        "correctness": 0.85,
+        "completeness": 0.75,
+        "evidence_alignment": 0.80,
+        "reasoning_depth": 0.70
+      },
+      "feedback": "Strong theoretical understanding; accurately explained rank constants.",
+      "turn": 2,
+      "target_concept": "Reciprocal Rank Fusion",
+      "session_id": "default"
+    }
+
+--------------------------------------------------------------------------------
+8.3 AUDIO & SPEECH PROCESSING ENDPOINTS
+--------------------------------------------------------------------------------
+
+- POST `/viva_turn_audio`
+  * Description: Multimodal voice turn endpoint. Receives raw recorded audio blob
+    from candidate's browser, transcribes speech (using local parser or Gemini
+    Multimodal Audio API fallback), executes full viva turn logic, and returns
+    both text and synthesized audio for the next question.
+  * Form Data:
+    - `file`: UploadFile (audio/webm, audio/wav, or audio/ogg)
+    - `session_id`: string (optional)
+  * Response (JSON):
+    {
+      "transcribed_text": "We utilized ChromaDB with Gemini embeddings because it provided sub-second lookup...",
+      "question": "How do you handle index persistence when containerizing the vector store?",
+      "agent": "Industry Expert",
+      "difficulty": 2,
+      "score": 0.72,
+      "audio_url": "/audio_response_cache/turn_2.mp3"
+    }
+
+--------------------------------------------------------------------------------
+8.4 DIAGNOSTIC ANALYTICS & REPORTING ENDPOINTS
+--------------------------------------------------------------------------------
+
+- GET `/analytics_report`
+  * Description: Compiles post-viva diagnostic analytics. Computes TF-IDF concept
+    coverage across the Knowledge Graph, runs the 8D XGBoost weakness classifier,
+    and calculates the Logistic Regression pass/readiness probability.
+  * Query Params: `session_id` (optional)
+  * Response (JSON):
+    {
+      "session_id": "default",
+      "overall_score": 0.74,
+      "passing_probability": 0.88,
+      "concept_coverage_percentage": 83.33,
+      "covered_concepts": ["FastAPI", "RAG", "ChromaDB", "DQN", "BM25"],
+      "uncovered_concepts": ["Redis", "Kubernetes"],
+      "weaknesses_detected": [
+        {
+          "concept": "Kubernetes Autoscaling",
+          "severity": "High",
+          "recommendation": "Review horizontal pod autoscaling algorithms and resource request metrics."
+        }
+      ],
+      "turn_history": [...]
+    }
+
+================================================================================
+9. END-TO-END OPERATIONAL WORKFLOW (STEP-BY-STEP USER JOURNEY)
+================================================================================
+
+This section walks through the complete end-to-end operation of the AIVA platform
+from the perspective of a student and faculty examiner:
+
+--------------------------------------------------------------------------------
+9.1 STAGE 1: DOCUMENT UPLOAD & GROUNDING PIPELINE
+--------------------------------------------------------------------------------
+1. Access the web dashboard at `http://localhost:3000`.
+2. On the "Document Ingestion" panel, drag and drop the candidate's technical
+   dissertation report (`.pdf`, `.docx`, or `.pptx`).
+3. Click "Process Document & Build Graph".
+4. The backend streams the document to `POST /upload_and_build_kg`:
+   - Text is parsed page-by-page.
+   - Text is split into 1000-character chunks with 200-character overlap.
+   - Dense embeddings are generated via Gemini Embedding 2 and stored in ChromaDB.
+   - Lexical Okapi BM25 inverted index is constructed.
+   - Gemini extracts entities and relationships into a structured DAG.
+   - PyVis compiles the interactive physics HTML canvas.
+5. Ingestion progress bar completes, displaying total nodes and relationships extracted.
+
+--------------------------------------------------------------------------------
+9.2 STAGE 2: KNOWLEDGE GRAPH VISUALIZATION & INSPECTION
+--------------------------------------------------------------------------------
+1. Navigate to the "Knowledge Graph" tab on the dashboard.
+2. The interactive 3D ForceAtlas2 physics canvas renders.
+3. Students and faculty can:
+   - Drag nodes to inspect cluster hierarchies.
+   - Zoom in/out to trace dependency relationships (`DEPENDS_ON`, `IMPLEMENTS`).
+   - Click on any concept node (e.g., "ChromaDB") to inspect its type, degree,
+     prerequisites, and connected components.
+   - Verify topological density and extraction latency metrics.
+
+--------------------------------------------------------------------------------
+9.3 STAGE 3: LIVE VIVA VOCE EXAMINATION (VOICE & TEXT)
+--------------------------------------------------------------------------------
+1. Navigate to the "Live Viva Room" tab.
+2. Click "Start Viva Examination".
+3. The General Examiner presents the opening architectural question:
+   "Welcome to your defense. Please explain the overall system architecture."
+4. The candidate responds using either:
+   - Speech: Click the Microphone button, speak into the mic, and click Stop.
+     (Audio blob is streamed to backend; Gemini Multimodal Fallback transcribes
+     it accurately even with accent or browser audio codec compression).
+   - Text: Type the detailed answer into the response text area and click Send.
+5. Behind the scenes:
+   - The answer is evaluated across Correctness, Completeness, Evidence, Depth.
+   - The UCS engine recalculates knowledge gaps and picks the next optimal concept.
+   - The Adaptive Engine steps difficulty (e.g., Level 1 -> Level 2).
+   - The LangGraph Router selects the next examiner (e.g., The Industry Expert).
+   - The question is grounded in retrieved report chunks and spoken via TTS.
+6. The candidate experiences a natural, rigorous, multi-turn academic defense.
+
+--------------------------------------------------------------------------------
+9.4 STAGE 4: POST-VIVA PERFORMANCE ANALYTICS & FEEDBACK
+--------------------------------------------------------------------------------
+1. After completing the desired number of turns (e.g., 5 to 10 turns), click
+   "Conclude Examination & Generate Report".
+2. The dashboard switches to the "Diagnostic Analytics" tab:
+   - Overall Score Gauge: Composite score across all viva responses.
+   - Readiness / Pass Probability Gauge: Logistic regression readiness metric.
+   - Concept Coverage Radar: TF-IDF semantic coverage against all Knowledge Graph nodes.
+   - Identified Weakness Alerts: XGBoost alerts identifying specific gaps where
+     the student gave vague or incorrect answers.
+   - Actionable Feedback: Structured suggestions for dissertation revision.
+
+================================================================================
+10. TROUBLESHOOTING, DIAGNOSTICS & FAQS
+================================================================================
+
+10.1 PORT & NETWORK BINDING ISSUES
+- Symptom: `ERROR: [Errno 10048] error while attempting to bind on address ('127.0.0.1', 8000)`
+- Cause: An existing instance of Python or Uvicorn is already occupying port 8000.
+- Resolution (Windows PowerShell):
+  ```powershell
+  # Find process occupying port 8000
+  netstat -ano | findstr :8000
+  # Terminate the process by PID
+  taskkill /PID <PID_NUMBER> /F
+  ```
+- Re-run `python -m uvicorn main:app --port 8000 --reload`.
+
+10.2 AUDIO MIME & BROWSER FALLBACK TROUBLESHOOTING
+- Symptom: Audio recordings fail to transcribe on Safari or older Chrome browsers.
+- Cause: Different browsers encode MediaRecorder streams in varying codecs
+  (`audio/webm;codecs=opus`, `audio/ogg`, or `audio/mp4`).
+- Resolution: AIVA's `core/voice_engine.py` includes automatic format sniffing.
+  If native local audio parsers fail, the raw audio stream is redirected to
+  the Gemini Multimodal Audio API, which natively processes all standard
+  audio container formats. Ensure your `GEMINI_API_KEY` is valid.
+
+10.3 GEMINI API KEY & RATE LIMIT DIAGNOSTICS
+- Symptom: `429 ResourceExhausted: Quota exceeded for quota metric 'Queries'`.
+- Cause: Using a free-tier Gemini API key with low rate limits under rapid requests.
+- Resolution:
+  1. Add exponential backoff delays between calls (built into AIVA's client).
+  2. For zero-quota offline development, all unit test suites in `tests/` use
+     mocked deterministic responses, allowing 100% offline testing:
+     `python tests/test_deterministic_end_to_end.py`
+
+10.4 MODEL DESERIALIZATION & VIRTUAL ENVIRONMENT ISSUES
+- Symptom: `ModuleNotFoundError: No module named 'gymnasium'` or `'xgboost'`.
+- Cause: Python commands executed outside the active virtual environment.
+- Resolution: Always ensure your virtual environment prompt is active:
+  ```powershell
+  cd e:\AIVA\AIVA_backend
+  .\venv\Scripts\Activate.ps1
+  pip install -r requirements.txt
+  ```
+
+================================================================================
+END OF MASTER PROJECT HANDBOOK
+AIVA: Adaptive Multi-Agent Viva Assessment Framework
+================================================================================
+

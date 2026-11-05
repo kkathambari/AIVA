@@ -1,0 +1,35 @@
+experiment:
+  name: knowledge_graph_reliability
+  version: "1.0.0"
+  description: "Evaluates KG extraction factuality, concept normalization, relation typing, and prerequisite DAG enforcement."
+
+dataset:
+  name: aiva_gold_kg_dataset
+  path: "experiments/datasets/kg_gold_dataset.json"
+  schema: "experiments/datasets/kg_schema.json"
+  version: "1.0.0"
+
+models:
+  llm: "gemini-2.5-flash"
+  temperature: 0.0
+
+pipeline:
+  min_edge_confidence: 0.50
+  enforce_dag_on_prereq_only: true
+  preserve_general_cycles: true
+  chunk_size: 6000
+  chunk_overlap: 600
+
+evaluation:
+  script: "experiments/evaluation/evaluate_kg.py"
+  output_artifact: "experiments/results/kg_results.json"
+  metrics:
+    - concept_precision
+    - concept_recall
+    - concept_f1
+    - relationship_precision
+    - relationship_recall
+    - relationship_f1
+    - prerequisite_direction_accuracy
+    - prerequisite_cycle_rate
+    - inter_annotator_cohens_kappa

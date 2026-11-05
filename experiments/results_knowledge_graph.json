@@ -1,49 +1,113 @@
 {
   "benchmark_metadata": {
-    "benchmark_name": "AIVA Live Knowledge Graph Extraction Benchmark",
-    "execution_timestamp": "2026-10-15T14:59:50.991505",
-    "live_system_execution": true,
-    "llm_model": "gemini-2.5-flash",
-    "execution_time_sec": 56.16,
-    "input_text_characters": 2683
+    "benchmark_name": "AIVA Knowledge Graph Reliability Evaluation",
+    "timestamp": "2026-10-31T22:51:43.877936",
+    "gold_dataset_version": "1.0.0",
+    "documents_evaluated": 5,
+    "inter_annotator_cohens_kappa": 1.0
   },
-  "concepts": {
-    "ground_truth_count": 18,
-    "extracted_count": 30,
-    "true_positives": 10,
-    "false_positives": 20,
-    "false_negatives": 8,
-    "precision": 0.3333,
-    "recall": 0.5556,
-    "f1_score": 0.4167
+  "baseline_unnormalized": {
+    "concept_precision": 0.15,
+    "concept_recall": 0.2195,
+    "concept_f1": 0.1782,
+    "relationship_precision": 0.4,
+    "relationship_recall": 0.7143,
+    "relationship_f1": 0.5128,
+    "prerequisite_direction_accuracy": 0.7273,
+    "prerequisite_cycles": 0
   },
-  "strict_directed_triples": {
-    "ground_truth_count": 13,
-    "extracted_count": 29,
-    "true_positives": 3,
-    "false_positives": 26,
-    "false_negatives": 10,
-    "precision": 0.1034,
-    "recall": 0.2308,
-    "f1_score": 0.1429
+  "improved_pipeline": {
+    "concept_precision": 0.4167,
+    "concept_recall": 0.6098,
+    "concept_f1": 0.495,
+    "relationship_precision": 0.2121,
+    "relationship_recall": 0.25,
+    "relationship_f1": 0.2295,
+    "prerequisite_direction_accuracy": 1.0,
+    "prerequisite_cycles_before": 0,
+    "prerequisite_cycles_after": 0,
+    "general_relations_preservation_rate": 0.3125
   },
-  "inversion_invariant_relational_adjacency": {
-    "ground_truth_count": 13,
-    "extracted_count": 29,
-    "true_positives": 3,
-    "false_positives": 26,
-    "false_negatives": 10,
-    "precision": 0.1034,
-    "recall": 0.2308,
-    "f1_score": 0.1429
-  },
-  "linguistic_error_analysis": {
-    "passive_voice_inversions_recovered": 0,
-    "inversion_examples": [
-      "Ground Truth: (Deep Q-Network, CONTROLS, Adaptive Difficulty) <-> Extracted: (Adaptive Difficulty, CONTROLLED_BY, Deep Q-Network)",
-      "Ground Truth: (XGBoost, CLASSIFIES, Weakness) <-> Extracted: (Weakness Classification, PERFORMED_BY, XGBoost Classifier)"
-    ],
-    "fine_grained_node_splitting": "LLM extracted granular protocol nodes (HTTP, WebSocket) as children of API Gateway rather than direct triples.",
-    "hierarchical_mediators": "Dissertation mentions 'architecture containerized using Docker'; LLM introduced intermediate 'Microservices Infrastructure' node."
-  }
+  "per_document_breakdown": [
+    {
+      "document_id": "doc_01_aiva_arch",
+      "title": "AIVA Microservices Architecture and Hybrid Viva Pipeline",
+      "split": "pilot_val",
+      "concepts": {
+        "precision": 0.4333,
+        "recall": 0.8667,
+        "f1": 0.5778
+      },
+      "relationships": {
+        "precision": 0.1034,
+        "recall": 0.4286,
+        "f1": 0.1667
+      },
+      "cycles_resolved": 0
+    },
+    {
+      "document_id": "doc_02_edge_cv",
+      "title": "Real-Time Object Detection and Spatial Feature Extraction on Edge TPUs",
+      "split": "pilot_val",
+      "concepts": {
+        "precision": 0.375,
+        "recall": 0.4286,
+        "f1": 0.4
+      },
+      "relationships": {
+        "precision": 1.0,
+        "recall": 0.1429,
+        "f1": 0.25
+      },
+      "cycles_resolved": 0
+    },
+    {
+      "document_id": "doc_03_hybrid_rag",
+      "title": "Hybrid Information Retrieval and Dense Vector Search for Enterprise Knowledge Bases",
+      "split": "frozen_test",
+      "concepts": {
+        "precision": 0.375,
+        "recall": 0.4286,
+        "f1": 0.4
+      },
+      "relationships": {
+        "precision": 1.0,
+        "recall": 0.2,
+        "f1": 0.3333
+      },
+      "cycles_resolved": 0
+    },
+    {
+      "document_id": "doc_04_rl_adaptive_viva",
+      "title": "Deep Reinforcement Learning for Adaptive Question Difficulty Transitions",
+      "split": "frozen_test",
+      "concepts": {
+        "precision": 0.2857,
+        "recall": 0.3333,
+        "f1": 0.3077
+      },
+      "relationships": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "cycles_resolved": 0
+    },
+    {
+      "document_id": "doc_05_distributed_k8s",
+      "title": "Cloud-Native Container Orchestration and Autoscaling Infrastructure",
+      "split": "frozen_test",
+      "concepts": {
+        "precision": 0.5714,
+        "recall": 0.6667,
+        "f1": 0.6154
+      },
+      "relationships": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6667
+      },
+      "cycles_resolved": 0
+    }
+  ]
 }

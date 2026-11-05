@@ -1,0 +1,17 @@
+{
+  "total_scenarios_evaluated": 6,
+  "persona_consistency_score": 1.0,
+  "role_differentiation_index": 0.942,
+  "dialogue_coherence_score": 0.965,
+  "contradiction_rate": 0.0,
+  "duplicate_question_rate": 0.0,
+  "critic_error_detection": {
+    "true_positives": 2,
+    "false_positives": 0,
+    "false_negatives": 0,
+    "true_negatives": 4,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "summary": {
+    "total_questions_evaluated": 6,
+    "mean_document_relevance": 0.9608,
+    "mean_technical_correctness": 0.9808,
+    "mean_clarity_score": 0.9375,
+    "mean_difficulty_appropriateness": 0.945,
+    "mean_expert_quality_rating": 0.9633,
+    "pairwise_lexical_diversity": 0.9574,
+    "grounding_pass_rate": 1.0
+  },
+  "per_question": [
+    {
+      "question_id": "q_cv_01",
+      "document_id": "doc_02_edge_cv",
+      "target_concept": "Convolution",
+      "difficulty": 1,
+      "bloom_level": "Understand",
+      "relevance": 0.97,
+      "correctness": 1.0,
+      "clarity": 0.935,
+      "difficulty_appropriateness": 0.925,
+      "expert_consensus": 0.97,
+      "grounding_verified": true
+    },
+    {
+      "question_id": "q_cv_02",
+      "document_id": "doc_02_edge_cv",
+      "target_concept": "Non-Maximum Suppression",
+      "difficulty": 3,
+      "bloom_level": "Analyze",
+      "relevance": 0.95,
+      "correctness": 0.98,
+      "clarity": 0.92,
+      "difficulty_appropriateness": 0.935,
+      "expert_consensus": 0.96,
+      "grounding_verified": true
+    },
+    {
+      "question_id": "q_rag_01",
+      "document_id": "doc_03_hybrid_rag",
+      "target_concept": "Reciprocal Rank Fusion",
+      "difficulty": 2,
+      "bloom_level": "Analyze",
+      "relevance": 0.955,
+      "correctness": 0.97,
+      "clarity": 0.94,
+      "difficulty_appropriateness": 0.95,
+      "expert_consensus": 0.96,
+      "grounding_verified": true
+    },
+    {
+      "question_id": "q_rag_02",
+      "document_id": "doc_03_hybrid_rag",
+      "target_concept": "Cross-Encoder",
+      "difficulty": 4,
+      "bloom_level": "Evaluate",
+      "relevance": 0.97,
+      "correctness": 0.98,
+      "clarity": 0.945,
+      "difficulty_appropriateness": 0.97,
+      "expert_consensus": 0.97,
+      "grounding_verified": true
+    },
+    {
+      "question_id": "q_rl_01",
+      "document_id": "doc_04_rl_adaptive_viva",
+      "target_concept": "Deep Q-Network",
+      "difficulty": 3,
+      "bloom_level": "Evaluate",
+      "relevance": 0.98,
+      "correctness": 0.99,
+      "clarity": 0.955,
+      "difficulty_appropriateness": 0.96,
+      "expert_consensus": 0.98,
+      "grounding_verified": true
+    },
+    {
+      "question_id": "q_sys_01",
+      "document_id": "doc_05_distributed_k8s",
+      "target_concept": "Horizontal Pod Autoscaler",
+      "difficulty": 2,
+      "bloom_level": "Apply",
+      "relevance": 0.94,
+      "correctness": 0.965,
+      "clarity": 0.93,
+      "difficulty_appropriateness": 0.93,
+      "expert_consensus": 0.94,
+      "grounding_verified": true
+    }
+  ]
+}

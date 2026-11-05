@@ -142,7 +142,7 @@ async def upload_and_build_kg(
     session_id: Optional[str] = Form(None),
     x_session_id: Optional[str] = Header(None, alias="X-Session-ID")
 ):
-    target_sid = session_id or x_session_id or str(uuid.uuid4())[:8]
+    target_sid = session_id or x_session_id or DEFAULT_SESSION_ID
     sess = get_or_create_session(target_sid)
     
     tmp_path = f"temp_{target_sid}_{file.filename}"
@@ -172,10 +172,22 @@ async def upload_and_build_kg(
             # Build NetworkX and visualize
             kg_builder.build_networkx_graph(extraction)
             output_html = kg_builder.generate_html_visualization(f"kg_visualization_{target_sid}.html")
+            kg_builder.generate_html_visualization("kg_visualization.html")
             
             # Store in session state
             sess.graph_nodes = [node.model_dump() for node in extraction.nodes]
             sess.graph_relationships = [rel.model_dump() for rel in extraction.relationships]
+            
+            # Persist to kg_data.json
+            try:
+                with open("kg_data.json", "w", encoding="utf-8") as f:
+                    json.dump({
+                        "document_name": sess.document_name,
+                        "nodes": sess.graph_nodes,
+                        "relationships": sess.graph_relationships
+                    }, f, indent=2)
+            except Exception as e:
+                print(f"Error persisting kg_data.json: {e}")
             
             # Initialize the Unresolved Concept Selection (UCS) engine with the extracted concept graph
             sess.ucs_engine.load_concept_graph(sess.graph_nodes, sess.graph_relationships)

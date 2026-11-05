@@ -19,8 +19,8 @@ class VivaEnv(gym.Env):
         
         # State: [Current Difficulty (0-4), Last Answer Score (0.0 - 1.0)]
         self.observation_space = spaces.Box(
-            low=np.array([0, 0.0]), 
-            high=np.array([4, 1.0]), 
+            low=np.array([0.0, 0.0], dtype=np.float32), 
+            high=np.array([4.0, 1.0], dtype=np.float32), 
             dtype=np.float32
         )
         

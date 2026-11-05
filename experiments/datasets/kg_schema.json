@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AIVA Gold-Standard Knowledge Graph Dataset Schema",
+  "description": "Validation schema for technical project documents with expert-annotated concepts, typed relations, prerequisite directions, and inter-rater consensus.",
+  "type": "object",
+  "required": ["dataset_version", "metadata", "documents"],
+  "properties": {
+    "dataset_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["created_at", "annotation_guidelines_version", "primary_annotator", "secondary_annotator", "split_policy"],
+      "properties": {
+        "created_at": { "type": "string" },
+        "annotation_guidelines_version": { "type": "string" },
+        "primary_annotator": { "type": "string" },
+        "secondary_annotator": { "type": "string" },
+        "split_policy": {
+          "type": "string",
+          "description": "Policy governing frozen test vs prompt-engineering splits."
+        },
+        "description": { "type": "string" }
+      }
+    },
+    "documents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "document_id",
+          "title",
+          "domain",
+          "split",
+          "raw_text",
+          "canonical_concepts",
+          "gold_relationships"
+        ],
+        "properties": {
+          "document_id": { "type": "string" },
+          "title": { "type": "string" },
+          "domain": {
+            "type": "string",
+            "enum": [
+              "Computer Vision",
+              "Natural Language Processing",
+              "Reinforcement Learning & Robotics",
+              "Distributed Systems & Cloud Computing",
+              "Information Retrieval & Search",
+              "Machine Learning Systems"
+            ]
+          },
+          "split": {
+            "type": "string",
+            "enum": ["pilot_val", "frozen_test"]
+          },
+          "raw_text": {
+            "type": "string",
+            "minLength": 50
+          },
+          "canonical_concepts": {
+            "type": "array",
+            "minItems": 3,
+            "items": {
+              "type": "object",
+              "required": ["id", "category", "aliases"],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Canonical normalized name of the concept."
+                },
+                "category": {
+                  "type": "string",
+                  "enum": [
+                    "Mathematical Foundation",
+                    "Algorithm",
+                    "Model Architecture",
+                    "System Component",
+                    "Framework / Tool",
+                    "Protocol / Standard",
+                    "Evaluation Metric / Methodology"
+                  ]
+                },
+                "aliases": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "description": "Recognized textual synonyms, acronyms, and grammatical variations."
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "gold_relationships": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "source",
+                "target",
+                "type",
+                "source_is_prerequisite",
+                "direction_rationale",
+                "annotator_agreement"
+              ],
+              "properties": {
+                "source": { "type": "string" },
+                "target": { "type": "string" },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "prerequisite",
+                    "dependency",
+                    "part_of",
+                    "implements",
+                    "evaluates"
+                  ],
+                  "description": "Constrained relationship taxonomy. Note: only 'prerequisite' edges are restricted to a Directed Acyclic Graph (DAG)."
+                },
+                "source_is_prerequisite": {
+                  "type": "boolean",
+                  "description": "True if source must be mastered before target. Must be true for type='prerequisite'."
+                },
+                "direction_rationale": {
+                  "type": "string",
+                  "description": "Technical justification for why the directional arrow points from source to target."
+                },
+                "annotator_agreement": {
+                  "type": "object",
+                  "required": ["annotator_1", "annotator_2", "consensus"],
+                  "properties": {
+                    "annotator_1": { "type": "string" },
+                    "annotator_2": { "type": "string" },
+                    "consensus": { "type": "boolean" },
+                    "reconciliation_notes": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

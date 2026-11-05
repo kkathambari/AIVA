@@ -28,9 +28,13 @@ export function UploadSection({ onUploadComplete, currentDocumentName }: UploadS
       setIsReplacing(false);
       setFile(null);
       onUploadComplete(data);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Upload failed", error);
-      alert("Failed to upload document. Is the backend running?");
+      const detail = error?.response?.data?.detail;
+      const message = detail 
+        ? `Upload failed: ${detail}` 
+        : "Failed to upload document. Please verify the backend is running at http://127.0.0.1:8000.";
+      alert(message);
     } finally {
       setUploading(false);
     }
@@ -80,7 +84,7 @@ export function UploadSection({ onUploadComplete, currentDocumentName }: UploadS
               <input
                 type="file"
                 className="hidden"
-                accept=".pdf,.docx"
+                accept=".pdf,.docx,.pptx,.txt,.md"
                 onChange={handleFileChange}
               />
             </label>

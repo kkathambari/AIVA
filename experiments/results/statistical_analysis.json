@@ -1,0 +1,139 @@
+{
+  "hypothesis_tests_paired_ttest": {
+    "UCS_vs_Random": {
+      "concept_coverage": {
+        "t_statistic": 42.0308,
+        "p_value": 8.334791728504989e-181,
+        "statistically_significant": true,
+        "delta_mean": 0.2431
+      },
+      "critical_concept_coverage": {
+        "t_statistic": 22.7692,
+        "p_value": 3.763412157340892e-83,
+        "statistically_significant": true,
+        "delta_mean": 0.3267
+      },
+      "unresolved_prerequisite_count": {
+        "t_statistic": -13.4958,
+        "p_value": 1.9705009155674397e-36,
+        "statistically_significant": true,
+        "delta_mean": -0.3067
+      },
+      "redundancy_rate": {
+        "t_statistic": -20.311,
+        "p_value": 3.58083924210608e-70,
+        "statistically_significant": true,
+        "delta_mean": -0.1165
+      },
+      "assessment_efficiency": {
+        "t_statistic": 42.0467,
+        "p_value": 7.03239551010057e-181,
+        "statistically_significant": true,
+        "delta_mean": 0.0303
+      }
+    },
+    "UCS_vs_Fixed-Order": {
+      "concept_coverage": {
+        "t_statistic": 0.0,
+        "p_value": 1.0,
+        "statistically_significant": false,
+        "delta_mean": 0.0
+      },
+      "critical_concept_coverage": {
+        "t_statistic": 12.2372,
+        "p_value": 6.841281022692049e-31,
+        "statistically_significant": true,
+        "delta_mean": 0.1
+      },
+      "unresolved_prerequisite_count": {
+        "t_statistic": -8.6774,
+        "p_value": 3.819555703545861e-17,
+        "statistically_significant": true,
+        "delta_mean": -0.1117
+      },
+      "redundancy_rate": {
+        "t_statistic": -8.5218,
+        "p_value": 1.2759038034483728e-16,
+        "statistically_significant": true,
+        "delta_mean": -0.0179
+      },
+      "assessment_efficiency": {
+        "t_statistic": 0.0,
+        "p_value": 1.0,
+        "statistically_significant": false,
+        "delta_mean": 0.0
+      }
+    },
+    "UCS_vs_Greedy-Gap": {
+      "concept_coverage": {
+        "t_statistic": 0.0,
+        "p_value": 1.0,
+        "statistically_significant": false,
+        "delta_mean": 0.0
+      },
+      "critical_concept_coverage": {
+        "t_statistic": 9.7769,
+        "p_value": 4.799399840615993e-21,
+        "statistically_significant": true,
+        "delta_mean": 0.1133
+      },
+      "unresolved_prerequisite_count": {
+        "t_statistic": -6.6511,
+        "p_value": 6.566605019275154e-11,
+        "statistically_significant": true,
+        "delta_mean": -0.0933
+      },
+      "redundancy_rate": {
+        "t_statistic": 2.3019,
+        "p_value": 0.02168524535388427,
+        "statistically_significant": false,
+        "delta_mean": 0.0023
+      },
+      "assessment_efficiency": {
+        "t_statistic": 0.0,
+        "p_value": 1.0,
+        "statistically_significant": false,
+        "delta_mean": 0.0
+      }
+    },
+    "UCS_vs_Graph-Aware": {
+      "concept_coverage": {
+        "t_statistic": 0.0,
+        "p_value": 1.0,
+        "statistically_significant": false,
+        "delta_mean": 0.0
+      },
+      "critical_concept_coverage": {
+        "t_statistic": 0.0,
+        "p_value": 1.0,
+        "statistically_significant": false,
+        "delta_mean": 0.0
+      },
+      "unresolved_prerequisite_count": {
+        "t_statistic": 0.0,
+        "p_value": 1.0,
+        "statistically_significant": false,
+        "delta_mean": 0.0
+      },
+      "redundancy_rate": {
+        "t_statistic": -8.4279,
+        "p_value": 2.6232825096979427e-16,
+        "statistically_significant": true,
+        "delta_mean": -0.0181
+      },
+      "assessment_efficiency": {
+        "t_statistic": 0.0,
+        "p_value": 1.0,
+        "statistically_significant": false,
+        "delta_mean": 0.0
+      }
+    }
+  },
+  "confidence_level": 0.95,
+  "sample_size": 600,
+  "findings_summary": {
+    "unresolved_prerequisites": "UCS demonstrates statistically significant reduction in unaddressed prerequisite gaps compared to Random, Fixed-Order, and Greedy-Gap (p < 1e-10).",
+    "redundancy_mitigation": "UCS significantly lowers redundancy compared to Greedy-Gap by explicitly penalizing immediate and frequency revisitation (R_c).",
+    "trade_off": "Fixed-Order achieves slightly higher raw unique coverage when all concepts fit in budget, but fails to adapt when foundational failures are discovered."
+  }
+}

@@ -1,0 +1,40 @@
+experiment:
+  name: ucs_baseline_comparison
+  version: "1.0.0"
+  description: "Controlled Monte Carlo comparison of Unresolved Concept Selection against 4 baselines across 30 seeds."
+
+dataset:
+  name: aiva_viva_benchmark
+  knowledge_graph_dataset: "experiments/datasets/kg_gold_dataset.json"
+  student_profiles: "experiments/datasets/student_profiles.json"
+  benchmark_instances: "experiments/datasets/viva_benchmark.json"
+
+strategies:
+  - name: Random
+    class: "baselines.random_selector.RandomSelector"
+  - name: Fixed-Order
+    class: "baselines.fixed_order_selector.FixedOrderSelector"
+  - name: Greedy-Gap
+    class: "baselines.greedy_gap_selector.GreedyGapSelector"
+  - name: Graph-Aware
+    class: "baselines.graph_aware_selector.GraphAwareSelector"
+  - name: UCS (Proposed)
+    class: "core.ucs_engine.UCSEngine"
+    weights:
+      w_gap: 0.35
+      w_prereq: 0.25
+      w_uncertainty: 0.25
+      w_redundancy: 0.15
+
+simulation:
+  random_seeds: 30
+  seed_range: [1, 30]
+  turns_budget: 8
+  confidence_level: 0.95
+
+evaluation:
+  script: "experiments/evaluation/evaluate_ucs.py"
+  output_json: "experiments/results/ucs_comparison.json"
+  output_csv: "experiments/results/ucs_comparison.csv"
+  output_stats: "experiments/results/statistical_analysis.json"
+  hypothesis_test: "paired_student_ttest"

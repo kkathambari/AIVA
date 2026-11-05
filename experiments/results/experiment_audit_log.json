@@ -1,0 +1,787 @@
+[
+  {
+    "experiment_name": "ucs_baseline_comparison",
+    "config_file": "experiments/configs/ucs.yaml",
+    "execution_metadata": {
+      "start_time": "2026-10-31T22:51:08.743265",
+      "end_time": "2026-10-31T22:51:12.866832",
+      "duration_seconds": 4.12,
+      "git_commit": "f1f5855d6066f73930fea251e08aaa4135ccee76",
+      "git_working_tree_dirty": true,
+      "python_version": "3.10.0",
+      "platform": "Windows-10-10.0.26200-SP0",
+      "machine": "AMD64",
+      "processor": "Intel64 Family 6 Model 140 Stepping 2, GenuineIntel"
+    },
+    "dataset_provenance": {
+      "path": "experiments/datasets/kg_gold_dataset.json",
+      "sha256": "334e265827aa138bf18b43e239b4a0f76532a39eb967fbfc6f87471dd9a23450"
+    },
+    "hyperparameters": {
+      "random_seeds": 30,
+      "seed_range": [
+        1,
+        30
+      ],
+      "turns_budget": 8,
+      "confidence_level": 0.95
+    },
+    "metrics_reported": {
+      "benchmark_name": "AIVA UCS Baseline Comparison Benchmark",
+      "summary_statistics": {
+        "Random": {
+          "concept_coverage": {
+            "mean": 0.6636,
+            "std": 0.1728,
+            "ci_95": 0.0139,
+            "ci_lower": 0.6497,
+            "ci_upper": 0.6775
+          },
+          "critical_concept_coverage": {
+            "mean": 0.6733,
+            "std": 0.3514,
+            "ci_95": 0.0282,
+            "ci_lower": 0.6451,
+            "ci_upper": 0.7015
+          },
+          "unresolved_prerequisite_count": {
+            "mean": 0.3267,
+            "std": 0.572,
+            "ci_95": 0.0459,
+            "ci_lower": 0.2808,
+            "ci_upper": 0.3726
+          },
+          "redundancy_rate": {
+            "mean": 0.1596,
+            "std": 0.1846,
+            "ci_95": 0.0148,
+            "ci_lower": 0.1448,
+            "ci_upper": 0.1744
+          },
+          "assessment_efficiency": {
+            "mean": 0.083,
+            "std": 0.0216,
+            "ci_95": 0.0017,
+            "ci_lower": 0.0813,
+            "ci_upper": 0.0847
+          }
+        },
+        "Fixed-Order": {
+          "concept_coverage": {
+            "mean": 0.9067,
+            "std": 0.1868,
+            "ci_95": 0.015,
+            "ci_lower": 0.8917,
+            "ci_upper": 0.9217
+          },
+          "critical_concept_coverage": {
+            "mean": 0.9,
+            "std": 0.2002,
+            "ci_95": 0.016,
+            "ci_lower": 0.884,
+            "ci_upper": 0.916
+          },
+          "unresolved_prerequisite_count": {
+            "mean": 0.1083,
+            "std": 0.3111,
+            "ci_95": 0.0249,
+            "ci_lower": 0.0834,
+            "ci_upper": 0.1332
+          },
+          "redundancy_rate": {
+            "mean": 0.061,
+            "std": 0.0911,
+            "ci_95": 0.0073,
+            "ci_lower": 0.0537,
+            "ci_upper": 0.0683
+          },
+          "assessment_efficiency": {
+            "mean": 0.1133,
+            "std": 0.0233,
+            "ci_95": 0.0019,
+            "ci_lower": 0.1114,
+            "ci_upper": 0.1152
+          }
+        },
+        "Greedy-Gap": {
+          "concept_coverage": {
+            "mean": 0.9067,
+            "std": 0.1868,
+            "ci_95": 0.015,
+            "ci_lower": 0.8917,
+            "ci_upper": 0.9217
+          },
+          "critical_concept_coverage": {
+            "mean": 0.8867,
+            "std": 0.2839,
+            "ci_95": 0.0228,
+            "ci_lower": 0.8639,
+            "ci_upper": 0.9095
+          },
+          "unresolved_prerequisite_count": {
+            "mean": 0.09,
+            "std": 0.3446,
+            "ci_95": 0.0276,
+            "ci_lower": 0.0624,
+            "ci_upper": 0.1176
+          },
+          "redundancy_rate": {
+            "mean": 0.0408,
+            "std": 0.0817,
+            "ci_95": 0.0066,
+            "ci_lower": 0.0342,
+            "ci_upper": 0.0474
+          },
+          "assessment_efficiency": {
+            "mean": 0.1133,
+            "std": 0.0233,
+            "ci_95": 0.0019,
+            "ci_lower": 0.1114,
+            "ci_upper": 0.1152
+          }
+        },
+        "Graph-Aware": {
+          "concept_coverage": {
+            "mean": 0.9067,
+            "std": 0.1868,
+            "ci_95": 0.015,
+            "ci_lower": 0.8917,
+            "ci_upper": 0.9217
+          },
+          "critical_concept_coverage": {
+            "mean": 1.0,
+            "std": 0.0,
+            "ci_95": 0.0,
+            "ci_lower": 1.0,
+            "ci_upper": 1.0
+          },
+          "unresolved_prerequisite_count": {
+            "mean": 0.0,
+            "std": 0.0,
+            "ci_95": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0
+          },
+          "redundancy_rate": {
+            "mean": 0.0612,
+            "std": 0.0914,
+            "ci_95": 0.0073,
+            "ci_lower": 0.0539,
+            "ci_upper": 0.0685
+          },
+          "assessment_efficiency": {
+            "mean": 0.1133,
+            "std": 0.0233,
+            "ci_95": 0.0019,
+            "ci_lower": 0.1114,
+            "ci_upper": 0.1152
+          }
+        },
+        "UCS (Proposed)": {
+          "concept_coverage": {
+            "mean": 0.9067,
+            "std": 0.1868,
+            "ci_95": 0.015,
+            "ci_lower": 0.8917,
+            "ci_upper": 0.9217
+          },
+          "critical_concept_coverage": {
+            "mean": 1.0,
+            "std": 0.0,
+            "ci_95": 0.0,
+            "ci_lower": 1.0,
+            "ci_upper": 1.0
+          },
+          "unresolved_prerequisite_count": {
+            "mean": 0.0,
+            "std": 0.0,
+            "ci_95": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0
+          },
+          "redundancy_rate": {
+            "mean": 0.0431,
+            "std": 0.0835,
+            "ci_95": 0.0067,
+            "ci_lower": 0.0364,
+            "ci_upper": 0.0498
+          },
+          "assessment_efficiency": {
+            "mean": 0.1133,
+            "std": 0.0233,
+            "ci_95": 0.0019,
+            "ci_lower": 0.1114,
+            "ci_upper": 0.1152
+          }
+        }
+      },
+      "seeds_tested": 30,
+      "runs_per_strategy": 600
+    },
+    "output_artifacts": [
+      "experiments/results/ucs_comparison.json"
+    ]
+  },
+  {
+    "experiment_name": "knowledge_graph_reliability",
+    "config_file": "experiments/configs/kg.yaml",
+    "execution_metadata": {
+      "start_time": "2026-10-31T22:51:42.616243",
+      "end_time": "2026-10-31T22:51:43.934371",
+      "duration_seconds": 1.32,
+      "git_commit": "f1f5855d6066f73930fea251e08aaa4135ccee76",
+      "git_working_tree_dirty": true,
+      "python_version": "3.10.0",
+      "platform": "Windows-10-10.0.26200-SP0",
+      "machine": "AMD64",
+      "processor": "Intel64 Family 6 Model 140 Stepping 2, GenuineIntel"
+    },
+    "dataset_provenance": {
+      "path": "experiments/datasets/kg_gold_dataset.json",
+      "sha256": "334e265827aa138bf18b43e239b4a0f76532a39eb967fbfc6f87471dd9a23450"
+    },
+    "hyperparameters": {
+      "min_edge_confidence": 0.5,
+      "enforce_dag_on_prereq_only": true,
+      "preserve_general_cycles": true,
+      "chunk_size": 6000,
+      "chunk_overlap": 600
+    },
+    "metrics_reported": {
+      "benchmark_metadata": {
+        "benchmark_name": "AIVA Knowledge Graph Reliability Evaluation",
+        "timestamp": "2026-10-31T22:51:43.877936",
+        "gold_dataset_version": "1.0.0",
+        "documents_evaluated": 5,
+        "inter_annotator_cohens_kappa": 1.0
+      },
+      "baseline_unnormalized": {
+        "concept_precision": 0.15,
+        "concept_recall": 0.2195,
+        "concept_f1": 0.1782,
+        "relationship_precision": 0.4,
+        "relationship_recall": 0.7143,
+        "relationship_f1": 0.5128,
+        "prerequisite_direction_accuracy": 0.7273,
+        "prerequisite_cycles": 0
+      },
+      "improved_pipeline": {
+        "concept_precision": 0.4167,
+        "concept_recall": 0.6098,
+        "concept_f1": 0.495,
+        "relationship_precision": 0.2121,
+        "relationship_recall": 0.25,
+        "relationship_f1": 0.2295,
+        "prerequisite_direction_accuracy": 1.0,
+        "prerequisite_cycles_before": 0,
+        "prerequisite_cycles_after": 0,
+        "general_relations_preservation_rate": 0.3125
+      },
+      "per_document_breakdown": [
+        {
+          "document_id": "doc_01_aiva_arch",
+          "title": "AIVA Microservices Architecture and Hybrid Viva Pipeline",
+          "split": "pilot_val",
+          "concepts": {
+            "precision": 0.4333,
+            "recall": 0.8667,
+            "f1": 0.5778
+          },
+          "relationships": {
+            "precision": 0.1034,
+            "recall": 0.4286,
+            "f1": 0.1667
+          },
+          "cycles_resolved": 0
+        },
+        {
+          "document_id": "doc_02_edge_cv",
+          "title": "Real-Time Object Detection and Spatial Feature Extraction on Edge TPUs",
+          "split": "pilot_val",
+          "concepts": {
+            "precision": 0.375,
+            "recall": 0.4286,
+            "f1": 0.4
+          },
+          "relationships": {
+            "precision": 1.0,
+            "recall": 0.1429,
+            "f1": 0.25
+          },
+          "cycles_resolved": 0
+        },
+        {
+          "document_id": "doc_03_hybrid_rag",
+          "title": "Hybrid Information Retrieval and Dense Vector Search for Enterprise Knowledge Bases",
+          "split": "frozen_test",
+          "concepts": {
+            "precision": 0.375,
+            "recall": 0.4286,
+            "f1": 0.4
+          },
+          "relationships": {
+            "precision": 1.0,
+            "recall": 0.2,
+            "f1": 0.3333
+          },
+          "cycles_resolved": 0
+        },
+        {
+          "document_id": "doc_04_rl_adaptive_viva",
+          "title": "Deep Reinforcement Learning for Adaptive Question Difficulty Transitions",
+          "split": "frozen_test",
+          "concepts": {
+            "precision": 0.2857,
+            "recall": 0.3333,
+            "f1": 0.3077
+          },
+          "relationships": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "cycles_resolved": 0
+        },
+        {
+          "document_id": "doc_05_distributed_k8s",
+          "title": "Cloud-Native Container Orchestration and Autoscaling Infrastructure",
+          "split": "frozen_test",
+          "concepts": {
+            "precision": 0.5714,
+            "recall": 0.6667,
+            "f1": 0.6154
+          },
+          "relationships": {
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6667
+          },
+          "cycles_resolved": 0
+        }
+      ]
+    },
+    "output_artifacts": [
+      "experiments/results/kg_results.json"
+    ]
+  },
+  {
+    "experiment_name": "hybrid_rag_retrieval_evaluation",
+    "config_file": "experiments/configs/rag.yaml",
+    "execution_metadata": {
+      "start_time": "2026-10-31T22:51:44.099851",
+      "end_time": "2026-10-31T22:51:52.878303",
+      "duration_seconds": 8.78,
+      "git_commit": "f1f5855d6066f73930fea251e08aaa4135ccee76",
+      "git_working_tree_dirty": true,
+      "python_version": "3.10.0",
+      "platform": "Windows-10-10.0.26200-SP0",
+      "machine": "AMD64",
+      "processor": "Intel64 Family 6 Model 140 Stepping 2, GenuineIntel"
+    },
+    "dataset_provenance": {
+      "path": null,
+      "sha256": "none"
+    },
+    "hyperparameters": {
+      "sparse": "BM25Okapi (technical_tokenize)",
+      "dense": "Google Generative AI Embedding 2 (cosine similarity)",
+      "hybrid": "Reciprocal Rank Fusion (RRF)",
+      "rrf_constant_k": 60
+    },
+    "metrics_reported": {
+      "benchmark_name": "AIVA Independent Hybrid RAG Benchmark",
+      "summary": {
+        "BM25_Sparse": {
+          "mrr": 0.7619,
+          "recall@1": 0.7,
+          "recall@3": 0.8,
+          "recall@5": 0.8,
+          "precision@1": 0.7,
+          "precision@3": 0.2667,
+          "ndcg@3": 0.75,
+          "ndcg@5": 0.75,
+          "context_relevance": 0.78,
+          "faithfulness_score": 0.82
+        },
+        "Dense_Semantic": {
+          "mrr": 0.831,
+          "recall@1": 0.8,
+          "recall@3": 0.8,
+          "recall@5": 0.8,
+          "precision@1": 0.8,
+          "precision@3": 0.2667,
+          "ndcg@3": 0.8,
+          "ndcg@5": 0.8,
+          "context_relevance": 0.85,
+          "faithfulness_score": 0.88
+        },
+        "Hybrid_RRF": {
+          "mrr": 0.7786,
+          "recall@1": 0.7,
+          "recall@3": 0.8,
+          "recall@5": 0.8,
+          "precision@1": 0.7,
+          "precision@3": 0.2667,
+          "ndcg@3": 0.7631,
+          "ndcg@5": 0.7631,
+          "context_relevance": 0.94,
+          "faithfulness_score": 0.96
+        }
+      }
+    },
+    "output_artifacts": [
+      "experiments/results/rag_evaluation.json"
+    ]
+  },
+  {
+    "experiment_name": "ucs_baseline_comparison",
+    "config_file": "experiments/configs/ucs.yaml",
+    "execution_metadata": {
+      "start_time": "2026-10-31T22:51:52.994444",
+      "end_time": "2026-10-31T22:51:56.325076",
+      "duration_seconds": 3.33,
+      "git_commit": "f1f5855d6066f73930fea251e08aaa4135ccee76",
+      "git_working_tree_dirty": true,
+      "python_version": "3.10.0",
+      "platform": "Windows-10-10.0.26200-SP0",
+      "machine": "AMD64",
+      "processor": "Intel64 Family 6 Model 140 Stepping 2, GenuineIntel"
+    },
+    "dataset_provenance": {
+      "path": "experiments/datasets/kg_gold_dataset.json",
+      "sha256": "334e265827aa138bf18b43e239b4a0f76532a39eb967fbfc6f87471dd9a23450"
+    },
+    "hyperparameters": {
+      "random_seeds": 30,
+      "seed_range": [
+        1,
+        30
+      ],
+      "turns_budget": 8,
+      "confidence_level": 0.95
+    },
+    "metrics_reported": {
+      "benchmark_name": "AIVA UCS Baseline Comparison Benchmark",
+      "summary_statistics": {
+        "Random": {
+          "concept_coverage": {
+            "mean": 0.6636,
+            "std": 0.1728,
+            "ci_95": 0.0139,
+            "ci_lower": 0.6497,
+            "ci_upper": 0.6775
+          },
+          "critical_concept_coverage": {
+            "mean": 0.6733,
+            "std": 0.3514,
+            "ci_95": 0.0282,
+            "ci_lower": 0.6451,
+            "ci_upper": 0.7015
+          },
+          "unresolved_prerequisite_count": {
+            "mean": 0.3067,
+            "std": 0.5566,
+            "ci_95": 0.0446,
+            "ci_lower": 0.2621,
+            "ci_upper": 0.3513
+          },
+          "redundancy_rate": {
+            "mean": 0.1596,
+            "std": 0.1846,
+            "ci_95": 0.0148,
+            "ci_lower": 0.1448,
+            "ci_upper": 0.1744
+          },
+          "assessment_efficiency": {
+            "mean": 0.083,
+            "std": 0.0216,
+            "ci_95": 0.0017,
+            "ci_lower": 0.0813,
+            "ci_upper": 0.0847
+          }
+        },
+        "Fixed-Order": {
+          "concept_coverage": {
+            "mean": 0.9067,
+            "std": 0.1868,
+            "ci_95": 0.015,
+            "ci_lower": 0.8917,
+            "ci_upper": 0.9217
+          },
+          "critical_concept_coverage": {
+            "mean": 0.9,
+            "std": 0.2002,
+            "ci_95": 0.016,
+            "ci_lower": 0.884,
+            "ci_upper": 0.916
+          },
+          "unresolved_prerequisite_count": {
+            "mean": 0.1117,
+            "std": 0.3152,
+            "ci_95": 0.0253,
+            "ci_lower": 0.0864,
+            "ci_upper": 0.137
+          },
+          "redundancy_rate": {
+            "mean": 0.061,
+            "std": 0.0911,
+            "ci_95": 0.0073,
+            "ci_lower": 0.0537,
+            "ci_upper": 0.0683
+          },
+          "assessment_efficiency": {
+            "mean": 0.1133,
+            "std": 0.0233,
+            "ci_95": 0.0019,
+            "ci_lower": 0.1114,
+            "ci_upper": 0.1152
+          }
+        },
+        "Greedy-Gap": {
+          "concept_coverage": {
+            "mean": 0.9067,
+            "std": 0.1868,
+            "ci_95": 0.015,
+            "ci_lower": 0.8917,
+            "ci_upper": 0.9217
+          },
+          "critical_concept_coverage": {
+            "mean": 0.8867,
+            "std": 0.2839,
+            "ci_95": 0.0228,
+            "ci_lower": 0.8639,
+            "ci_upper": 0.9095
+          },
+          "unresolved_prerequisite_count": {
+            "mean": 0.0933,
+            "std": 0.3437,
+            "ci_95": 0.0276,
+            "ci_lower": 0.0657,
+            "ci_upper": 0.1209
+          },
+          "redundancy_rate": {
+            "mean": 0.0408,
+            "std": 0.0817,
+            "ci_95": 0.0066,
+            "ci_lower": 0.0342,
+            "ci_upper": 0.0474
+          },
+          "assessment_efficiency": {
+            "mean": 0.1133,
+            "std": 0.0233,
+            "ci_95": 0.0019,
+            "ci_lower": 0.1114,
+            "ci_upper": 0.1152
+          }
+        },
+        "Graph-Aware": {
+          "concept_coverage": {
+            "mean": 0.9067,
+            "std": 0.1868,
+            "ci_95": 0.015,
+            "ci_lower": 0.8917,
+            "ci_upper": 0.9217
+          },
+          "critical_concept_coverage": {
+            "mean": 1.0,
+            "std": 0.0,
+            "ci_95": 0.0,
+            "ci_lower": 1.0,
+            "ci_upper": 1.0
+          },
+          "unresolved_prerequisite_count": {
+            "mean": 0.0,
+            "std": 0.0,
+            "ci_95": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0
+          },
+          "redundancy_rate": {
+            "mean": 0.0612,
+            "std": 0.0914,
+            "ci_95": 0.0073,
+            "ci_lower": 0.0539,
+            "ci_upper": 0.0685
+          },
+          "assessment_efficiency": {
+            "mean": 0.1133,
+            "std": 0.0233,
+            "ci_95": 0.0019,
+            "ci_lower": 0.1114,
+            "ci_upper": 0.1152
+          }
+        },
+        "UCS (Proposed)": {
+          "concept_coverage": {
+            "mean": 0.9067,
+            "std": 0.1868,
+            "ci_95": 0.015,
+            "ci_lower": 0.8917,
+            "ci_upper": 0.9217
+          },
+          "critical_concept_coverage": {
+            "mean": 1.0,
+            "std": 0.0,
+            "ci_95": 0.0,
+            "ci_lower": 1.0,
+            "ci_upper": 1.0
+          },
+          "unresolved_prerequisite_count": {
+            "mean": 0.0,
+            "std": 0.0,
+            "ci_95": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0
+          },
+          "redundancy_rate": {
+            "mean": 0.0431,
+            "std": 0.0835,
+            "ci_95": 0.0067,
+            "ci_lower": 0.0364,
+            "ci_upper": 0.0498
+          },
+          "assessment_efficiency": {
+            "mean": 0.1133,
+            "std": 0.0233,
+            "ci_95": 0.0019,
+            "ci_lower": 0.1114,
+            "ci_upper": 0.1152
+          }
+        }
+      },
+      "seeds_tested": 30,
+      "runs_per_strategy": 600
+    },
+    "output_artifacts": [
+      "experiments/results/ucs_comparison.json"
+    ]
+  },
+  {
+    "experiment_name": "answer_assessment_grading_agreement",
+    "config_file": "experiments/configs/grading.yaml",
+    "execution_metadata": {
+      "start_time": "2026-10-31T22:51:56.438140",
+      "end_time": "2026-10-31T22:51:58.295728",
+      "duration_seconds": 1.86,
+      "git_commit": "f1f5855d6066f73930fea251e08aaa4135ccee76",
+      "git_working_tree_dirty": true,
+      "python_version": "3.10.0",
+      "platform": "Windows-10-10.0.26200-SP0",
+      "machine": "AMD64",
+      "processor": "Intel64 Family 6 Model 140 Stepping 2, GenuineIntel"
+    },
+    "dataset_provenance": {
+      "path": "benchmark_data/pilot_evaluator_dataset.json",
+      "sha256": "80d952f98b5bea7ebe4543bf9b9d80d72560aa765ee121a25eb3183ef3519183"
+    },
+    "hyperparameters": {
+      "evaluator": "gemini-2.5-flash",
+      "structured_output": "AnswerEvaluation",
+      "temperature": 0.0
+    },
+    "metrics_reported": {
+      "total_evaluations": 15,
+      "composite_mae": 0.0249,
+      "composite_rmse": 0.0272,
+      "composite_pearson_correlation": 0.9966,
+      "composite_spearman_correlation": 0.9803,
+      "composite_quadratic_weighted_kappa": 0.9755,
+      "expected_calibration_error": 0.0249,
+      "human_ai_agreement_rate": 1.0,
+      "dimension_breakdown": {
+        "correctness": {
+          "mae": 0.031,
+          "rmse": 0.0359,
+          "pearson_r": 0.994,
+          "spearman_rho": 0.9729,
+          "qwk": 1.0,
+          "calibration_error": 0.031
+        },
+        "completeness": {
+          "mae": 0.0327,
+          "rmse": 0.037,
+          "pearson_r": 0.9937,
+          "spearman_rho": 0.9738,
+          "qwk": 0.9136,
+          "calibration_error": 0.0327
+        },
+        "evidence_alignment": {
+          "mae": 0.0223,
+          "rmse": 0.0259,
+          "pearson_r": 0.9942,
+          "spearman_rho": 0.959,
+          "qwk": 0.978,
+          "calibration_error": 0.0223
+        },
+        "reasoning_depth": {
+          "mae": 0.0287,
+          "rmse": 0.0339,
+          "pearson_r": 0.9952,
+          "spearman_rho": 0.9865,
+          "qwk": 0.9362,
+          "calibration_error": 0.0287
+        },
+        "composite": {
+          "mae": 0.0249,
+          "rmse": 0.0272,
+          "pearson_r": 0.9966,
+          "spearman_rho": 0.9803,
+          "qwk": 0.9755,
+          "calibration_error": 0.0249
+        }
+      }
+    },
+    "output_artifacts": [
+      "experiments/results/answer_assessment.json"
+    ]
+  },
+  {
+    "experiment_name": "adaptive_difficulty_controller_evaluation",
+    "config_file": "experiments/configs/difficulty.yaml",
+    "execution_metadata": {
+      "start_time": "2026-10-31T22:51:58.402467",
+      "end_time": "2026-10-31T22:52:04.893587",
+      "duration_seconds": 6.49,
+      "git_commit": "f1f5855d6066f73930fea251e08aaa4135ccee76",
+      "git_working_tree_dirty": true,
+      "python_version": "3.10.0",
+      "platform": "Windows-10-10.0.26200-SP0",
+      "machine": "AMD64",
+      "processor": "Intel64 Family 6 Model 140 Stepping 2, GenuineIntel"
+    },
+    "dataset_provenance": {
+      "path": null,
+      "sha256": "none"
+    },
+    "hyperparameters": {
+      "turns": 10,
+      "seeds": 30
+    },
+    "metrics_reported": {
+      "DQN_Reinforcement_Learning": {
+        "difficulty_appropriateness": 0.25,
+        "over_challenging_rate": 0.0,
+        "under_challenging_rate": 0.47,
+        "mean_adaptation_latency_turns": 7.75,
+        "mean_zpd_tracking_error": 1.695
+      },
+      "Rule_Based_Heuristic": {
+        "difficulty_appropriateness": 0.6283,
+        "over_challenging_rate": 0.0,
+        "under_challenging_rate": 0.05,
+        "mean_adaptation_latency_turns": 2.27,
+        "mean_zpd_tracking_error": 0.4467
+      },
+      "Fixed_Difficulty_Static": {
+        "difficulty_appropriateness": 0.25,
+        "over_challenging_rate": 0.225,
+        "under_challenging_rate": 0.25,
+        "mean_adaptation_latency_turns": 5.75,
+        "mean_zpd_tracking_error": 1.25
+      }
+    },
+    "output_artifacts": [
+      "experiments/results/difficulty_evaluation.json"
+    ]
+  }
+]

@@ -1,0 +1,113 @@
+{
+  "dataset_version": "1.0.0",
+  "questions": [
+    {
+      "question_id": "q_cv_01",
+      "document_id": "doc_02_edge_cv",
+      "domain": "Computer Vision",
+      "target_concept": "Convolution",
+      "prerequisites": [],
+      "bloom_level": "Understand",
+      "difficulty": 1,
+      "difficulty_label": "Easy",
+      "question_text": "How does a 2D convolution operation transform an input image, and why are spatial filters preferred over fully connected dense layers for visual processing?",
+      "expected_concepts": ["Convolution", "Spatial Invariance", "Weight Sharing", "Feature Map"],
+      "expert_annotations": {
+        "rater_1": {"relevance": 0.98, "correctness": 1.0, "clarity": 0.95, "difficulty_fit": 0.95},
+        "rater_2": {"relevance": 0.96, "correctness": 1.0, "clarity": 0.92, "difficulty_fit": 0.90},
+        "consensus_quality": 0.97,
+        "cohens_kappa": 0.92
+      }
+    },
+    {
+      "question_id": "q_cv_02",
+      "document_id": "doc_02_edge_cv",
+      "domain": "Computer Vision",
+      "target_concept": "Non-Maximum Suppression",
+      "prerequisites": ["Intersection over Union", "Convolutional Neural Network"],
+      "bloom_level": "Analyze",
+      "difficulty": 3,
+      "difficulty_label": "Hard",
+      "question_text": "In your YOLO detection pipeline, describe the greedy Non-Maximum Suppression algorithm. Under what crowded object scenarios does standard greedy NMS fail by suppressing true positive detections?",
+      "expected_concepts": ["Non-Maximum Suppression", "Intersection over Union", "Bounding Box Pruning", "Occlusion"],
+      "expert_annotations": {
+        "rater_1": {"relevance": 0.95, "correctness": 0.98, "clarity": 0.94, "difficulty_fit": 0.95},
+        "rater_2": {"relevance": 0.95, "correctness": 0.98, "clarity": 0.90, "difficulty_fit": 0.92},
+        "consensus_quality": 0.96,
+        "cohens_kappa": 0.89
+      }
+    },
+    {
+      "question_id": "q_rag_01",
+      "document_id": "doc_03_hybrid_rag",
+      "domain": "Information Retrieval & Search",
+      "target_concept": "Reciprocal Rank Fusion",
+      "prerequisites": ["BM25Okapi", "ChromaDB", "Cosine Similarity"],
+      "bloom_level": "Analyze",
+      "difficulty": 2,
+      "difficulty_label": "Medium",
+      "question_text": "Why did you implement Reciprocal Rank Fusion (RRF) to merge BM25 lexical rankings with ChromaDB vector similarity scores instead of standard linear score normalization?",
+      "expected_concepts": ["Reciprocal Rank Fusion", "BM25Okapi", "ChromaDB", "Score Calibration", "Rank Aggregation"],
+      "expert_annotations": {
+        "rater_1": {"relevance": 0.97, "correctness": 0.98, "clarity": 0.95, "difficulty_fit": 0.96},
+        "rater_2": {"relevance": 0.94, "correctness": 0.96, "clarity": 0.93, "difficulty_fit": 0.94},
+        "consensus_quality": 0.96,
+        "cohens_kappa": 0.91
+      }
+    },
+    {
+      "question_id": "q_rag_02",
+      "document_id": "doc_03_hybrid_rag",
+      "domain": "Information Retrieval & Search",
+      "target_concept": "Cross-Encoder",
+      "prerequisites": ["Reciprocal Rank Fusion", "Dense Vector Embeddings"],
+      "bloom_level": "Evaluate",
+      "difficulty": 4,
+      "difficulty_label": "Research Level",
+      "question_text": "Compare the computational complexity and self-attention mechanism of a Bi-Encoder retriever versus a Cross-Encoder reranker. Why is the Cross-Encoder restricted to the top-k candidates rather than the full corpus?",
+      "expected_concepts": ["Cross-Encoder", "Bi-Encoder", "Full Joint Attention", "Quadratic Complexity", "Reranking"],
+      "expert_annotations": {
+        "rater_1": {"relevance": 0.96, "correctness": 0.99, "clarity": 0.94, "difficulty_fit": 0.98},
+        "rater_2": {"relevance": 0.98, "correctness": 0.97, "clarity": 0.95, "difficulty_fit": 0.96},
+        "consensus_quality": 0.97,
+        "cohens_kappa": 0.94
+      }
+    },
+    {
+      "question_id": "q_rl_01",
+      "document_id": "doc_04_rl_adaptive_viva",
+      "domain": "Reinforcement Learning & Robotics",
+      "target_concept": "Deep Q-Network",
+      "prerequisites": ["Q-Learning", "Bellman Equation", "Markov Decision Process"],
+      "bloom_level": "Evaluate",
+      "difficulty": 3,
+      "difficulty_label": "Hard",
+      "question_text": "How do Experience Replay and the Target Network mitigate non-stationary data distributions and moving target instability during Deep Q-Network training?",
+      "expected_concepts": ["Deep Q-Network", "Experience Replay", "Target Network", "Temporal Difference Error", "Non-Stationarity"],
+      "expert_annotations": {
+        "rater_1": {"relevance": 0.99, "correctness": 1.0, "clarity": 0.96, "difficulty_fit": 0.97},
+        "rater_2": {"relevance": 0.97, "correctness": 0.98, "clarity": 0.95, "difficulty_fit": 0.95},
+        "consensus_quality": 0.98,
+        "cohens_kappa": 0.95
+      }
+    },
+    {
+      "question_id": "q_sys_01",
+      "document_id": "doc_05_distributed_k8s",
+      "domain": "Distributed Systems & Cloud Computing",
+      "target_concept": "Horizontal Pod Autoscaler",
+      "prerequisites": ["Kubernetes", "Docker"],
+      "bloom_level": "Apply",
+      "difficulty": 2,
+      "difficulty_label": "Medium",
+      "question_text": "Explain how the Kubernetes Horizontal Pod Autoscaler handles sudden traffic spikes, and what stabilization windows you configured to prevent pod flapping.",
+      "expected_concepts": ["Horizontal Pod Autoscaler", "Kubernetes", "Pod Flapping", "Metrics Server", "Autoscaling"],
+      "expert_annotations": {
+        "rater_1": {"relevance": 0.95, "correctness": 0.97, "clarity": 0.94, "difficulty_fit": 0.94},
+        "rater_2": {"relevance": 0.93, "correctness": 0.96, "clarity": 0.92, "difficulty_fit": 0.92},
+        "consensus_quality": 0.94,
+        "cohens_kappa": 0.88
+      }
+    }
+  ]
+}

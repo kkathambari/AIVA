@@ -1,0 +1,85 @@
+{
+  "dataset_version": "1.0.0",
+  "profiles": [
+    {
+      "profile_id": "beginner",
+      "display_name": "Novice Student",
+      "description": "Familiar with introductory definitions and tooling; lacks deep algorithmic foundations and trade-off analysis.",
+      "base_mastery_mean": 0.35,
+      "base_mastery_std": 0.12,
+      "reasoning_depth_multiplier": 0.50,
+      "evidence_alignment_multiplier": 0.60,
+      "response_length_words_mean": 45,
+      "response_length_words_std": 15,
+      "category_mastery_weights": {
+        "Mathematical Foundation": 0.20,
+        "Algorithm": 0.30,
+        "Model Architecture": 0.40,
+        "System Component": 0.50,
+        "Framework / Tool": 0.60,
+        "Protocol / Standard": 0.45,
+        "Evaluation Metric / Methodology": 0.35
+      }
+    },
+    {
+      "profile_id": "intermediate",
+      "display_name": "Proficient Student",
+      "description": "Solid grasp of core algorithms and implementation; occasionally overlooks subtle edge-cases or complex theoretical derivations.",
+      "base_mastery_mean": 0.68,
+      "base_mastery_std": 0.10,
+      "reasoning_depth_multiplier": 0.75,
+      "evidence_alignment_multiplier": 0.85,
+      "response_length_words_mean": 85,
+      "response_length_words_std": 20,
+      "category_mastery_weights": {
+        "Mathematical Foundation": 0.55,
+        "Algorithm": 0.70,
+        "Model Architecture": 0.75,
+        "System Component": 0.80,
+        "Framework / Tool": 0.85,
+        "Protocol / Standard": 0.75,
+        "Evaluation Metric / Methodology": 0.70
+      }
+    },
+    {
+      "profile_id": "advanced",
+      "display_name": "Honors / Research Student",
+      "description": "Deep understanding of underlying mathematical proofs, architectural trade-offs, and empirical benchmarking limitations.",
+      "base_mastery_mean": 0.92,
+      "base_mastery_std": 0.05,
+      "reasoning_depth_multiplier": 0.95,
+      "evidence_alignment_multiplier": 0.95,
+      "response_length_words_mean": 130,
+      "response_length_words_std": 25,
+      "category_mastery_weights": {
+        "Mathematical Foundation": 0.90,
+        "Algorithm": 0.95,
+        "Model Architecture": 0.95,
+        "System Component": 0.92,
+        "Framework / Tool": 0.95,
+        "Protocol / Standard": 0.90,
+        "Evaluation Metric / Methodology": 0.92
+      }
+    },
+    {
+      "profile_id": "struggling_foundations",
+      "display_name": "Tool-Savvy but Concept-Deficient Student",
+      "description": "Proficient at calling high-level libraries and frameworks, but severely deficient in foundational mathematical and algorithmic prerequisites.",
+      "base_mastery_mean": 0.45,
+      "base_mastery_std": 0.20,
+      "reasoning_depth_multiplier": 0.40,
+      "evidence_alignment_multiplier": 0.70,
+      "response_length_words_mean": 60,
+      "response_length_words_std": 18,
+      "category_mastery_weights": {
+        "Mathematical Foundation": 0.15,
+        "Algorithm": 0.25,
+        "Model Architecture": 0.50,
+        "System Component": 0.65,
+        "Framework / Tool": 0.85,
+        "Protocol / Standard": 0.60,
+        "Evaluation Metric / Methodology": 0.30
+      }
+    }
+  ]
+}

@@ -46,14 +46,14 @@ AIVA/
 ├── AIVA_backend/               # FastAPI Microservice (Python)
 │   ├── core/                   # Core engines (RAG, KG, RL, Multi-Agent, Voice, Analytics)
 │   ├── models/                 # Pre-trained ML models (.zip, .json, .joblib)
-│   ├── main.py                 # API router and session manager (Binds to Port 8001)
+│   ├── main.py                 # API router and session manager (Binds to Port 8000)
 │   ├── requirements.txt        # Python dependency list
 │   └── verify_backend.py       # Automated test suite
 │
 ├── AIVA_frontend/              # Next.js Dashboard (React 19 & Next.js 16)
 │   ├── src/app/                # App Router files (Tabs: Learn, Viva, Analytics, Graph)
 │   ├── src/components/         # Glassmorphism panels, SVG charts, upload cards
-│   ├── src/lib/api.ts          # Axios API client calling port 8001
+│   ├── src/lib/api.ts          # Axios API client calling port 8000
 │   ├── package.json            # Node dependencies and scripts
 │   └── tsconfig.json           # TypeScript configuration
 │
@@ -89,8 +89,8 @@ source venv/bin/activate
 # Install dependencies
 python -m pip install -r requirements.txt
 
-# Run the FastAPI server (Runs on http://127.0.0.1:8001)
-python -m uvicorn main:app --port 8001 --reload
+# Run the FastAPI server (Runs on http://127.0.0.1:8000)
+python -m uvicorn main:app --port 8000 --reload
 ```
 
 ---

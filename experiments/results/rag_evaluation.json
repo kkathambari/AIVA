@@ -1,0 +1,41 @@
+{
+  "benchmark_name": "AIVA Independent Hybrid RAG Benchmark",
+  "summary": {
+    "BM25_Sparse": {
+      "mrr": 0.7619,
+      "recall@1": 0.7,
+      "recall@3": 0.8,
+      "recall@5": 0.8,
+      "precision@1": 0.7,
+      "precision@3": 0.2667,
+      "ndcg@3": 0.75,
+      "ndcg@5": 0.75,
+      "context_relevance": 0.78,
+      "faithfulness_score": 0.82
+    },
+    "Dense_Semantic": {
+      "mrr": 0.831,
+      "recall@1": 0.8,
+      "recall@3": 0.8,
+      "recall@5": 0.8,
+      "precision@1": 0.8,
+      "precision@3": 0.2667,
+      "ndcg@3": 0.8,
+      "ndcg@5": 0.8,
+      "context_relevance": 0.85,
+      "faithfulness_score": 0.88
+    },
+    "Hybrid_RRF": {
+      "mrr": 0.7786,
+      "recall@1": 0.7,
+      "recall@3": 0.8,
+      "recall@5": 0.8,
+      "precision@1": 0.7,
+      "precision@3": 0.2667,
+      "ndcg@3": 0.7631,
+      "ndcg@5": 0.7631,
+      "context_relevance": 0.94,
+      "faithfulness_score": 0.96
+    }
+  }
+}

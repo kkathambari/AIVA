@@ -1,46 +1,41 @@
 {
-  "benchmark_metadata": {
-    "execution_timestamp": "2026-10-15T14:57:54.661719",
-    "corpus_size": 30,
-    "query_count": 18,
-    "dense_model": "models/gemini-embedding-2 (3072-dim)",
-    "sparse_model": "BM25Okapi with technical_tokenize",
-    "rrf_constant_k": 60
-  },
-  "tfidf_baseline": {
-    "Recall@1": 0.8889,
-    "Recall@3": 1.0,
-    "Recall@5": 1.0,
-    "MRR": 0.9444,
-    "nDCG@3": 0.959,
-    "nDCG@5": 0.959,
-    "query_count": 18
-  },
-  "bm25_sparse": {
-    "Recall@1": 0.9444,
-    "Recall@3": 1.0,
-    "Recall@5": 1.0,
-    "MRR": 0.9722,
-    "nDCG@3": 0.9795,
-    "nDCG@5": 0.9795,
-    "query_count": 18
-  },
-  "gemini_dense": {
-    "Recall@1": 0.9444,
-    "Recall@3": 1.0,
-    "Recall@5": 1.0,
-    "MRR": 0.9722,
-    "nDCG@3": 0.9795,
-    "nDCG@5": 0.9795,
-    "query_count": 18
-  },
-  "hybrid_rrf": {
-    "Recall@1": 1.0,
-    "Recall@3": 1.0,
-    "Recall@5": 1.0,
-    "MRR": 1.0,
-    "nDCG@3": 1.0,
-    "nDCG@5": 1.0,
-    "query_count": 18
+  "benchmark_name": "AIVA Independent Hybrid RAG Benchmark",
+  "summary": {
+    "BM25_Sparse": {
+      "mrr": 0.7619,
+      "recall@1": 0.7,
+      "recall@3": 0.8,
+      "recall@5": 0.8,
+      "precision@1": 0.7,
+      "precision@3": 0.2667,
+      "ndcg@3": 0.75,
+      "ndcg@5": 0.75,
+      "context_relevance": 0.78,
+      "faithfulness_score": 0.82
+    },
+    "Dense_Semantic": {
+      "mrr": 0.831,
+      "recall@1": 0.8,
+      "recall@3": 0.8,
+      "recall@5": 0.8,
+      "precision@1": 0.8,
+      "precision@3": 0.2667,
+      "ndcg@3": 0.8,
+      "ndcg@5": 0.8,
+      "context_relevance": 0.85,
+      "faithfulness_score": 0.88
+    },
+    "Hybrid_RRF": {
+      "mrr": 0.7786,
+      "recall@1": 0.7,
+      "recall@3": 0.8,
+      "recall@5": 0.8,
+      "precision@1": 0.7,
+      "precision@3": 0.2667,
+      "ndcg@3": 0.7631,
+      "ndcg@5": 0.7631,
+      "context_relevance": 0.94,
+      "faithfulness_score": 0.96
+    }
   }
 }

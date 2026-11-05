@@ -1,0 +1,59 @@
+{
+  "rubric_version": "1.0.0",
+  "name": "AIVA 4-Dimensional Academic Viva Voce Rubric",
+  "description": "Standardized academic scoring rubric for evaluating university student oral defense responses.",
+  "dimensions": [
+    {
+      "dimension_id": "correctness",
+      "weight": 0.35,
+      "name": "Technical Correctness",
+      "description": "Veracity, factual precision, and mathematical/algorithmic accuracy of the explanation.",
+      "levels": {
+        "0.0": "Completely inaccurate or fundamentally flawed concepts.",
+        "0.25": "Major factual misconceptions with minor peripheral truths.",
+        "0.50": "Partially correct; grasps high-level concept but contains minor technical errors.",
+        "0.75": "Technically accurate with negligible omissions.",
+        "1.00": "Flawless technical precision adhering strictly to domain principles."
+      }
+    },
+    {
+      "dimension_id": "completeness",
+      "weight": 0.25,
+      "name": "Facet Completeness",
+      "description": "Extent to which all core aspects of the multi-part question are addressed.",
+      "levels": {
+        "0.0": "Completely non-responsive or off-topic.",
+        "0.25": "Addresses only a single peripheral aspect while omitting the core question.",
+        "0.50": "Covers approximately half of the required components.",
+        "0.75": "Covers all major components with minor brevity in one facet.",
+        "1.00": "Exhaustively addresses every component and implication of the prompt."
+      }
+    },
+    {
+      "dimension_id": "evidence_alignment",
+      "weight": 0.20,
+      "name": "Project Report Grounding",
+      "description": "Consistency with facts, architectural parameters, and implementation details documented in the student's report.",
+      "levels": {
+        "0.0": "Directly contradicts the submitted project report.",
+        "0.25": "Describes generic concepts completely divorced from the project implementation.",
+        "0.50": "Mentions project components with loose or generic alignment.",
+        "0.75": "Accurately references specific libraries, hyper-parameters, and pipeline stages.",
+        "1.00": "Perfect fidelity to empirical figures, configuration settings, and architectural diagrams."
+      }
+    },
+    {
+      "dimension_id": "reasoning_depth",
+      "weight": 0.20,
+      "name": "Architectural Rationale & Trade-offs",
+      "description": "Student's ability to articulate 'why' specific choices were made and critically evaluate alternative methods.",
+      "levels": {
+        "0.0": "Pure rote recitation without any explanatory rationale.",
+        "0.25": "Superficial rationale ('it was faster') without technical substance.",
+        "0.50": "Explains rationale but fails to articulate operational trade-offs or failure modes.",
+        "0.75": "Articulates clear engineering trade-offs (e.g., latency vs accuracy, memory vs compute).",
+        "1.00": "Comprehensive synthesis of trade-offs, theoretical bounds, and architectural alternatives."
+      }
+    }
+  ]
+}

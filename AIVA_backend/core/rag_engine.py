@@ -89,7 +89,7 @@ class RAGEngine:
             except Exception as e:
                 print(f"Error removing chunks cache: {e}")
 
-    def index_document(self, text: str, document_id: str) -> int:
+    def index_document(self, text: str, document_id: str, session_id: Optional[str] = None) -> int:
         chunks = self.text_splitter.split_text(text)
         
         if not chunks:

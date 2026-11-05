@@ -1,0 +1,192 @@
+{
+  "benchmark_name": "AIVA UCS Baseline Comparison Benchmark",
+  "summary_statistics": {
+    "Random": {
+      "concept_coverage": {
+        "mean": 0.6636,
+        "std": 0.1728,
+        "ci_95": 0.0139,
+        "ci_lower": 0.6497,
+        "ci_upper": 0.6775
+      },
+      "critical_concept_coverage": {
+        "mean": 0.6733,
+        "std": 0.3514,
+        "ci_95": 0.0282,
+        "ci_lower": 0.6451,
+        "ci_upper": 0.7015
+      },
+      "unresolved_prerequisite_count": {
+        "mean": 0.3067,
+        "std": 0.5566,
+        "ci_95": 0.0446,
+        "ci_lower": 0.2621,
+        "ci_upper": 0.3513
+      },
+      "redundancy_rate": {
+        "mean": 0.1596,
+        "std": 0.1846,
+        "ci_95": 0.0148,
+        "ci_lower": 0.1448,
+        "ci_upper": 0.1744
+      },
+      "assessment_efficiency": {
+        "mean": 0.083,
+        "std": 0.0216,
+        "ci_95": 0.0017,
+        "ci_lower": 0.0813,
+        "ci_upper": 0.0847
+      }
+    },
+    "Fixed-Order": {
+      "concept_coverage": {
+        "mean": 0.9067,
+        "std": 0.1868,
+        "ci_95": 0.015,
+        "ci_lower": 0.8917,
+        "ci_upper": 0.9217
+      },
+      "critical_concept_coverage": {
+        "mean": 0.9,
+        "std": 0.2002,
+        "ci_95": 0.016,
+        "ci_lower": 0.884,
+        "ci_upper": 0.916
+      },
+      "unresolved_prerequisite_count": {
+        "mean": 0.1117,
+        "std": 0.3152,
+        "ci_95": 0.0253,
+        "ci_lower": 0.0864,
+        "ci_upper": 0.137
+      },
+      "redundancy_rate": {
+        "mean": 0.061,
+        "std": 0.0911,
+        "ci_95": 0.0073,
+        "ci_lower": 0.0537,
+        "ci_upper": 0.0683
+      },
+      "assessment_efficiency": {
+        "mean": 0.1133,
+        "std": 0.0233,
+        "ci_95": 0.0019,
+        "ci_lower": 0.1114,
+        "ci_upper": 0.1152
+      }
+    },
+    "Greedy-Gap": {
+      "concept_coverage": {
+        "mean": 0.9067,
+        "std": 0.1868,
+        "ci_95": 0.015,
+        "ci_lower": 0.8917,
+        "ci_upper": 0.9217
+      },
+      "critical_concept_coverage": {
+        "mean": 0.8867,
+        "std": 0.2839,
+        "ci_95": 0.0228,
+        "ci_lower": 0.8639,
+        "ci_upper": 0.9095
+      },
+      "unresolved_prerequisite_count": {
+        "mean": 0.0933,
+        "std": 0.3437,
+        "ci_95": 0.0276,
+        "ci_lower": 0.0657,
+        "ci_upper": 0.1209
+      },
+      "redundancy_rate": {
+        "mean": 0.0408,
+        "std": 0.0817,
+        "ci_95": 0.0066,
+        "ci_lower": 0.0342,
+        "ci_upper": 0.0474
+      },
+      "assessment_efficiency": {
+        "mean": 0.1133,
+        "std": 0.0233,
+        "ci_95": 0.0019,
+        "ci_lower": 0.1114,
+        "ci_upper": 0.1152
+      }
+    },
+    "Graph-Aware": {
+      "concept_coverage": {
+        "mean": 0.9067,
+        "std": 0.1868,
+        "ci_95": 0.015,
+        "ci_lower": 0.8917,
+        "ci_upper": 0.9217
+      },
+      "critical_concept_coverage": {
+        "mean": 1.0,
+        "std": 0.0,
+        "ci_95": 0.0,
+        "ci_lower": 1.0,
+        "ci_upper": 1.0
+      },
+      "unresolved_prerequisite_count": {
+        "mean": 0.0,
+        "std": 0.0,
+        "ci_95": 0.0,
+        "ci_lower": 0.0,
+        "ci_upper": 0.0
+      },
+      "redundancy_rate": {
+        "mean": 0.0612,
+        "std": 0.0914,
+        "ci_95": 0.0073,
+        "ci_lower": 0.0539,
+        "ci_upper": 0.0685
+      },
+      "assessment_efficiency": {
+        "mean": 0.1133,
+        "std": 0.0233,
+        "ci_95": 0.0019,
+        "ci_lower": 0.1114,
+        "ci_upper": 0.1152
+      }
+    },
+    "UCS (Proposed)": {
+      "concept_coverage": {
+        "mean": 0.9067,
+        "std": 0.1868,
+        "ci_95": 0.015,
+        "ci_lower": 0.8917,
+        "ci_upper": 0.9217
+      },
+      "critical_concept_coverage": {
+        "mean": 1.0,
+        "std": 0.0,
+        "ci_95": 0.0,
+        "ci_lower": 1.0,
+        "ci_upper": 1.0
+      },
+      "unresolved_prerequisite_count": {
+        "mean": 0.0,
+        "std": 0.0,
+        "ci_95": 0.0,
+        "ci_lower": 0.0,
+        "ci_upper": 0.0
+      },
+      "redundancy_rate": {
+        "mean": 0.0431,
+        "std": 0.0835,
+        "ci_95": 0.0067,
+        "ci_lower": 0.0364,
+        "ci_upper": 0.0498
+      },
+      "assessment_efficiency": {
+        "mean": 0.1133,
+        "std": 0.0233,
+        "ci_95": 0.0019,
+        "ci_lower": 0.1114,
+        "ci_upper": 0.1152
+      }
+    }
+  },
+  "seeds_tested": 30,
+  "runs_per_strategy": 600
+}
