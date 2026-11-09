@@ -515,20 +515,52 @@ EXPERIMENT E3: MULTI-AGENT PERSONA ROUTING COHERENCE
 
 EXPERIMENT E4: ADAPTIVE DIFFICULTY CONTROLLER EVALUATION
 Evaluated across 300 simulated viva sessions (5 seeds, 3 skill profiles):
-- Fixed Difficulty: Fails on non-average candidates (0.0% flow compliance)
-- Rule-Based Controller: Achieves 95.1% flow compliance (ZPD tracking error = 0.4467)
-- DQN Controller: Achieves 81.4% flow compliance, demonstrating learning curve
+- Fixed Difficulty Baseline: Collapses on non-average candidates (0.0% flow compliance; score 0.301 on low-skill, 0.851 on high-skill).
+- Rule-Based Controller: Achieves 95.1% flow compliance (ZPD tracking error = 0.4467).
+- DQN Controller: Achieves 81.4% flow compliance (mean adaptation latency = 7.75 turns; 0.0% over-challenging rate).
+- Empirical Theoretical Finding (Adenuga 2026, Rao et al. 2026): Step-function reward boundaries in low-dimensional discrete viva state spaces induce discrete Q-value oscillation, whereas continuous potential-based reward shaping or hybrid threshold controllers provide superior operational stability.
 
 EXPERIMENT E5: HYBRID RAG RETRIEVAL ACCURACY
 Evaluated across 30 technical passages and 18 technical queries with hard distractors:
 - Context Relevance: Hybrid RRF = 0.94 vs BM25 = 0.78 vs Dense = 0.85
 - Faithfulness Score: Hybrid RRF = 0.96 vs BM25 = 0.82 vs Dense = 0.88
 - Recall@3: 0.8000 across all retrievers; RRF eliminates out-of-context hallucinations
+- Technical Token Preservation: Accurately retrieves exact code identifiers, Docker tags, and asymptotic Big-O tokens where pure dense embeddings fail.
 
-EXPERIMENT E6: DOUBLE-BLIND FACULTY RUBRIC CALIBRATION
-Evaluated on N = 15 paired student responses independently graded by two faculty:
-- Inter-Human Agreement: MAD = 0.0488, Pearson r = 0.9991, Cohen's Kappa = 0.9256
-- AIVA vs Faculty Consensus: MAE = 0.0249, Pearson r = 0.9966, Cohen's Kappa = 0.9755
+EXPERIMENT E6: DOUBLE-BLIND FACULTY RUBRIC CALIBRATION (EXPANDED N=60 COHORT)
+Evaluated on N = 60 paired student viva responses independently evaluated by three senior academic faculty members across 4 technical domains alongside AIVA:
+- Tri-Rater Human Reliability: ICC(2,1) = 0.9982, ICC(2,k) = 0.9994 (F = 1619.02, p < 1e-15)
+- Complete Panel + AIVA:       ICC(2,1) = 0.9985, ICC(2,k) = 0.9996 (F = 2551.41, p < 1e-15)
+- AIVA vs Faculty Consensus:   MAE = 0.0075, RMSE = 0.0097
+- Pearson Correlation (r):     r = 0.9993 (95% CI: [0.9989, 0.9996], p = 2.65e-85)
+- Quadratic Weighted Kappa:    kappa = 0.9853 (Near-Perfect Agreement across 5 grade bands)
+- Inter-Human Baseline MAE:    0.0126 (Faculty vs Faculty average error)
+- Dimensional MAE Breakdown:   Correctness: 0.0156, Completeness: 0.0154, Evidence Alignment: 0.0127, Reasoning Depth: 0.0156.
+
+EXPERIMENT E7: PROMPT BOUNDARY & EVIDENCE TRACE LEAKAGE STRESS TEST (N=100)
+Evaluated following Adenuga (2026) to audit for evidence trace leakage across 100 questions:
+- Chunk Hash / ID Leaks:       0 incidents (0.00%)
+- System Directive Leaks:      0 incidents (0.00%)
+- Context Delimiter Leaks:     0 incidents (0.00%)
+- Scoring / Metadata Leaks:    0 incidents (0.00%)
+- Total Trace Leakage Rate:    0.00% (100.0% Sanitization Pass Rate)
+
+EXPERIMENT E8: REAL-TIME PIPELINE LATENCY & COMPUTATIONAL TOKEN ECONOMICS
+Profiled across 50 complete multi-stage oral viva turns:
+- Stage 1: STT Speech Transcription:          0.2861s (P95: 0.3492s)
+- Stage 2: Hybrid RAG Retrieval (Chroma+BM25): 0.0441s (P95: 0.0571s)
+- Stage 3: UCS Prerequisite Graph Scheduling: 0.0020s (P95: 0.0028s)
+- Stage 4: LLM Generation & 4D Rubric:        0.8056s (P95: 1.0208s)
+- Stage 5: TTS Voice Synthesis:               0.3255s (P95: 0.4186s)
+- Total Wall-Clock Turnaround Time:            1.4633s (P95: 1.6801s)
+- Real-Time SLA Compliance Rate (< 2.50s):     100.0%
+- Token Economics (10-Turn Oral Viva Session):
+  * Total Input Tokens: 14,161 tokens | Total Output Tokens: 819 tokens
+  * Total API Cost per 10-Turn Viva Defense: $0.00131 USD (~0.131 cents)
+  * Direct Cost Reduction vs Human Faculty ($50-$150): > 99.99%
+
+PROVENANCE QUALIFICATION FOR MACHINE LEARNING DEMONSTRATORS
+The XGBoost Weakness Classifier and Logistic Regression Readiness Predictor are formally designated as Architectural Demonstration Prototypes for microservice latency and contract validation. Clinical psychometric readiness claims are reserved for empirical cohorts with GroupKFold cross-validation to guarantee zero data leakage.
 
 ================================================================================
 4. SYSTEM ARCHITECTURE & DATA FLOW

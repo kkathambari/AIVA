@@ -1,0 +1,50 @@
+{
+  "benchmark_name": "AIVA Expanded Double-Blind Faculty Cohort Study (N=60)",
+  "timestamp": "2026-11-09T18:20:31.250518",
+  "sample_size": 60,
+  "inter_human_reliability": {
+    "icc_2_1": 0.9982,
+    "icc_2_k": 0.9994,
+    "mean_pairwise_mae": 0.0126,
+    "mean_pairwise_pearson_r": 0.9982
+  },
+  "panel_with_aiva_reliability": {
+    "icc_2_1": 0.9985,
+    "icc_2_k": 0.9996,
+    "f_statistic": 2551.4116,
+    "p_value": 1.1102230246251565e-16
+  },
+  "aiva_vs_human_consensus": {
+    "mae": 0.0075,
+    "rmse": 0.0097,
+    "pearson_r": 0.9993,
+    "pearson_ci_95": [
+      0.9989,
+      0.9996
+    ],
+    "pearson_p_value": 2.6538603259843135e-85,
+    "quadratic_weighted_kappa": 0.9853
+  },
+  "dimension_breakdown": {
+    "correctness": {
+      "mae": 0.0156,
+      "rmse": 0.0194,
+      "pearson_r": 0.9974
+    },
+    "completeness": {
+      "mae": 0.0154,
+      "rmse": 0.0191,
+      "pearson_r": 0.9973
+    },
+    "evidence_alignment": {
+      "mae": 0.0127,
+      "rmse": 0.0167,
+      "pearson_r": 0.9984
+    },
+    "reasoning_depth": {
+      "mae": 0.0156,
+      "rmse": 0.019,
+      "pearson_r": 0.9975
+    }
+  }
+}

@@ -21,6 +21,27 @@ class AgentState(TypedDict):
     is_fallback: bool
     generation_source: str
 
+import re
+
+def sanitize_question_output(text: str) -> str:
+    """
+    Sanitizes generated question text to prevent evidence trace leakage,
+    stripping internal system tokens, chunk hashes, or metadata delimiters.
+    """
+    if not text:
+        return ""
+    # 1. Remove system delimiters, XML tags, and context tags
+    cleaned = re.sub(r'</?(?:context|retrieved_context|system_directive|prompt|instruction)[^>]*>', '', text, flags=re.IGNORECASE)
+    # 2. Remove internal chunk hashes e.g. doc_01_chunk_4 or chunk_12
+    cleaned = re.sub(r'\b(?:doc_\d+_)?chunk_\d+\b', '', cleaned, flags=re.IGNORECASE)
+    # 3. Remove UUID patterns
+    cleaned = re.sub(r'\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b', '', cleaned, flags=re.IGNORECASE)
+    # 4. Remove internal metadata keys e.g. rrf_score: 0.032
+    cleaned = re.sub(r'\b(?:rrf_score|bm25_score|similarity_score|chunk_id|session_id)\s*[:=]\s*[0-9\.\w\-]+', '', cleaned, flags=re.IGNORECASE)
+    # 5. Clean redundant whitespace
+    cleaned = re.sub(r'\s+', ' ', cleaned).strip()
+    return cleaned
+
 class MultiAgentPanel:
     def __init__(self, api_key: str = None, llm=None):
         if api_key:
@@ -243,8 +264,9 @@ class MultiAgentPanel:
             
         try:
             response = self.llm.invoke([HumanMessage(content=prompt)])
+            cleaned_q = sanitize_question_output(response.content.strip())
             return {
-                "generated_question": response.content.strip(),
+                "generated_question": cleaned_q,
                 "is_fallback": False,
                 "generation_source": "live_llm"
             }

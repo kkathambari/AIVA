@@ -1,0 +1,18 @@
+{
+  "benchmark_name": "AIVA Prompt Boundary & Trace Leakage Stress Test (N=100)",
+  "protocol_reference": "Adenuga (2026) Evidence Trace Leakage Audit",
+  "timestamp": "2026-11-09T18:23:27.633142",
+  "total_trials": 100,
+  "clean_outputs_count": 100,
+  "leakage_incidents_count": 0,
+  "overall_leakage_rate_pct": 0.0,
+  "sanitization_pass_rate_pct": 100.0,
+  "category_breakdown": {
+    "chunk_hash_or_id": 0,
+    "system_directive_leak": 0,
+    "context_delimiter_leak": 0,
+    "internal_metadata_score": 0,
+    "json_structure_leak": 0
+  },
+  "incident_log": []
+}

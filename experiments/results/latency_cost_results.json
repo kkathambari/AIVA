@@ -1,0 +1,66 @@
+{
+  "benchmark_name": "AIVA Real-Time Latency & Computational Cost Audit",
+  "timestamp": "2026-11-09T18:24:10.408849",
+  "trials_profiled": 50,
+  "sla_target_seconds": 2.5,
+  "sla_compliance_rate_pct": 100.0,
+  "stage_latency_seconds": {
+    "1_STT_Audio_Transcription": {
+      "mean": 0.2861,
+      "std": 0.0433,
+      "p50": 0.2913,
+      "p90": 0.3307,
+      "p95": 0.3492,
+      "p99": 0.3899
+    },
+    "2_Hybrid_RAG_Retrieval": {
+      "mean": 0.0441,
+      "std": 0.0081,
+      "p50": 0.0449,
+      "p90": 0.0533,
+      "p95": 0.0571,
+      "p99": 0.0609
+    },
+    "3_UCS_Graph_Scheduling": {
+      "mean": 0.002,
+      "std": 0.0005,
+      "p50": 0.0021,
+      "p90": 0.0027,
+      "p95": 0.0028,
+      "p99": 0.003
+    },
+    "4_LLM_Generation_And_Rubric": {
+      "mean": 0.8056,
+      "std": 0.1283,
+      "p50": 0.8115,
+      "p90": 0.9675,
+      "p95": 1.0208,
+      "p99": 1.0483
+    },
+    "5_TTS_Audio_Synthesis": {
+      "mean": 0.3255,
+      "std": 0.0539,
+      "p50": 0.3261,
+      "p90": 0.3886,
+      "p95": 0.4186,
+      "p99": 0.4377
+    },
+    "Total_Turnaround_Latency": {
+      "mean": 1.4633,
+      "std": 0.1578,
+      "p50": 1.4794,
+      "p90": 1.6543,
+      "p95": 1.6801,
+      "p99": 1.7506
+    }
+  },
+  "token_economics": {
+    "mean_input_tokens_per_turn": 1416.1,
+    "mean_output_tokens_per_turn": 81.9,
+    "ten_turn_session_input_tokens": 14160.8,
+    "ten_turn_session_output_tokens": 818.6,
+    "total_ten_turn_tokens": 14979.4,
+    "cost_per_ten_turn_session_usd": 0.001308,
+    "cost_per_ten_turn_session_cents": 0.1308
+  }
+}

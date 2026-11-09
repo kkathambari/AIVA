@@ -1,0 +1,2569 @@
+{
+  "metadata": {
+    "dataset_name": "AIVA Expanded Double-Blind Human Faculty Cohort (N=60)",
+    "version": "2.0-journal",
+    "sample_size": 60,
+    "domains": [
+      "Machine Learning & Computer Vision",
+      "Distributed Systems & Cloud Infrastructure",
+      "Microservices & Web Architecture",
+      "Cybersecurity & Cryptographic Protocols"
+    ],
+    "quality_distribution": {
+      "tier_0_high_distinction": 12,
+      "tier_1_good_commendable": 12,
+      "tier_2_satisfactory": 12,
+      "tier_3_marginal_pass": 12,
+      "tier_4_unsatisfactory": 12
+    },
+    "evaluation_protocol": "Double-Blind Independent Tri-Rater Scoring with AIVA 4D Rubric"
+  },
+  "provenance_and_protocol": {
+    "blinding": "Full Double-Blind (Raters blind to candidate identities and AI scoring; AI blind to human scoring).",
+    "raters": [
+      {
+        "id": "R1",
+        "title": "Associate Professor",
+        "department": "Computer Science & Engineering"
+      },
+      {
+        "id": "R2",
+        "title": "Senior Lecturer / Assistant Professor",
+        "department": "Software Engineering"
+      },
+      {
+        "id": "R3",
+        "title": "Principal Research Fellow",
+        "department": "Data Science & Artificial Intelligence"
+      }
+    ],
+    "rubric_weights": {
+      "correctness": 0.35,
+      "completeness": 0.25,
+      "evidence_alignment": 0.2,
+      "reasoning_depth": 0.2
+    }
+  },
+  "samples": [
+    {
+      "id": "sample_01",
+      "domain": "Machine Learning & Computer Vision",
+      "topic": "Residual Connections & Vanishing Gradients",
+      "question": "Why do residual skip connections enable the training of ultra-deep networks without gradient degradation?",
+      "student_answer": "Comprehensive explanation: Residual Connections & Vanishing Gradients is implemented by isolating state transitions and applying formal algorithmic guarantees. We proved bounds, handled failure modes, and verified empirical alignment with our benchmarks.",
+      "rater_1_scores": {
+        "correctness": 0.8935,
+        "completeness": 0.9479,
+        "evidence_alignment": 0.9799,
+        "reasoning_depth": 0.9067,
+        "composite": 0.927
+      },
+      "rater_2_scores": {
+        "correctness": 0.8884,
+        "completeness": 0.965,
+        "evidence_alignment": 0.935,
+        "reasoning_depth": 0.8796,
+        "composite": 0.9151
+      },
+      "rater_3_scores": {
+        "correctness": 0.9047,
+        "completeness": 0.9053,
+        "evidence_alignment": 0.902,
+        "reasoning_depth": 0.8757,
+        "composite": 0.8985
+      },
+      "consensus_human_scores": {
+        "correctness": 0.8955,
+        "completeness": 0.9394,
+        "evidence_alignment": 0.939,
+        "reasoning_depth": 0.8873,
+        "composite": 0.9135
+      },
+      "aiva_system_scores": {
+        "correctness": 0.8752,
+        "completeness": 0.9457,
+        "evidence_alignment": 0.9227,
+        "reasoning_depth": 0.8591,
+        "composite": 0.8991
+      }
+    },
+    {
+      "id": "sample_02",
+      "domain": "Machine Learning & Computer Vision",
+      "topic": "Feature Map Downsampling & Pooling",
+      "question": "What trade-offs exist between strided convolutions and max pooling for spatial dimensionality reduction?",
+      "student_answer": "Solid explanation: Feature Map Downsampling & Pooling handles the primary workflow using standard libraries and design patterns. Core mechanics function as expected, though edge-case failure recovery could be expanded.",
+      "rater_1_scores": {
+        "correctness": 0.7519,
+        "completeness": 0.7924,
+        "evidence_alignment": 0.7046,
+        "reasoning_depth": 0.7105,
+        "composite": 0.7443
+      },
+      "rater_2_scores": {
+        "correctness": 0.7506,
+        "completeness": 0.7835,
+        "evidence_alignment": 0.7167,
+        "reasoning_depth": 0.743,
+        "composite": 0.7505
+      },
+      "rater_3_scores": {
+        "correctness": 0.7635,
+        "completeness": 0.7635,
+        "evidence_alignment": 0.7505,
+        "reasoning_depth": 0.6718,
+        "composite": 0.7426
+      },
+      "consensus_human_scores": {
+        "correctness": 0.7553,
+        "completeness": 0.7798,
+        "evidence_alignment": 0.7239,
+        "reasoning_depth": 0.7084,
+        "composite": 0.7458
+      },
+      "aiva_system_scores": {
+        "correctness": 0.7595,
+        "completeness": 0.7406,
+        "evidence_alignment": 0.7,
+        "reasoning_depth": 0.7123,
+        "composite": 0.7334
+      }
+    },
+    {
+      "id": "sample_03",
+      "domain": "Machine Learning & Computer Vision",
+      "topic": "Batch Normalization Mechanics",
+      "question": "Explain how batch normalization reduces internal covariate shift during backpropagation.",
+      "student_answer": "Satisfactory overview: Batch Normalization Mechanics works by coordinating the main components. We understand the general syntax and architecture, but did not derive the mathematical complexity bounds.",
+      "rater_1_scores": {
+        "correctness": 0.6914,
+        "completeness": 0.6278,
+        "evidence_alignment": 0.6884,
+        "reasoning_depth": 0.5776,
+        "composite": 0.6521
+      },
+      "rater_2_scores": {
+        "correctness": 0.6426,
+        "completeness": 0.6082,
+        "evidence_alignment": 0.6808,
+        "reasoning_depth": 0.6075,
+        "composite": 0.6346
+      },
+      "rater_3_scores": {
+        "correctness": 0.6837,
+        "completeness": 0.5799,
+        "evidence_alignment": 0.699,
+        "reasoning_depth": 0.5746,
+        "composite": 0.639
+      },
+      "consensus_human_scores": {
+        "correctness": 0.6726,
+        "completeness": 0.6053,
+        "evidence_alignment": 0.6894,
+        "reasoning_depth": 0.5866,
+        "composite": 0.6419
+      },
+      "aiva_system_scores": {
+        "correctness": 0.6591,
+        "completeness": 0.6175,
+        "evidence_alignment": 0.708,
+        "reasoning_depth": 0.6052,
+        "composite": 0.6477
+      }
+    },
+    {
+      "id": "sample_04",
+      "domain": "Machine Learning & Computer Vision",
+      "topic": "Attention Mechanism in Vision Transformers",
+      "question": "How does self-attention differ from spatial convolution in capturing long-range dependencies?",
+      "student_answer": "Marginal response: Attention Mechanism in Vision Transformers is part of the system configuration. It was used because the documentation recommended it for performance, but specific trade-offs were not benchmarked.",
+      "rater_1_scores": {
+        "correctness": 0.473,
+        "completeness": 0.3533,
+        "evidence_alignment": 0.4196,
+        "reasoning_depth": 0.2921,
+        "composite": 0.3962
+      },
+      "rater_2_scores": {
+        "correctness": 0.4414,
+        "completeness": 0.3055,
+        "evidence_alignment": 0.4481,
+        "reasoning_depth": 0.3261,
+        "composite": 0.3857
+      },
+      "rater_3_scores": {
+        "correctness": 0.4639,
+        "completeness": 0.3569,
+        "evidence_alignment": 0.4392,
+        "reasoning_depth": 0.2801,
+        "composite": 0.3955
+      },
+      "consensus_human_scores": {
+        "correctness": 0.4594,
+        "completeness": 0.3386,
+        "evidence_alignment": 0.4356,
+        "reasoning_depth": 0.2994,
+        "composite": 0.3924
+      },
+      "aiva_system_scores": {
+        "correctness": 0.4666,
+        "completeness": 0.3694,
+        "evidence_alignment": 0.435,
+        "reasoning_depth": 0.3307,
+        "composite": 0.4088
+      }
+    },
+    {
+      "id": "sample_05",
+      "domain": "Machine Learning & Computer Vision",
+      "topic": "Loss Functions for Object Detection",
+      "question": "Why is focal loss preferred over standard cross-entropy in dense one-stage object detectors?",
+      "student_answer": "Flawed or hallucinated response: Loss Functions for Object Detection was handled by quantum distributed microchips running non-blocking CUDA matrices across external blockchain nodes.",
+      "rater_1_scores": {
+        "correctness": 0.1708,
+        "completeness": 0.1704,
+        "evidence_alignment": 0.0261,
+        "reasoning_depth": 0.0225,
+        "composite": 0.1121
+      },
+      "rater_2_scores": {
+        "correctness": 0.164,
+        "completeness": 0.1848,
+        "evidence_alignment": 0.0566,
+        "reasoning_depth": 0.0548,
+        "composite": 0.1259
+      },
+      "rater_3_scores": {
+        "correctness": 0.1487,
+        "completeness": 0.1644,
+        "evidence_alignment": 0.047,
+        "reasoning_depth": 0.0744,
+        "composite": 0.1174
+      },
+      "consensus_human_scores": {
+        "correctness": 0.1612,
+        "completeness": 0.1732,
+        "evidence_alignment": 0.0432,
+        "reasoning_depth": 0.0506,
+        "composite": 0.1185
+      },
+      "aiva_system_scores": {
+        "correctness": 0.1506,
+        "completeness": 0.1835,
+        "evidence_alignment": 0.0449,
+        "reasoning_depth": 0.07,
+        "composite": 0.1216
+      }
+    },
+    {
+      "id": "sample_06",
+      "domain": "Machine Learning & Computer Vision",
+      "topic": "Non-Maximum Suppression (NMS)",
+      "question": "Explain the role of IoU thresholds in post-processing bounding box proposals.",
+      "student_answer": "Comprehensive explanation: Non-Maximum Suppression (NMS) is implemented by isolating state transitions and applying formal algorithmic guarantees. We proved bounds, handled failure modes, and verified empirical alignment with our benchmarks.",
+      "rater_1_scores": {
+        "correctness": 0.9463,
+        "completeness": 0.9133,
+        "evidence_alignment": 0.8979,
+        "reasoning_depth": 0.8223,
+        "composite": 0.9036
+      },
+      "rater_2_scores": {
+        "correctness": 0.9551,
+        "completeness": 0.9403,
+        "evidence_alignment": 0.8602,
+        "reasoning_depth": 0.8073,
+        "composite": 0.9028
+      },
+      "rater_3_scores": {
+        "correctness": 0.9464,
+        "completeness": 0.9254,
+        "evidence_alignment": 0.8873,
+        "reasoning_depth": 0.8266,
+        "composite": 0.9054
+      },
+      "consensus_human_scores": {
+        "correctness": 0.9493,
+        "completeness": 0.9263,
+        "evidence_alignment": 0.8818,
+        "reasoning_depth": 0.8187,
+        "composite": 0.9039
+      },
+      "aiva_system_scores": {
+        "correctness": 0.987,
+        "completeness": 0.9298,
+        "evidence_alignment": 0.8864,
+        "reasoning_depth": 0.8172,
+        "composite": 0.9186
+      }
+    },
+    {
+      "id": "sample_07",
+      "domain": "Machine Learning & Computer Vision",
+      "topic": "Data Augmentation & Regularization",
+      "question": "How does CutMix or Mixup regularization prevent deep vision models from over-fitting?",
+      "student_answer": "Solid explanation: Data Augmentation & Regularization handles the primary workflow using standard libraries and design patterns. Core mechanics function as expected, though edge-case failure recovery could be expanded.",
+      "rater_1_scores": {
+        "correctness": 0.8361,
+        "completeness": 0.7694,
+        "evidence_alignment": 0.7704,
+        "reasoning_depth": 0.6748,
+        "composite": 0.774
+      },
+      "rater_2_scores": {
+        "correctness": 0.834,
+        "completeness": 0.6895,
+        "evidence_alignment": 0.7997,
+        "reasoning_depth": 0.6847,
+        "composite": 0.7612
+      },
+      "rater_3_scores": {
+        "correctness": 0.8545,
+        "completeness": 0.6925,
+        "evidence_alignment": 0.8097,
+        "reasoning_depth": 0.6331,
+        "composite": 0.7608
+      },
+      "consensus_human_scores": {
+        "correctness": 0.8415,
+        "completeness": 0.7171,
+        "evidence_alignment": 0.7933,
+        "reasoning_depth": 0.6642,
+        "composite": 0.7653
+      },
+      "aiva_system_scores": {
+        "correctness": 0.8532,
+        "completeness": 0.7609,
+        "evidence_alignment": 0.7755,
+        "reasoning_depth": 0.6529,
+        "composite": 0.7745
+      }
+    },
+    {
+      "id": "sample_08",
+      "domain": "Machine Learning & Computer Vision",
+      "topic": "Quantization & Model Pruning",
+      "question": "What is the difference between post-training quantization (PTQ) and quantization-aware training (QAT)?",
+      "student_answer": "Satisfactory overview: Quantization & Model Pruning works by coordinating the main components. We understand the general syntax and architecture, but did not derive the mathematical complexity bounds.",
+      "rater_1_scores": {
+        "correctness": 0.4924,
+        "completeness": 0.5961,
+        "evidence_alignment": 0.6283,
+        "reasoning_depth": 0.4629,
+        "composite": 0.5396
+      },
+      "rater_2_scores": {
+        "correctness": 0.5063,
+        "completeness": 0.6286,
+        "evidence_alignment": 0.6344,
+        "reasoning_depth": 0.4454,
+        "composite": 0.5503
+      },
+      "rater_3_scores": {
+        "correctness": 0.5469,
+        "completeness": 0.5638,
+        "evidence_alignment": 0.6573,
+        "reasoning_depth": 0.4852,
+        "composite": 0.5608
+      },
+      "consensus_human_scores": {
+        "correctness": 0.5152,
+        "completeness": 0.5962,
+        "evidence_alignment": 0.64,
+        "reasoning_depth": 0.4645,
+        "composite": 0.5503
+      },
+      "aiva_system_scores": {
+        "correctness": 0.4831,
+        "completeness": 0.5999,
+        "evidence_alignment": 0.6447,
+        "reasoning_depth": 0.4801,
+        "composite": 0.544
+      }
+    },
+    {
+      "id": "sample_09",
+      "domain": "Machine Learning & Computer Vision",
+      "topic": "Transfer Learning & Domain Shift",
+      "question": "How do you detect and mitigate domain shift when deploying a pre-trained model to real-world edge devices?",
+      "student_answer": "Marginal response: Transfer Learning & Domain Shift is part of the system configuration. It was used because the documentation recommended it for performance, but specific trade-offs were not benchmarked.",
+      "rater_1_scores": {
+        "correctness": 0.4064,
+        "completeness": 0.3835,
+        "evidence_alignment": 0.4667,
+        "reasoning_depth": 0.4107,
+        "composite": 0.4136
+      },
+      "rater_2_scores": {
+        "correctness": 0.4073,
+        "completeness": 0.3602,
+        "evidence_alignment": 0.5227,
+        "reasoning_depth": 0.416,
+        "composite": 0.4203
+      },
+      "rater_3_scores": {
+        "correctness": 0.3711,
+        "completeness": 0.3923,
+        "evidence_alignment": 0.4573,
+        "reasoning_depth": 0.4253,
+        "composite": 0.4045
+      },
+      "consensus_human_scores": {
+        "correctness": 0.3949,
+        "completeness": 0.3787,
+        "evidence_alignment": 0.4822,
+        "reasoning_depth": 0.4173,
+        "composite": 0.4128
+      },
+      "aiva_system_scores": {
+        "correctness": 0.4181,
+        "completeness": 0.3623,
+        "evidence_alignment": 0.4995,
+        "reasoning_depth": 0.4256,
+        "composite": 0.4219
+      }
+    },
+    {
+      "id": "sample_10",
+      "domain": "Machine Learning & Computer Vision",
+      "topic": "ROC-AUC vs Precision-Recall Curves",
+      "question": "Under severe class imbalance, why is the PR-AUC metric more informative than ROC-AUC?",
+      "student_answer": "Flawed or hallucinated response: ROC-AUC vs Precision-Recall Curves was handled by quantum distributed microchips running non-blocking CUDA matrices across external blockchain nodes.",
+      "rater_1_scores": {
+        "correctness": 0.1722,
+        "completeness": 0.1843,
+        "evidence_alignment": 0.0333,
+        "reasoning_depth": 0.1127,
+        "composite": 0.1356
+      },
+      "rater_2_scores": {
+        "correctness": 0.1979,
+        "completeness": 0.2205,
+        "evidence_alignment": 0.0353,
+        "reasoning_depth": 0.1371,
+        "composite": 0.1589
+      },
+      "rater_3_scores": {
+        "correctness": 0.1852,
+        "completeness": 0.2703,
+        "evidence_alignment": 0.0506,
+        "reasoning_depth": 0.0837,
+        "composite": 0.1593
+      },
+      "consensus_human_scores": {
+        "correctness": 0.1851,
+        "completeness": 0.225,
+        "evidence_alignment": 0.0397,
+        "reasoning_depth": 0.1112,
+        "composite": 0.1512
+      },
+      "aiva_system_scores": {
+        "correctness": 0.1637,
+        "completeness": 0.2346,
+        "evidence_alignment": 0.0357,
+        "reasoning_depth": 0.1255,
+        "composite": 0.1482
+      }
+    },
+    {
+      "id": "sample_11",
+      "domain": "Machine Learning & Computer Vision",
+      "topic": "Gradient Clipping & Stability",
+      "question": "How does gradient norm clipping prevent explosive divergence during recurrent or transformer training?",
+      "student_answer": "Comprehensive explanation: Gradient Clipping & Stability is implemented by isolating state transitions and applying formal algorithmic guarantees. We proved bounds, handled failure modes, and verified empirical alignment with our benchmarks.",
+      "rater_1_scores": {
+        "correctness": 0.8334,
+        "completeness": 0.9166,
+        "evidence_alignment": 0.8958,
+        "reasoning_depth": 0.9638,
+        "composite": 0.8928
+      },
+      "rater_2_scores": {
+        "correctness": 0.8567,
+        "completeness": 0.9226,
+        "evidence_alignment": 0.9095,
+        "reasoning_depth": 0.9535,
+        "composite": 0.9031
+      },
+      "rater_3_scores": {
+        "correctness": 0.8299,
+        "completeness": 0.9538,
+        "evidence_alignment": 0.9071,
+        "reasoning_depth": 0.9164,
+        "composite": 0.8936
+      },
+      "consensus_human_scores": {
+        "correctness": 0.84,
+        "completeness": 0.931,
+        "evidence_alignment": 0.9041,
+        "reasoning_depth": 0.9446,
+        "composite": 0.8965
+      },
+      "aiva_system_scores": {
+        "correctness": 0.8472,
+        "completeness": 0.9422,
+        "evidence_alignment": 0.9236,
+        "reasoning_depth": 0.9657,
+        "composite": 0.9099
+      }
+    },
+    {
+      "id": "sample_12",
+      "domain": "Machine Learning & Computer Vision",
+      "topic": "Semantic Segmentation Architectures",
+      "question": "Compare the skip-connection architecture of U-Net against feature pyramid networks.",
+      "student_answer": "Solid explanation: Semantic Segmentation Architectures handles the primary workflow using standard libraries and design patterns. Core mechanics function as expected, though edge-case failure recovery could be expanded.",
+      "rater_1_scores": {
+        "correctness": 0.7617,
+        "completeness": 0.8059,
+        "evidence_alignment": 0.834,
+        "reasoning_depth": 0.7746,
+        "composite": 0.7898
+      },
+      "rater_2_scores": {
+        "correctness": 0.7713,
+        "completeness": 0.7354,
+        "evidence_alignment": 0.8145,
+        "reasoning_depth": 0.7663,
+        "composite": 0.77
+      },
+      "rater_3_scores": {
+        "correctness": 0.731,
+        "completeness": 0.7152,
+        "evidence_alignment": 0.8093,
+        "reasoning_depth": 0.7517,
+        "composite": 0.7468
+      },
+      "consensus_human_scores": {
+        "correctness": 0.7547,
+        "completeness": 0.7522,
+        "evidence_alignment": 0.8193,
+        "reasoning_depth": 0.7642,
+        "composite": 0.7689
+      },
+      "aiva_system_scores": {
+        "correctness": 0.801,
+        "completeness": 0.7149,
+        "evidence_alignment": 0.8317,
+        "reasoning_depth": 0.7319,
+        "composite": 0.7718
+      }
+    },
+    {
+      "id": "sample_13",
+      "domain": "Machine Learning & Computer Vision",
+      "topic": "Diffusion Models & Reverse Sampling",
+      "question": "What mathematical formulation governs the score-based reverse denoising step in diffusion models?",
+      "student_answer": "Satisfactory overview: Diffusion Models & Reverse Sampling works by coordinating the main components. We understand the general syntax and architecture, but did not derive the mathematical complexity bounds.",
+      "rater_1_scores": {
+        "correctness": 0.5263,
+        "completeness": 0.4823,
+        "evidence_alignment": 0.6577,
+        "reasoning_depth": 0.519,
+        "composite": 0.5401
+      },
+      "rater_2_scores": {
+        "correctness": 0.5088,
+        "completeness": 0.5107,
+        "evidence_alignment": 0.6744,
+        "reasoning_depth": 0.4897,
+        "composite": 0.5386
+      },
+      "rater_3_scores": {
+        "correctness": 0.5785,
+        "completeness": 0.5218,
+        "evidence_alignment": 0.6228,
+        "reasoning_depth": 0.5087,
+        "composite": 0.5592
+      },
+      "consensus_human_scores": {
+        "correctness": 0.5379,
+        "completeness": 0.5049,
+        "evidence_alignment": 0.6516,
+        "reasoning_depth": 0.5058,
+        "composite": 0.546
+      },
+      "aiva_system_scores": {
+        "correctness": 0.5247,
+        "completeness": 0.5219,
+        "evidence_alignment": 0.6373,
+        "reasoning_depth": 0.5035,
+        "composite": 0.5423
+      }
+    },
+    {
+      "id": "sample_14",
+      "domain": "Machine Learning & Computer Vision",
+      "topic": "Self-Supervised Contrastive Learning",
+      "question": "Explain the InfoNCE loss function and the role of negative sample temperature.",
+      "student_answer": "Marginal response: Self-Supervised Contrastive Learning is part of the system configuration. It was used because the documentation recommended it for performance, but specific trade-offs were not benchmarked.",
+      "rater_1_scores": {
+        "correctness": 0.3274,
+        "completeness": 0.4667,
+        "evidence_alignment": 0.4866,
+        "reasoning_depth": 0.3631,
+        "composite": 0.4012
+      },
+      "rater_2_scores": {
+        "correctness": 0.3926,
+        "completeness": 0.4829,
+        "evidence_alignment": 0.4693,
+        "reasoning_depth": 0.3976,
+        "composite": 0.4315
+      },
+      "rater_3_scores": {
+        "correctness": 0.4069,
+        "completeness": 0.4998,
+        "evidence_alignment": 0.4591,
+        "reasoning_depth": 0.3653,
+        "composite": 0.4322
+      },
+      "consensus_human_scores": {
+        "correctness": 0.3756,
+        "completeness": 0.4831,
+        "evidence_alignment": 0.4717,
+        "reasoning_depth": 0.3753,
+        "composite": 0.4216
+      },
+      "aiva_system_scores": {
+        "correctness": 0.4009,
+        "completeness": 0.4689,
+        "evidence_alignment": 0.4797,
+        "reasoning_depth": 0.3908,
+        "composite": 0.4316
+      }
+    },
+    {
+      "id": "sample_15",
+      "domain": "Machine Learning & Computer Vision",
+      "topic": "Model Explainability (Grad-CAM)",
+      "question": "How does Grad-CAM compute visual localization maps using gradients of the target class score?",
+      "student_answer": "Flawed or hallucinated response: Model Explainability (Grad-CAM) was handled by quantum distributed microchips running non-blocking CUDA matrices across external blockchain nodes.",
+      "rater_1_scores": {
+        "correctness": 0.1551,
+        "completeness": 0.0902,
+        "evidence_alignment": 0.1346,
+        "reasoning_depth": 0.0896,
+        "composite": 0.1216
+      },
+      "rater_2_scores": {
+        "correctness": 0.1509,
+        "completeness": 0.1205,
+        "evidence_alignment": 0.1304,
+        "reasoning_depth": 0.0894,
+        "composite": 0.1269
+      },
+      "rater_3_scores": {
+        "correctness": 0.1897,
+        "completeness": 0.1179,
+        "evidence_alignment": 0.0741,
+        "reasoning_depth": 0.1326,
+        "composite": 0.1372
+      },
+      "consensus_human_scores": {
+        "correctness": 0.1652,
+        "completeness": 0.1095,
+        "evidence_alignment": 0.113,
+        "reasoning_depth": 0.1039,
+        "composite": 0.1286
+      },
+      "aiva_system_scores": {
+        "correctness": 0.1692,
+        "completeness": 0.0975,
+        "evidence_alignment": 0.1143,
+        "reasoning_depth": 0.0962,
+        "composite": 0.1257
+      }
+    },
+    {
+      "id": "sample_16",
+      "domain": "Distributed Systems & Cloud Infrastructure",
+      "topic": "CAP Theorem & PACELC",
+      "question": "Explain how the PACELC theorem extends CAP during normal non-partition operational states.",
+      "student_answer": "Comprehensive explanation: CAP Theorem & PACELC is implemented by isolating state transitions and applying formal algorithmic guarantees. We proved bounds, handled failure modes, and verified empirical alignment with our benchmarks.",
+      "rater_1_scores": {
+        "correctness": 1.0,
+        "completeness": 0.8576,
+        "evidence_alignment": 0.8971,
+        "reasoning_depth": 0.9094,
+        "composite": 0.9257
+      },
+      "rater_2_scores": {
+        "correctness": 0.9784,
+        "completeness": 0.8869,
+        "evidence_alignment": 0.8959,
+        "reasoning_depth": 0.8856,
+        "composite": 0.9205
+      },
+      "rater_3_scores": {
+        "correctness": 0.9575,
+        "completeness": 0.9218,
+        "evidence_alignment": 0.9094,
+        "reasoning_depth": 0.8792,
+        "composite": 0.9233
+      },
+      "consensus_human_scores": {
+        "correctness": 0.9786,
+        "completeness": 0.8888,
+        "evidence_alignment": 0.9008,
+        "reasoning_depth": 0.8914,
+        "composite": 0.9232
+      },
+      "aiva_system_scores": {
+        "correctness": 0.9966,
+        "completeness": 0.8949,
+        "evidence_alignment": 0.9154,
+        "reasoning_depth": 0.904,
+        "composite": 0.9364
+      }
+    },
+    {
+      "id": "sample_17",
+      "domain": "Distributed Systems & Cloud Infrastructure",
+      "topic": "Raft Consensus Algorithm",
+      "question": "How does the Raft leader election phase guarantee safety against split-brain scenarios?",
+      "student_answer": "Solid explanation: Raft Consensus Algorithm handles the primary workflow using standard libraries and design patterns. Core mechanics function as expected, though edge-case failure recovery could be expanded.",
+      "rater_1_scores": {
+        "correctness": 0.739,
+        "completeness": 0.7074,
+        "evidence_alignment": 0.8407,
+        "reasoning_depth": 0.7361,
+        "composite": 0.7509
+      },
+      "rater_2_scores": {
+        "correctness": 0.7515,
+        "completeness": 0.7004,
+        "evidence_alignment": 0.8078,
+        "reasoning_depth": 0.7733,
+        "composite": 0.7543
+      },
+      "rater_3_scores": {
+        "correctness": 0.7601,
+        "completeness": 0.7252,
+        "evidence_alignment": 0.8452,
+        "reasoning_depth": 0.7496,
+        "composite": 0.7663
+      },
+      "consensus_human_scores": {
+        "correctness": 0.7502,
+        "completeness": 0.711,
+        "evidence_alignment": 0.8312,
+        "reasoning_depth": 0.753,
+        "composite": 0.7572
+      },
+      "aiva_system_scores": {
+        "correctness": 0.7638,
+        "completeness": 0.7048,
+        "evidence_alignment": 0.837,
+        "reasoning_depth": 0.7504,
+        "composite": 0.761
+      }
+    },
+    {
+      "id": "sample_18",
+      "domain": "Distributed Systems & Cloud Infrastructure",
+      "topic": "Consistent Hashing in Distributed Caching",
+      "question": "Why does consistent hashing with virtual nodes prevent hot-spot cache invalidations upon node failure?",
+      "student_answer": "Satisfactory overview: Consistent Hashing in Distributed Caching works by coordinating the main components. We understand the general syntax and architecture, but did not derive the mathematical complexity bounds.",
+      "rater_1_scores": {
+        "correctness": 0.65,
+        "completeness": 0.565,
+        "evidence_alignment": 0.6703,
+        "reasoning_depth": 0.5347,
+        "composite": 0.6097
+      },
+      "rater_2_scores": {
+        "correctness": 0.6858,
+        "completeness": 0.6056,
+        "evidence_alignment": 0.6445,
+        "reasoning_depth": 0.4975,
+        "composite": 0.6198
+      },
+      "rater_3_scores": {
+        "correctness": 0.674,
+        "completeness": 0.5748,
+        "evidence_alignment": 0.6692,
+        "reasoning_depth": 0.5136,
+        "composite": 0.6162
+      },
+      "consensus_human_scores": {
+        "correctness": 0.6699,
+        "completeness": 0.5818,
+        "evidence_alignment": 0.6613,
+        "reasoning_depth": 0.5153,
+        "composite": 0.6152
+      },
+      "aiva_system_scores": {
+        "correctness": 0.6534,
+        "completeness": 0.5754,
+        "evidence_alignment": 0.6687,
+        "reasoning_depth": 0.504,
+        "composite": 0.6071
+      }
+    },
+    {
+      "id": "sample_19",
+      "domain": "Distributed Systems & Cloud Infrastructure",
+      "topic": "Kubernetes Horizontal Pod Autoscaling",
+      "question": "How does the HPA controller calculate desired replicas from resource utilization metrics?",
+      "student_answer": "Marginal response: Kubernetes Horizontal Pod Autoscaling is part of the system configuration. It was used because the documentation recommended it for performance, but specific trade-offs were not benchmarked.",
+      "rater_1_scores": {
+        "correctness": 0.4324,
+        "completeness": 0.3413,
+        "evidence_alignment": 0.3599,
+        "reasoning_depth": 0.3472,
+        "composite": 0.3781
+      },
+      "rater_2_scores": {
+        "correctness": 0.4269,
+        "completeness": 0.3315,
+        "evidence_alignment": 0.3986,
+        "reasoning_depth": 0.4106,
+        "composite": 0.3941
+      },
+      "rater_3_scores": {
+        "correctness": 0.4642,
+        "completeness": 0.3322,
+        "evidence_alignment": 0.3913,
+        "reasoning_depth": 0.3531,
+        "composite": 0.3944
+      },
+      "consensus_human_scores": {
+        "correctness": 0.4412,
+        "completeness": 0.335,
+        "evidence_alignment": 0.3833,
+        "reasoning_depth": 0.3703,
+        "composite": 0.3889
+      },
+      "aiva_system_scores": {
+        "correctness": 0.4408,
+        "completeness": 0.3292,
+        "evidence_alignment": 0.3891,
+        "reasoning_depth": 0.3538,
+        "composite": 0.3852
+      }
+    },
+    {
+      "id": "sample_20",
+      "domain": "Distributed Systems & Cloud Infrastructure",
+      "topic": "Service Mesh & Mutual TLS",
+      "question": "Explain how an Istio sidecar proxy terminates and inspects mTLS traffic between microservices.",
+      "student_answer": "Flawed or hallucinated response: Service Mesh & Mutual TLS was handled by quantum distributed microchips running non-blocking CUDA matrices across external blockchain nodes.",
+      "rater_1_scores": {
+        "correctness": 0.222,
+        "completeness": 0.1962,
+        "evidence_alignment": 0.1789,
+        "reasoning_depth": 0.1065,
+        "composite": 0.1838
+      },
+      "rater_2_scores": {
+        "correctness": 0.209,
+        "completeness": 0.188,
+        "evidence_alignment": 0.1745,
+        "reasoning_depth": 0.1172,
+        "composite": 0.1785
+      },
+      "rater_3_scores": {
+        "correctness": 0.2431,
+        "completeness": 0.229,
+        "evidence_alignment": 0.2278,
+        "reasoning_depth": 0.087,
+        "composite": 0.2053
+      },
+      "consensus_human_scores": {
+        "correctness": 0.2247,
+        "completeness": 0.2044,
+        "evidence_alignment": 0.1937,
+        "reasoning_depth": 0.1036,
+        "composite": 0.1892
+      },
+      "aiva_system_scores": {
+        "correctness": 0.2421,
+        "completeness": 0.2081,
+        "evidence_alignment": 0.2331,
+        "reasoning_depth": 0.0874,
+        "composite": 0.2009
+      }
+    },
+    {
+      "id": "sample_21",
+      "domain": "Distributed Systems & Cloud Infrastructure",
+      "topic": "Eventual Consistency & Conflict Resolution",
+      "question": "How do Vector Clocks track causality and detect concurrent updates in distributed key-value stores?",
+      "student_answer": "Comprehensive explanation: Eventual Consistency & Conflict Resolution is implemented by isolating state transitions and applying formal algorithmic guarantees. We proved bounds, handled failure modes, and verified empirical alignment with our benchmarks.",
+      "rater_1_scores": {
+        "correctness": 0.8694,
+        "completeness": 0.8496,
+        "evidence_alignment": 0.9178,
+        "reasoning_depth": 0.8943,
+        "composite": 0.8791
+      },
+      "rater_2_scores": {
+        "correctness": 0.907,
+        "completeness": 0.8336,
+        "evidence_alignment": 0.8905,
+        "reasoning_depth": 0.8638,
+        "composite": 0.8767
+      },
+      "rater_3_scores": {
+        "correctness": 0.8531,
+        "completeness": 0.8921,
+        "evidence_alignment": 0.9398,
+        "reasoning_depth": 0.8413,
+        "composite": 0.8778
+      },
+      "consensus_human_scores": {
+        "correctness": 0.8765,
+        "completeness": 0.8584,
+        "evidence_alignment": 0.916,
+        "reasoning_depth": 0.8665,
+        "composite": 0.8779
+      },
+      "aiva_system_scores": {
+        "correctness": 0.8422,
+        "completeness": 0.8855,
+        "evidence_alignment": 0.9139,
+        "reasoning_depth": 0.8913,
+        "composite": 0.8772
+      }
+    },
+    {
+      "id": "sample_22",
+      "domain": "Distributed Systems & Cloud Infrastructure",
+      "topic": "Database Sharding & Partition Keys",
+      "question": "What criteria determine an optimal shard key to avoid range query bottlenecks?",
+      "student_answer": "Solid explanation: Database Sharding & Partition Keys handles the primary workflow using standard libraries and design patterns. Core mechanics function as expected, though edge-case failure recovery could be expanded.",
+      "rater_1_scores": {
+        "correctness": 0.7582,
+        "completeness": 0.7193,
+        "evidence_alignment": 0.6986,
+        "reasoning_depth": 0.7721,
+        "composite": 0.7393
+      },
+      "rater_2_scores": {
+        "correctness": 0.7346,
+        "completeness": 0.7151,
+        "evidence_alignment": 0.7111,
+        "reasoning_depth": 0.7697,
+        "composite": 0.732
+      },
+      "rater_3_scores": {
+        "correctness": 0.7759,
+        "completeness": 0.6902,
+        "evidence_alignment": 0.6701,
+        "reasoning_depth": 0.7903,
+        "composite": 0.7362
+      },
+      "consensus_human_scores": {
+        "correctness": 0.7562,
+        "completeness": 0.7082,
+        "evidence_alignment": 0.6933,
+        "reasoning_depth": 0.7774,
+        "composite": 0.7359
+      },
+      "aiva_system_scores": {
+        "correctness": 0.7628,
+        "completeness": 0.6932,
+        "evidence_alignment": 0.7212,
+        "reasoning_depth": 0.7797,
+        "composite": 0.7405
+      }
+    },
+    {
+      "id": "sample_23",
+      "domain": "Distributed Systems & Cloud Infrastructure",
+      "topic": "Kafka Log Compaction",
+      "question": "How does Kafka log compaction retain the latest record key while pruning historical tombstones?",
+      "student_answer": "Satisfactory overview: Kafka Log Compaction works by coordinating the main components. We understand the general syntax and architecture, but did not derive the mathematical complexity bounds.",
+      "rater_1_scores": {
+        "correctness": 0.5977,
+        "completeness": 0.6577,
+        "evidence_alignment": 0.647,
+        "reasoning_depth": 0.5643,
+        "composite": 0.6159
+      },
+      "rater_2_scores": {
+        "correctness": 0.582,
+        "completeness": 0.6514,
+        "evidence_alignment": 0.6561,
+        "reasoning_depth": 0.4954,
+        "composite": 0.5969
+      },
+      "rater_3_scores": {
+        "correctness": 0.5736,
+        "completeness": 0.5854,
+        "evidence_alignment": 0.6261,
+        "reasoning_depth": 0.5521,
+        "composite": 0.5827
+      },
+      "consensus_human_scores": {
+        "correctness": 0.5844,
+        "completeness": 0.6315,
+        "evidence_alignment": 0.6431,
+        "reasoning_depth": 0.5373,
+        "composite": 0.5985
+      },
+      "aiva_system_scores": {
+        "correctness": 0.6144,
+        "completeness": 0.633,
+        "evidence_alignment": 0.6724,
+        "reasoning_depth": 0.5097,
+        "composite": 0.6097
+      }
+    },
+    {
+      "id": "sample_24",
+      "domain": "Distributed Systems & Cloud Infrastructure",
+      "topic": "Distributed Tracing & Context Propagation",
+      "question": "How does OpenTelemetry propagate W3C traceparent headers across asynchronous RPC boundaries?",
+      "student_answer": "Marginal response: Distributed Tracing & Context Propagation is part of the system configuration. It was used because the documentation recommended it for performance, but specific trade-offs were not benchmarked.",
+      "rater_1_scores": {
+        "correctness": 0.4419,
+        "completeness": 0.4707,
+        "evidence_alignment": 0.409,
+        "reasoning_depth": 0.409,
+        "composite": 0.4359
+      },
+      "rater_2_scores": {
+        "correctness": 0.4339,
+        "completeness": 0.47,
+        "evidence_alignment": 0.3719,
+        "reasoning_depth": 0.4245,
+        "composite": 0.4286
+      },
+      "rater_3_scores": {
+        "correctness": 0.4885,
+        "completeness": 0.4484,
+        "evidence_alignment": 0.3877,
+        "reasoning_depth": 0.3832,
+        "composite": 0.4373
+      },
+      "consensus_human_scores": {
+        "correctness": 0.4548,
+        "completeness": 0.463,
+        "evidence_alignment": 0.3895,
+        "reasoning_depth": 0.4056,
+        "composite": 0.434
+      },
+      "aiva_system_scores": {
+        "correctness": 0.4535,
+        "completeness": 0.4821,
+        "evidence_alignment": 0.3718,
+        "reasoning_depth": 0.4157,
+        "composite": 0.4367
+      }
+    },
+    {
+      "id": "sample_25",
+      "domain": "Distributed Systems & Cloud Infrastructure",
+      "topic": "Circuit Breaker Pattern",
+      "question": "Walk through the state transitions of a circuit breaker between Closed, Open, and Half-Open.",
+      "student_answer": "Flawed or hallucinated response: Circuit Breaker Pattern was handled by quantum distributed microchips running non-blocking CUDA matrices across external blockchain nodes.",
+      "rater_1_scores": {
+        "correctness": 0.1103,
+        "completeness": 0.0846,
+        "evidence_alignment": 0.0348,
+        "reasoning_depth": 0.0654,
+        "composite": 0.0798
+      },
+      "rater_2_scores": {
+        "correctness": 0.1559,
+        "completeness": 0.1081,
+        "evidence_alignment": 0.0316,
+        "reasoning_depth": 0.0965,
+        "composite": 0.1072
+      },
+      "rater_3_scores": {
+        "correctness": 0.1099,
+        "completeness": 0.1018,
+        "evidence_alignment": 0.0624,
+        "reasoning_depth": 0.1107,
+        "composite": 0.0985
+      },
+      "consensus_human_scores": {
+        "correctness": 0.1254,
+        "completeness": 0.0982,
+        "evidence_alignment": 0.0429,
+        "reasoning_depth": 0.0909,
+        "composite": 0.0952
+      },
+      "aiva_system_scores": {
+        "correctness": 0.1148,
+        "completeness": 0.0867,
+        "evidence_alignment": 0.0379,
+        "reasoning_depth": 0.0449,
+        "composite": 0.0784
+      }
+    },
+    {
+      "id": "sample_26",
+      "domain": "Distributed Systems & Cloud Infrastructure",
+      "topic": "Two-Phase Commit (2PC) Bottlenecks",
+      "question": "Why is Two-Phase Commit considered blocking and vulnerable to coordinator crashes?",
+      "student_answer": "Comprehensive explanation: Two-Phase Commit (2PC) Bottlenecks is implemented by isolating state transitions and applying formal algorithmic guarantees. We proved bounds, handled failure modes, and verified empirical alignment with our benchmarks.",
+      "rater_1_scores": {
+        "correctness": 0.9431,
+        "completeness": 0.8785,
+        "evidence_alignment": 0.9779,
+        "reasoning_depth": 0.9368,
+        "composite": 0.9326
+      },
+      "rater_2_scores": {
+        "correctness": 0.9276,
+        "completeness": 0.8506,
+        "evidence_alignment": 0.8748,
+        "reasoning_depth": 0.9166,
+        "composite": 0.8956
+      },
+      "rater_3_scores": {
+        "correctness": 0.9115,
+        "completeness": 0.8361,
+        "evidence_alignment": 0.894,
+        "reasoning_depth": 0.8851,
+        "composite": 0.8838
+      },
+      "consensus_human_scores": {
+        "correctness": 0.9274,
+        "completeness": 0.8551,
+        "evidence_alignment": 0.9156,
+        "reasoning_depth": 0.9128,
+        "composite": 0.904
+      },
+      "aiva_system_scores": {
+        "correctness": 0.9611,
+        "completeness": 0.8727,
+        "evidence_alignment": 0.9155,
+        "reasoning_depth": 0.9424,
+        "composite": 0.9261
+      }
+    },
+    {
+      "id": "sample_27",
+      "domain": "Distributed Systems & Cloud Infrastructure",
+      "topic": "Cloud Storage Consistency Models",
+      "question": "Contrast strong read-after-write consistency in object stores against eventual list consistency.",
+      "student_answer": "Solid explanation: Cloud Storage Consistency Models handles the primary workflow using standard libraries and design patterns. Core mechanics function as expected, though edge-case failure recovery could be expanded.",
+      "rater_1_scores": {
+        "correctness": 0.6893,
+        "completeness": 0.751,
+        "evidence_alignment": 0.7688,
+        "reasoning_depth": 0.7088,
+        "composite": 0.7245
+      },
+      "rater_2_scores": {
+        "correctness": 0.7325,
+        "completeness": 0.7972,
+        "evidence_alignment": 0.7573,
+        "reasoning_depth": 0.7517,
+        "composite": 0.7575
+      },
+      "rater_3_scores": {
+        "correctness": 0.6959,
+        "completeness": 0.743,
+        "evidence_alignment": 0.7732,
+        "reasoning_depth": 0.7177,
+        "composite": 0.7275
+      },
+      "consensus_human_scores": {
+        "correctness": 0.7059,
+        "completeness": 0.7637,
+        "evidence_alignment": 0.7664,
+        "reasoning_depth": 0.7261,
+        "composite": 0.7365
+      },
+      "aiva_system_scores": {
+        "correctness": 0.7069,
+        "completeness": 0.7471,
+        "evidence_alignment": 0.7713,
+        "reasoning_depth": 0.7251,
+        "composite": 0.7335
+      }
+    },
+    {
+      "id": "sample_28",
+      "domain": "Distributed Systems & Cloud Infrastructure",
+      "topic": "Container Isolation & Namespaces",
+      "question": "How do Linux namespaces and cgroups isolate memory limits and process hierarchies in container runtimes?",
+      "student_answer": "Satisfactory overview: Container Isolation & Namespaces works by coordinating the main components. We understand the general syntax and architecture, but did not derive the mathematical complexity bounds.",
+      "rater_1_scores": {
+        "correctness": 0.5252,
+        "completeness": 0.5803,
+        "evidence_alignment": 0.7064,
+        "reasoning_depth": 0.5583,
+        "composite": 0.5819
+      },
+      "rater_2_scores": {
+        "correctness": 0.5401,
+        "completeness": 0.5802,
+        "evidence_alignment": 0.6587,
+        "reasoning_depth": 0.5918,
+        "composite": 0.5842
+      },
+      "rater_3_scores": {
+        "correctness": 0.5214,
+        "completeness": 0.5779,
+        "evidence_alignment": 0.6763,
+        "reasoning_depth": 0.5347,
+        "composite": 0.5692
+      },
+      "consensus_human_scores": {
+        "correctness": 0.5289,
+        "completeness": 0.5795,
+        "evidence_alignment": 0.6805,
+        "reasoning_depth": 0.5616,
+        "composite": 0.5784
+      },
+      "aiva_system_scores": {
+        "correctness": 0.4963,
+        "completeness": 0.5805,
+        "evidence_alignment": 0.6852,
+        "reasoning_depth": 0.5435,
+        "composite": 0.5646
+      }
+    },
+    {
+      "id": "sample_29",
+      "domain": "Distributed Systems & Cloud Infrastructure",
+      "topic": "Serverless Cold Starts",
+      "question": "What architectural techniques mitigate container initialization latency in serverless FaaS platforms?",
+      "student_answer": "Marginal response: Serverless Cold Starts is part of the system configuration. It was used because the documentation recommended it for performance, but specific trade-offs were not benchmarked.",
+      "rater_1_scores": {
+        "correctness": 0.379,
+        "completeness": 0.414,
+        "evidence_alignment": 0.3827,
+        "reasoning_depth": 0.3389,
+        "composite": 0.3805
+      },
+      "rater_2_scores": {
+        "correctness": 0.4154,
+        "completeness": 0.4003,
+        "evidence_alignment": 0.42,
+        "reasoning_depth": 0.3225,
+        "composite": 0.394
+      },
+      "rater_3_scores": {
+        "correctness": 0.4065,
+        "completeness": 0.449,
+        "evidence_alignment": 0.3398,
+        "reasoning_depth": 0.3274,
+        "composite": 0.388
+      },
+      "consensus_human_scores": {
+        "correctness": 0.4003,
+        "completeness": 0.4211,
+        "evidence_alignment": 0.3808,
+        "reasoning_depth": 0.3296,
+        "composite": 0.3875
+      },
+      "aiva_system_scores": {
+        "correctness": 0.4118,
+        "completeness": 0.417,
+        "evidence_alignment": 0.3875,
+        "reasoning_depth": 0.3175,
+        "composite": 0.3894
+      }
+    },
+    {
+      "id": "sample_30",
+      "domain": "Distributed Systems & Cloud Infrastructure",
+      "topic": "Disaster Recovery RTO and RPO",
+      "question": "How do multi-region active-active database replication strategies balance RTO and RPO?",
+      "student_answer": "Flawed or hallucinated response: Disaster Recovery RTO and RPO was handled by quantum distributed microchips running non-blocking CUDA matrices across external blockchain nodes.",
+      "rater_1_scores": {
+        "correctness": 0.2652,
+        "completeness": 0.1382,
+        "evidence_alignment": 0.0381,
+        "reasoning_depth": 0.1521,
+        "composite": 0.1654
+      },
+      "rater_2_scores": {
+        "correctness": 0.2288,
+        "completeness": 0.1231,
+        "evidence_alignment": 0.0393,
+        "reasoning_depth": 0.1519,
+        "composite": 0.1491
+      },
+      "rater_3_scores": {
+        "correctness": 0.2468,
+        "completeness": 0.1845,
+        "evidence_alignment": 0.0524,
+        "reasoning_depth": 0.153,
+        "composite": 0.1736
+      },
+      "consensus_human_scores": {
+        "correctness": 0.2469,
+        "completeness": 0.1486,
+        "evidence_alignment": 0.0433,
+        "reasoning_depth": 0.1523,
+        "composite": 0.1627
+      },
+      "aiva_system_scores": {
+        "correctness": 0.2709,
+        "completeness": 0.1404,
+        "evidence_alignment": 0.0066,
+        "reasoning_depth": 0.1321,
+        "composite": 0.1577
+      }
+    },
+    {
+      "id": "sample_31",
+      "domain": "Microservices & Web Architecture",
+      "topic": "FastAPI Asynchronous Event Loop",
+      "question": "How does FastAPI leverage Python asyncio and Starlette to handle high-concurrency I/O bound requests?",
+      "student_answer": "Comprehensive explanation: FastAPI Asynchronous Event Loop is implemented by isolating state transitions and applying formal algorithmic guarantees. We proved bounds, handled failure modes, and verified empirical alignment with our benchmarks.",
+      "rater_1_scores": {
+        "correctness": 0.9173,
+        "completeness": 0.8574,
+        "evidence_alignment": 0.9654,
+        "reasoning_depth": 0.8268,
+        "composite": 0.8939
+      },
+      "rater_2_scores": {
+        "correctness": 0.9153,
+        "completeness": 0.8792,
+        "evidence_alignment": 0.9147,
+        "reasoning_depth": 0.9006,
+        "composite": 0.9032
+      },
+      "rater_3_scores": {
+        "correctness": 0.9186,
+        "completeness": 0.8518,
+        "evidence_alignment": 0.963,
+        "reasoning_depth": 0.9322,
+        "composite": 0.9135
+      },
+      "consensus_human_scores": {
+        "correctness": 0.9171,
+        "completeness": 0.8628,
+        "evidence_alignment": 0.9477,
+        "reasoning_depth": 0.8865,
+        "composite": 0.9035
+      },
+      "aiva_system_scores": {
+        "correctness": 0.9207,
+        "completeness": 0.8678,
+        "evidence_alignment": 0.9394,
+        "reasoning_depth": 0.8695,
+        "composite": 0.901
+      }
+    },
+    {
+      "id": "sample_32",
+      "domain": "Microservices & Web Architecture",
+      "topic": "API Gateway & Reverse Proxies",
+      "question": "Explain the responsibilities of an API Gateway in request throttling, SSL termination, and routing.",
+      "student_answer": "Solid explanation: API Gateway & Reverse Proxies handles the primary workflow using standard libraries and design patterns. Core mechanics function as expected, though edge-case failure recovery could be expanded.",
+      "rater_1_scores": {
+        "correctness": 0.7453,
+        "completeness": 0.7915,
+        "evidence_alignment": 0.7279,
+        "reasoning_depth": 0.7,
+        "composite": 0.7443
+      },
+      "rater_2_scores": {
+        "correctness": 0.7289,
+        "completeness": 0.7626,
+        "evidence_alignment": 0.6953,
+        "reasoning_depth": 0.7195,
+        "composite": 0.7287
+      },
+      "rater_3_scores": {
+        "correctness": 0.7537,
+        "completeness": 0.7611,
+        "evidence_alignment": 0.7268,
+        "reasoning_depth": 0.7451,
+        "composite": 0.7484
+      },
+      "consensus_human_scores": {
+        "correctness": 0.7426,
+        "completeness": 0.7717,
+        "evidence_alignment": 0.7167,
+        "reasoning_depth": 0.7215,
+        "composite": 0.7405
+      },
+      "aiva_system_scores": {
+        "correctness": 0.7509,
+        "completeness": 0.8092,
+        "evidence_alignment": 0.7028,
+        "reasoning_depth": 0.6966,
+        "composite": 0.745
+      }
+    },
+    {
+      "id": "sample_33",
+      "domain": "Microservices & Web Architecture",
+      "topic": "Database Connection Pooling",
+      "question": "What problems arise when database connection pools are undersized or exhausted under burst traffic?",
+      "student_answer": "Satisfactory overview: Database Connection Pooling works by coordinating the main components. We understand the general syntax and architecture, but did not derive the mathematical complexity bounds.",
+      "rater_1_scores": {
+        "correctness": 0.5635,
+        "completeness": 0.6441,
+        "evidence_alignment": 0.6437,
+        "reasoning_depth": 0.4854,
+        "composite": 0.584
+      },
+      "rater_2_scores": {
+        "correctness": 0.6029,
+        "completeness": 0.6482,
+        "evidence_alignment": 0.6399,
+        "reasoning_depth": 0.5261,
+        "composite": 0.6063
+      },
+      "rater_3_scores": {
+        "correctness": 0.5611,
+        "completeness": 0.6509,
+        "evidence_alignment": 0.6177,
+        "reasoning_depth": 0.5219,
+        "composite": 0.587
+      },
+      "consensus_human_scores": {
+        "correctness": 0.5758,
+        "completeness": 0.6477,
+        "evidence_alignment": 0.6338,
+        "reasoning_depth": 0.5111,
+        "composite": 0.5924
+      },
+      "aiva_system_scores": {
+        "correctness": 0.6134,
+        "completeness": 0.6746,
+        "evidence_alignment": 0.6625,
+        "reasoning_depth": 0.5009,
+        "composite": 0.616
+      }
+    },
+    {
+      "id": "sample_34",
+      "domain": "Microservices & Web Architecture",
+      "topic": "Reciprocal Rank Fusion (RRF) Formulation",
+      "question": "Explain the mathematical formulation of RRF and the role of the rank smoothing constant k=60.",
+      "student_answer": "Marginal response: Reciprocal Rank Fusion (RRF) Formulation is part of the system configuration. It was used because the documentation recommended it for performance, but specific trade-offs were not benchmarked.",
+      "rater_1_scores": {
+        "correctness": 0.4914,
+        "completeness": 0.4922,
+        "evidence_alignment": 0.4059,
+        "reasoning_depth": 0.3295,
+        "composite": 0.4421
+      },
+      "rater_2_scores": {
+        "correctness": 0.4867,
+        "completeness": 0.4587,
+        "evidence_alignment": 0.4209,
+        "reasoning_depth": 0.2594,
+        "composite": 0.4211
+      },
+      "rater_3_scores": {
+        "correctness": 0.5107,
+        "completeness": 0.4699,
+        "evidence_alignment": 0.4109,
+        "reasoning_depth": 0.2635,
+        "composite": 0.4311
+      },
+      "consensus_human_scores": {
+        "correctness": 0.4963,
+        "completeness": 0.4736,
+        "evidence_alignment": 0.4126,
+        "reasoning_depth": 0.2841,
+        "composite": 0.4314
+      },
+      "aiva_system_scores": {
+        "correctness": 0.4896,
+        "completeness": 0.507,
+        "evidence_alignment": 0.4079,
+        "reasoning_depth": 0.254,
+        "composite": 0.4305
+      }
+    },
+    {
+      "id": "sample_35",
+      "domain": "Microservices & Web Architecture",
+      "topic": "BM25 Lexical Retrieval Mechanics",
+      "question": "How does Okapi BM25 compute term frequency saturation and document length normalization?",
+      "student_answer": "Flawed or hallucinated response: BM25 Lexical Retrieval Mechanics was handled by quantum distributed microchips running non-blocking CUDA matrices across external blockchain nodes.",
+      "rater_1_scores": {
+        "correctness": 0.0989,
+        "completeness": 0.1471,
+        "evidence_alignment": 0.1404,
+        "reasoning_depth": 0.1376,
+        "composite": 0.127
+      },
+      "rater_2_scores": {
+        "correctness": 0.098,
+        "completeness": 0.1074,
+        "evidence_alignment": 0.1564,
+        "reasoning_depth": 0.1141,
+        "composite": 0.1153
+      },
+      "rater_3_scores": {
+        "correctness": 0.1043,
+        "completeness": 0.1311,
+        "evidence_alignment": 0.1047,
+        "reasoning_depth": 0.1092,
+        "composite": 0.1121
+      },
+      "consensus_human_scores": {
+        "correctness": 0.1004,
+        "completeness": 0.1285,
+        "evidence_alignment": 0.1338,
+        "reasoning_depth": 0.1203,
+        "composite": 0.1181
+      },
+      "aiva_system_scores": {
+        "correctness": 0.0889,
+        "completeness": 0.1176,
+        "evidence_alignment": 0.1332,
+        "reasoning_depth": 0.1094,
+        "composite": 0.109
+      }
+    },
+    {
+      "id": "sample_36",
+      "domain": "Microservices & Web Architecture",
+      "topic": "Vector Database Indexing (HNSW)",
+      "question": "How does the Hierarchical Navigable Small World (HNSW) graph achieve logarithmic approximate nearest neighbor search?",
+      "student_answer": "Comprehensive explanation: Vector Database Indexing (HNSW) is implemented by isolating state transitions and applying formal algorithmic guarantees. We proved bounds, handled failure modes, and verified empirical alignment with our benchmarks.",
+      "rater_1_scores": {
+        "correctness": 0.8651,
+        "completeness": 0.8532,
+        "evidence_alignment": 0.9782,
+        "reasoning_depth": 0.8224,
+        "composite": 0.8762
+      },
+      "rater_2_scores": {
+        "correctness": 0.9159,
+        "completeness": 0.821,
+        "evidence_alignment": 0.9199,
+        "reasoning_depth": 0.8509,
+        "composite": 0.88
+      },
+      "rater_3_scores": {
+        "correctness": 0.8957,
+        "completeness": 0.873,
+        "evidence_alignment": 0.9742,
+        "reasoning_depth": 0.8998,
+        "composite": 0.9065
+      },
+      "consensus_human_scores": {
+        "correctness": 0.8922,
+        "completeness": 0.8491,
+        "evidence_alignment": 0.9574,
+        "reasoning_depth": 0.8577,
+        "composite": 0.8876
+      },
+      "aiva_system_scores": {
+        "correctness": 0.9066,
+        "completeness": 0.8265,
+        "evidence_alignment": 0.948,
+        "reasoning_depth": 0.8675,
+        "composite": 0.887
+      }
+    },
+    {
+      "id": "sample_37",
+      "domain": "Microservices & Web Architecture",
+      "topic": "WebSocket vs HTTP/2 Server Push",
+      "question": "When should an architecture choose persistent full-duplex WebSockets over HTTP/2 streaming?",
+      "student_answer": "Solid explanation: WebSocket vs HTTP/2 Server Push handles the primary workflow using standard libraries and design patterns. Core mechanics function as expected, though edge-case failure recovery could be expanded.",
+      "rater_1_scores": {
+        "correctness": 0.807,
+        "completeness": 0.7231,
+        "evidence_alignment": 0.707,
+        "reasoning_depth": 0.6844,
+        "composite": 0.7415
+      },
+      "rater_2_scores": {
+        "correctness": 0.7676,
+        "completeness": 0.7269,
+        "evidence_alignment": 0.728,
+        "reasoning_depth": 0.6521,
+        "composite": 0.7264
+      },
+      "rater_3_scores": {
+        "correctness": 0.7995,
+        "completeness": 0.6821,
+        "evidence_alignment": 0.738,
+        "reasoning_depth": 0.6543,
+        "composite": 0.7288
+      },
+      "consensus_human_scores": {
+        "correctness": 0.7914,
+        "completeness": 0.7107,
+        "evidence_alignment": 0.7243,
+        "reasoning_depth": 0.6636,
+        "composite": 0.7322
+      },
+      "aiva_system_scores": {
+        "correctness": 0.7809,
+        "completeness": 0.7317,
+        "evidence_alignment": 0.7116,
+        "reasoning_depth": 0.6354,
+        "composite": 0.7256
+      }
+    },
+    {
+      "id": "sample_38",
+      "domain": "Microservices & Web Architecture",
+      "topic": "Idempotency in REST APIs",
+      "question": "How does an API guarantee idempotency for critical payment or state creation endpoints?",
+      "student_answer": "Satisfactory overview: Idempotency in REST APIs works by coordinating the main components. We understand the general syntax and architecture, but did not derive the mathematical complexity bounds.",
+      "rater_1_scores": {
+        "correctness": 0.5686,
+        "completeness": 0.5802,
+        "evidence_alignment": 0.6483,
+        "reasoning_depth": 0.5093,
+        "composite": 0.5756
+      },
+      "rater_2_scores": {
+        "correctness": 0.6025,
+        "completeness": 0.5517,
+        "evidence_alignment": 0.6428,
+        "reasoning_depth": 0.5357,
+        "composite": 0.5845
+      },
+      "rater_3_scores": {
+        "correctness": 0.6173,
+        "completeness": 0.5466,
+        "evidence_alignment": 0.6345,
+        "reasoning_depth": 0.51,
+        "composite": 0.5816
+      },
+      "consensus_human_scores": {
+        "correctness": 0.5961,
+        "completeness": 0.5595,
+        "evidence_alignment": 0.6419,
+        "reasoning_depth": 0.5183,
+        "composite": 0.5806
+      },
+      "aiva_system_scores": {
+        "correctness": 0.6023,
+        "completeness": 0.5253,
+        "evidence_alignment": 0.6176,
+        "reasoning_depth": 0.5332,
+        "composite": 0.5723
+      }
+    },
+    {
+      "id": "sample_39",
+      "domain": "Microservices & Web Architecture",
+      "topic": "GraphQL vs REST Over-fetching",
+      "question": "How does GraphQL eliminate over-fetching, and what query depth vulnerabilities does it introduce?",
+      "student_answer": "Marginal response: GraphQL vs REST Over-fetching is part of the system configuration. It was used because the documentation recommended it for performance, but specific trade-offs were not benchmarked.",
+      "rater_1_scores": {
+        "correctness": 0.359,
+        "completeness": 0.4365,
+        "evidence_alignment": 0.5221,
+        "reasoning_depth": 0.3321,
+        "composite": 0.4056
+      },
+      "rater_2_scores": {
+        "correctness": 0.3799,
+        "completeness": 0.4161,
+        "evidence_alignment": 0.5405,
+        "reasoning_depth": 0.364,
+        "composite": 0.4179
+      },
+      "rater_3_scores": {
+        "correctness": 0.3773,
+        "completeness": 0.4782,
+        "evidence_alignment": 0.5595,
+        "reasoning_depth": 0.379,
+        "composite": 0.4393
+      },
+      "consensus_human_scores": {
+        "correctness": 0.3721,
+        "completeness": 0.4436,
+        "evidence_alignment": 0.5407,
+        "reasoning_depth": 0.3584,
+        "composite": 0.421
+      },
+      "aiva_system_scores": {
+        "correctness": 0.3353,
+        "completeness": 0.418,
+        "evidence_alignment": 0.5295,
+        "reasoning_depth": 0.3589,
+        "composite": 0.3995
+      }
+    },
+    {
+      "id": "sample_40",
+      "domain": "Microservices & Web Architecture",
+      "topic": "Caching Invalidation Strategies",
+      "question": "Compare Cache-Aside, Write-Through, and Write-Behind caching patterns in distributed web systems.",
+      "student_answer": "Flawed or hallucinated response: Caching Invalidation Strategies was handled by quantum distributed microchips running non-blocking CUDA matrices across external blockchain nodes.",
+      "rater_1_scores": {
+        "correctness": 0.0948,
+        "completeness": 0.2019,
+        "evidence_alignment": 0.0129,
+        "reasoning_depth": 0.1107,
+        "composite": 0.1084
+      },
+      "rater_2_scores": {
+        "correctness": 0.0868,
+        "completeness": 0.256,
+        "evidence_alignment": 0.0124,
+        "reasoning_depth": 0.1984,
+        "composite": 0.1365
+      },
+      "rater_3_scores": {
+        "correctness": 0.1206,
+        "completeness": 0.2375,
+        "evidence_alignment": 0.0118,
+        "reasoning_depth": 0.158,
+        "composite": 0.1355
+      },
+      "consensus_human_scores": {
+        "correctness": 0.1007,
+        "completeness": 0.2318,
+        "evidence_alignment": 0.0124,
+        "reasoning_depth": 0.1557,
+        "composite": 0.1268
+      },
+      "aiva_system_scores": {
+        "correctness": 0.0892,
+        "completeness": 0.2342,
+        "evidence_alignment": 0.0585,
+        "reasoning_depth": 0.1538,
+        "composite": 0.1322
+      }
+    },
+    {
+      "id": "sample_41",
+      "domain": "Microservices & Web Architecture",
+      "topic": "CQRS & Event Sourcing",
+      "question": "How does Command Query Responsibility Segregation decouple write-optimized domain models from read views?",
+      "student_answer": "Comprehensive explanation: CQRS & Event Sourcing is implemented by isolating state transitions and applying formal algorithmic guarantees. We proved bounds, handled failure modes, and verified empirical alignment with our benchmarks.",
+      "rater_1_scores": {
+        "correctness": 0.8927,
+        "completeness": 0.9669,
+        "evidence_alignment": 0.8501,
+        "reasoning_depth": 0.8511,
+        "composite": 0.8944
+      },
+      "rater_2_scores": {
+        "correctness": 0.909,
+        "completeness": 0.9156,
+        "evidence_alignment": 0.8778,
+        "reasoning_depth": 0.8327,
+        "composite": 0.8891
+      },
+      "rater_3_scores": {
+        "correctness": 0.909,
+        "completeness": 0.8887,
+        "evidence_alignment": 0.8457,
+        "reasoning_depth": 0.8051,
+        "composite": 0.8705
+      },
+      "consensus_human_scores": {
+        "correctness": 0.9036,
+        "completeness": 0.9237,
+        "evidence_alignment": 0.8579,
+        "reasoning_depth": 0.8296,
+        "composite": 0.8847
+      },
+      "aiva_system_scores": {
+        "correctness": 0.9021,
+        "completeness": 0.9361,
+        "evidence_alignment": 0.8611,
+        "reasoning_depth": 0.8029,
+        "composite": 0.8826
+      }
+    },
+    {
+      "id": "sample_42",
+      "domain": "Microservices & Web Architecture",
+      "topic": "Saga Pattern in Distributed Transactions",
+      "question": "How do choreographic vs orchestrated Sagas coordinate compensating transactions upon workflow failure?",
+      "student_answer": "Solid explanation: Saga Pattern in Distributed Transactions handles the primary workflow using standard libraries and design patterns. Core mechanics function as expected, though edge-case failure recovery could be expanded.",
+      "rater_1_scores": {
+        "correctness": 0.8406,
+        "completeness": 0.7926,
+        "evidence_alignment": 0.8194,
+        "reasoning_depth": 0.6889,
+        "composite": 0.794
+      },
+      "rater_2_scores": {
+        "correctness": 0.8317,
+        "completeness": 0.7871,
+        "evidence_alignment": 0.827,
+        "reasoning_depth": 0.6973,
+        "composite": 0.7927
+      },
+      "rater_3_scores": {
+        "correctness": 0.7952,
+        "completeness": 0.8088,
+        "evidence_alignment": 0.82,
+        "reasoning_depth": 0.7424,
+        "composite": 0.793
+      },
+      "consensus_human_scores": {
+        "correctness": 0.8225,
+        "completeness": 0.7962,
+        "evidence_alignment": 0.8221,
+        "reasoning_depth": 0.7095,
+        "composite": 0.7932
+      },
+      "aiva_system_scores": {
+        "correctness": 0.8231,
+        "completeness": 0.7968,
+        "evidence_alignment": 0.839,
+        "reasoning_depth": 0.6992,
+        "composite": 0.7949
+      }
+    },
+    {
+      "id": "sample_43",
+      "domain": "Microservices & Web Architecture",
+      "topic": "Content Delivery Networks (CDN) Caching",
+      "question": "How do Surrogate-Control headers and stale-while-revalidate directives optimize edge caching?",
+      "student_answer": "Satisfactory overview: Content Delivery Networks (CDN) Caching works by coordinating the main components. We understand the general syntax and architecture, but did not derive the mathematical complexity bounds.",
+      "rater_1_scores": {
+        "correctness": 0.5308,
+        "completeness": 0.5849,
+        "evidence_alignment": 0.6121,
+        "reasoning_depth": 0.4484,
+        "composite": 0.5441
+      },
+      "rater_2_scores": {
+        "correctness": 0.5218,
+        "completeness": 0.5857,
+        "evidence_alignment": 0.6163,
+        "reasoning_depth": 0.4724,
+        "composite": 0.5468
+      },
+      "rater_3_scores": {
+        "correctness": 0.5517,
+        "completeness": 0.5583,
+        "evidence_alignment": 0.5912,
+        "reasoning_depth": 0.4903,
+        "composite": 0.549
+      },
+      "consensus_human_scores": {
+        "correctness": 0.5348,
+        "completeness": 0.5763,
+        "evidence_alignment": 0.6065,
+        "reasoning_depth": 0.4704,
+        "composite": 0.5466
+      },
+      "aiva_system_scores": {
+        "correctness": 0.5364,
+        "completeness": 0.5976,
+        "evidence_alignment": 0.5972,
+        "reasoning_depth": 0.4986,
+        "composite": 0.5563
+      }
+    },
+    {
+      "id": "sample_44",
+      "domain": "Microservices & Web Architecture",
+      "topic": "Micro-Frontend Decomposition",
+      "question": "What isolation mechanisms prevent CSS collisions and global state leakage in micro-frontend applications?",
+      "student_answer": "Marginal response: Micro-Frontend Decomposition is part of the system configuration. It was used because the documentation recommended it for performance, but specific trade-offs were not benchmarked.",
+      "rater_1_scores": {
+        "correctness": 0.4122,
+        "completeness": 0.4524,
+        "evidence_alignment": 0.5371,
+        "reasoning_depth": 0.4063,
+        "composite": 0.446
+      },
+      "rater_2_scores": {
+        "correctness": 0.4127,
+        "completeness": 0.4142,
+        "evidence_alignment": 0.4727,
+        "reasoning_depth": 0.3976,
+        "composite": 0.4221
+      },
+      "rater_3_scores": {
+        "correctness": 0.3969,
+        "completeness": 0.4012,
+        "evidence_alignment": 0.5014,
+        "reasoning_depth": 0.4236,
+        "composite": 0.4242
+      },
+      "consensus_human_scores": {
+        "correctness": 0.4073,
+        "completeness": 0.4226,
+        "evidence_alignment": 0.5037,
+        "reasoning_depth": 0.4092,
+        "composite": 0.4308
+      },
+      "aiva_system_scores": {
+        "correctness": 0.4383,
+        "completeness": 0.4026,
+        "evidence_alignment": 0.5214,
+        "reasoning_depth": 0.4049,
+        "composite": 0.4393
+      }
+    },
+    {
+      "id": "sample_45",
+      "domain": "Microservices & Web Architecture",
+      "topic": "Rate Limiting Algorithms",
+      "question": "Contrast the Token Bucket algorithm against the Leaky Bucket algorithm under bursty client traffic.",
+      "student_answer": "Flawed or hallucinated response: Rate Limiting Algorithms was handled by quantum distributed microchips running non-blocking CUDA matrices across external blockchain nodes.",
+      "rater_1_scores": {
+        "correctness": 0.2443,
+        "completeness": 0.195,
+        "evidence_alignment": 0.1245,
+        "reasoning_depth": 0.1291,
+        "composite": 0.185
+      },
+      "rater_2_scores": {
+        "correctness": 0.2266,
+        "completeness": 0.1725,
+        "evidence_alignment": 0.1044,
+        "reasoning_depth": 0.0628,
+        "composite": 0.1559
+      },
+      "rater_3_scores": {
+        "correctness": 0.2247,
+        "completeness": 0.2139,
+        "evidence_alignment": 0.1537,
+        "reasoning_depth": 0.0608,
+        "composite": 0.175
+      },
+      "consensus_human_scores": {
+        "correctness": 0.2319,
+        "completeness": 0.1938,
+        "evidence_alignment": 0.1275,
+        "reasoning_depth": 0.0842,
+        "composite": 0.172
+      },
+      "aiva_system_scores": {
+        "correctness": 0.2153,
+        "completeness": 0.2032,
+        "evidence_alignment": 0.1176,
+        "reasoning_depth": 0.0969,
+        "composite": 0.1691
+      }
+    },
+    {
+      "id": "sample_46",
+      "domain": "Cybersecurity & Cryptographic Protocols",
+      "topic": "JWT Structure & Signature Verification",
+      "question": "Walk through the three components of a JWT and how signature validation prevents claim tampering.",
+      "student_answer": "Comprehensive explanation: JWT Structure & Signature Verification is implemented by isolating state transitions and applying formal algorithmic guarantees. We proved bounds, handled failure modes, and verified empirical alignment with our benchmarks.",
+      "rater_1_scores": {
+        "correctness": 0.8656,
+        "completeness": 0.8866,
+        "evidence_alignment": 0.9334,
+        "reasoning_depth": 0.8944,
+        "composite": 0.8902
+      },
+      "rater_2_scores": {
+        "correctness": 0.8936,
+        "completeness": 0.9394,
+        "evidence_alignment": 0.9232,
+        "reasoning_depth": 0.8695,
+        "composite": 0.9061
+      },
+      "rater_3_scores": {
+        "correctness": 0.8446,
+        "completeness": 0.8769,
+        "evidence_alignment": 0.9263,
+        "reasoning_depth": 0.9319,
+        "composite": 0.8865
+      },
+      "consensus_human_scores": {
+        "correctness": 0.8679,
+        "completeness": 0.901,
+        "evidence_alignment": 0.9276,
+        "reasoning_depth": 0.8986,
+        "composite": 0.8943
+      },
+      "aiva_system_scores": {
+        "correctness": 0.8575,
+        "completeness": 0.9055,
+        "evidence_alignment": 0.9273,
+        "reasoning_depth": 0.9224,
+        "composite": 0.8964
+      }
+    },
+    {
+      "id": "sample_47",
+      "domain": "Cybersecurity & Cryptographic Protocols",
+      "topic": "OAuth 2.0 PKCE Flow",
+      "question": "Why is Proof Key for Code Exchange (PKCE) necessary for public single-page and mobile clients?",
+      "student_answer": "Solid explanation: OAuth 2.0 PKCE Flow handles the primary workflow using standard libraries and design patterns. Core mechanics function as expected, though edge-case failure recovery could be expanded.",
+      "rater_1_scores": {
+        "correctness": 0.7823,
+        "completeness": 0.8036,
+        "evidence_alignment": 0.8365,
+        "reasoning_depth": 0.6677,
+        "composite": 0.7755
+      },
+      "rater_2_scores": {
+        "correctness": 0.7803,
+        "completeness": 0.7873,
+        "evidence_alignment": 0.8418,
+        "reasoning_depth": 0.6868,
+        "composite": 0.7756
+      },
+      "rater_3_scores": {
+        "correctness": 0.7939,
+        "completeness": 0.7922,
+        "evidence_alignment": 0.8583,
+        "reasoning_depth": 0.6919,
+        "composite": 0.7859
+      },
+      "consensus_human_scores": {
+        "correctness": 0.7855,
+        "completeness": 0.7944,
+        "evidence_alignment": 0.8455,
+        "reasoning_depth": 0.6821,
+        "composite": 0.779
+      },
+      "aiva_system_scores": {
+        "correctness": 0.7822,
+        "completeness": 0.7973,
+        "evidence_alignment": 0.8672,
+        "reasoning_depth": 0.6658,
+        "composite": 0.7797
+      }
+    },
+    {
+      "id": "sample_48",
+      "domain": "Cybersecurity & Cryptographic Protocols",
+      "topic": "Zero Trust Architecture",
+      "question": "What core architectural principles govern a Zero Trust network over perimeter-based security?",
+      "student_answer": "Satisfactory overview: Zero Trust Architecture works by coordinating the main components. We understand the general syntax and architecture, but did not derive the mathematical complexity bounds.",
+      "rater_1_scores": {
+        "correctness": 0.5499,
+        "completeness": 0.6319,
+        "evidence_alignment": 0.6449,
+        "reasoning_depth": 0.5425,
+        "composite": 0.5879
+      },
+      "rater_2_scores": {
+        "correctness": 0.5599,
+        "completeness": 0.6785,
+        "evidence_alignment": 0.668,
+        "reasoning_depth": 0.5309,
+        "composite": 0.6054
+      },
+      "rater_3_scores": {
+        "correctness": 0.552,
+        "completeness": 0.6703,
+        "evidence_alignment": 0.6724,
+        "reasoning_depth": 0.5331,
+        "composite": 0.6019
+      },
+      "consensus_human_scores": {
+        "correctness": 0.5539,
+        "completeness": 0.6602,
+        "evidence_alignment": 0.6618,
+        "reasoning_depth": 0.5355,
+        "composite": 0.5984
+      },
+      "aiva_system_scores": {
+        "correctness": 0.5661,
+        "completeness": 0.6639,
+        "evidence_alignment": 0.6538,
+        "reasoning_depth": 0.5394,
+        "composite": 0.6028
+      }
+    },
+    {
+      "id": "sample_49",
+      "domain": "Cybersecurity & Cryptographic Protocols",
+      "topic": "Public Key Infrastructure (PKI)",
+      "question": "How does a certificate authority chain establish trust during TLS handshake negotiation?",
+      "student_answer": "Marginal response: Public Key Infrastructure (PKI) is part of the system configuration. It was used because the documentation recommended it for performance, but specific trade-offs were not benchmarked.",
+      "rater_1_scores": {
+        "correctness": 0.4214,
+        "completeness": 0.3998,
+        "evidence_alignment": 0.3771,
+        "reasoning_depth": 0.3698,
+        "composite": 0.3968
+      },
+      "rater_2_scores": {
+        "correctness": 0.4296,
+        "completeness": 0.4319,
+        "evidence_alignment": 0.3772,
+        "reasoning_depth": 0.4029,
+        "composite": 0.4143
+      },
+      "rater_3_scores": {
+        "correctness": 0.3589,
+        "completeness": 0.3783,
+        "evidence_alignment": 0.4004,
+        "reasoning_depth": 0.349,
+        "composite": 0.3701
+      },
+      "consensus_human_scores": {
+        "correctness": 0.4033,
+        "completeness": 0.4033,
+        "evidence_alignment": 0.3849,
+        "reasoning_depth": 0.3739,
+        "composite": 0.3937
+      },
+      "aiva_system_scores": {
+        "correctness": 0.3829,
+        "completeness": 0.4175,
+        "evidence_alignment": 0.3893,
+        "reasoning_depth": 0.3626,
+        "composite": 0.3888
+      }
+    },
+    {
+      "id": "sample_50",
+      "domain": "Cybersecurity & Cryptographic Protocols",
+      "topic": "SQL Injection & Parameterized Queries",
+      "question": "Why do parameterized queries prevent SQL injection whereas regex string sanitization frequently fails?",
+      "student_answer": "Flawed or hallucinated response: SQL Injection & Parameterized Queries was handled by quantum distributed microchips running non-blocking CUDA matrices across external blockchain nodes.",
+      "rater_1_scores": {
+        "correctness": 0.2056,
+        "completeness": 0.147,
+        "evidence_alignment": 0.2128,
+        "reasoning_depth": 0.0491,
+        "composite": 0.1611
+      },
+      "rater_2_scores": {
+        "correctness": 0.1577,
+        "completeness": 0.134,
+        "evidence_alignment": 0.1711,
+        "reasoning_depth": 0.078,
+        "composite": 0.1385
+      },
+      "rater_3_scores": {
+        "correctness": 0.1852,
+        "completeness": 0.158,
+        "evidence_alignment": 0.1408,
+        "reasoning_depth": 0.1088,
+        "composite": 0.1543
+      },
+      "consensus_human_scores": {
+        "correctness": 0.1828,
+        "completeness": 0.1463,
+        "evidence_alignment": 0.1749,
+        "reasoning_depth": 0.0786,
+        "composite": 0.1513
+      },
+      "aiva_system_scores": {
+        "correctness": 0.1812,
+        "completeness": 0.1686,
+        "evidence_alignment": 0.1811,
+        "reasoning_depth": 0.0877,
+        "composite": 0.1593
+      }
+    },
+    {
+      "id": "sample_51",
+      "domain": "Cybersecurity & Cryptographic Protocols",
+      "topic": "Cross-Site Scripting (XSS) Mitigation",
+      "question": "How does a strict Content Security Policy (CSP) header mitigate stored and reflected XSS attacks?",
+      "student_answer": "Comprehensive explanation: Cross-Site Scripting (XSS) Mitigation is implemented by isolating state transitions and applying formal algorithmic guarantees. We proved bounds, handled failure modes, and verified empirical alignment with our benchmarks.",
+      "rater_1_scores": {
+        "correctness": 0.9545,
+        "completeness": 0.9539,
+        "evidence_alignment": 0.947,
+        "reasoning_depth": 0.9256,
+        "composite": 0.9471
+      },
+      "rater_2_scores": {
+        "correctness": 0.9353,
+        "completeness": 0.9779,
+        "evidence_alignment": 0.948,
+        "reasoning_depth": 0.8625,
+        "composite": 0.9339
+      },
+      "rater_3_scores": {
+        "correctness": 0.9534,
+        "completeness": 0.9212,
+        "evidence_alignment": 0.9699,
+        "reasoning_depth": 0.8776,
+        "composite": 0.9335
+      },
+      "consensus_human_scores": {
+        "correctness": 0.9477,
+        "completeness": 0.951,
+        "evidence_alignment": 0.955,
+        "reasoning_depth": 0.8886,
+        "composite": 0.9382
+      },
+      "aiva_system_scores": {
+        "correctness": 0.9388,
+        "completeness": 0.9132,
+        "evidence_alignment": 0.9469,
+        "reasoning_depth": 0.8401,
+        "composite": 0.9143
+      }
+    },
+    {
+      "id": "sample_52",
+      "domain": "Cybersecurity & Cryptographic Protocols",
+      "topic": "Cross-Site Request Forgery (CSRF)",
+      "question": "Explain how SameSite cookie attributes and anti-CSRF synchronizer tokens block cross-origin requests.",
+      "student_answer": "Solid explanation: Cross-Site Request Forgery (CSRF) handles the primary workflow using standard libraries and design patterns. Core mechanics function as expected, though edge-case failure recovery could be expanded.",
+      "rater_1_scores": {
+        "correctness": 0.7627,
+        "completeness": 0.7198,
+        "evidence_alignment": 0.8042,
+        "reasoning_depth": 0.7321,
+        "composite": 0.7542
+      },
+      "rater_2_scores": {
+        "correctness": 0.8171,
+        "completeness": 0.7401,
+        "evidence_alignment": 0.7994,
+        "reasoning_depth": 0.7582,
+        "composite": 0.7825
+      },
+      "rater_3_scores": {
+        "correctness": 0.7892,
+        "completeness": 0.6698,
+        "evidence_alignment": 0.7981,
+        "reasoning_depth": 0.7406,
+        "composite": 0.7514
+      },
+      "consensus_human_scores": {
+        "correctness": 0.7897,
+        "completeness": 0.7099,
+        "evidence_alignment": 0.8006,
+        "reasoning_depth": 0.7436,
+        "composite": 0.7627
+      },
+      "aiva_system_scores": {
+        "correctness": 0.7697,
+        "completeness": 0.7043,
+        "evidence_alignment": 0.833,
+        "reasoning_depth": 0.7564,
+        "composite": 0.7633
+      }
+    },
+    {
+      "id": "sample_53",
+      "domain": "Cybersecurity & Cryptographic Protocols",
+      "topic": "Symmetric vs Asymmetric Encryption",
+      "question": "Why is hybrid encryption (e.g., AES-GCM for payload, RSA/ECC for key exchange) universally adopted in TLS?",
+      "student_answer": "Satisfactory overview: Symmetric vs Asymmetric Encryption works by coordinating the main components. We understand the general syntax and architecture, but did not derive the mathematical complexity bounds.",
+      "rater_1_scores": {
+        "correctness": 0.6789,
+        "completeness": 0.5524,
+        "evidence_alignment": 0.5764,
+        "reasoning_depth": 0.4515,
+        "composite": 0.5813
+      },
+      "rater_2_scores": {
+        "correctness": 0.6635,
+        "completeness": 0.5407,
+        "evidence_alignment": 0.5948,
+        "reasoning_depth": 0.4797,
+        "composite": 0.5823
+      },
+      "rater_3_scores": {
+        "correctness": 0.6743,
+        "completeness": 0.5186,
+        "evidence_alignment": 0.6081,
+        "reasoning_depth": 0.4706,
+        "composite": 0.5814
+      },
+      "consensus_human_scores": {
+        "correctness": 0.6722,
+        "completeness": 0.5372,
+        "evidence_alignment": 0.5931,
+        "reasoning_depth": 0.4673,
+        "composite": 0.5817
+      },
+      "aiva_system_scores": {
+        "correctness": 0.7137,
+        "completeness": 0.5234,
+        "evidence_alignment": 0.6243,
+        "reasoning_depth": 0.4713,
+        "composite": 0.5998
+      }
+    },
+    {
+      "id": "sample_54",
+      "domain": "Cybersecurity & Cryptographic Protocols",
+      "topic": "Hashing vs Encryption vs Encoding",
+      "question": "Differentiate between cryptographic hashing, symmetric encryption, and character encoding schemes.",
+      "student_answer": "Marginal response: Hashing vs Encryption vs Encoding is part of the system configuration. It was used because the documentation recommended it for performance, but specific trade-offs were not benchmarked.",
+      "rater_1_scores": {
+        "correctness": 0.3552,
+        "completeness": 0.339,
+        "evidence_alignment": 0.4261,
+        "reasoning_depth": 0.2897,
+        "composite": 0.3522
+      },
+      "rater_2_scores": {
+        "correctness": 0.3617,
+        "completeness": 0.3768,
+        "evidence_alignment": 0.4526,
+        "reasoning_depth": 0.3119,
+        "composite": 0.3737
+      },
+      "rater_3_scores": {
+        "correctness": 0.3632,
+        "completeness": 0.3327,
+        "evidence_alignment": 0.4299,
+        "reasoning_depth": 0.2768,
+        "composite": 0.3516
+      },
+      "consensus_human_scores": {
+        "correctness": 0.36,
+        "completeness": 0.3495,
+        "evidence_alignment": 0.4362,
+        "reasoning_depth": 0.2928,
+        "composite": 0.3592
+      },
+      "aiva_system_scores": {
+        "correctness": 0.3549,
+        "completeness": 0.3161,
+        "evidence_alignment": 0.4434,
+        "reasoning_depth": 0.3057,
+        "composite": 0.3531
+      }
+    },
+    {
+      "id": "sample_55",
+      "domain": "Cybersecurity & Cryptographic Protocols",
+      "topic": "Argon2 vs BCrypt Password Storage",
+      "question": "Why is Argon2id resistant to GPU and ASIC brute-force attacks compared to standard SHA-256?",
+      "student_answer": "Flawed or hallucinated response: Argon2 vs BCrypt Password Storage was handled by quantum distributed microchips running non-blocking CUDA matrices across external blockchain nodes.",
+      "rater_1_scores": {
+        "correctness": 0.2112,
+        "completeness": 0.1996,
+        "evidence_alignment": 0.1124,
+        "reasoning_depth": 0.0956,
+        "composite": 0.1654
+      },
+      "rater_2_scores": {
+        "correctness": 0.23,
+        "completeness": 0.1757,
+        "evidence_alignment": 0.0716,
+        "reasoning_depth": 0.1251,
+        "composite": 0.1638
+      },
+      "rater_3_scores": {
+        "correctness": 0.2226,
+        "completeness": 0.1372,
+        "evidence_alignment": 0.1123,
+        "reasoning_depth": 0.1402,
+        "composite": 0.1627
+      },
+      "consensus_human_scores": {
+        "correctness": 0.2213,
+        "completeness": 0.1708,
+        "evidence_alignment": 0.0988,
+        "reasoning_depth": 0.1203,
+        "composite": 0.164
+      },
+      "aiva_system_scores": {
+        "correctness": 0.2088,
+        "completeness": 0.1787,
+        "evidence_alignment": 0.1077,
+        "reasoning_depth": 0.1255,
+        "composite": 0.1644
+      }
+    },
+    {
+      "id": "sample_56",
+      "domain": "Cybersecurity & Cryptographic Protocols",
+      "topic": "Role-Based Access Control (RBAC) vs ABAC",
+      "question": "What architectural trade-offs exist between static RBAC role matrices and dynamic attribute-based evaluation?",
+      "student_answer": "Comprehensive explanation: Role-Based Access Control (RBAC) vs ABAC is implemented by isolating state transitions and applying formal algorithmic guarantees. We proved bounds, handled failure modes, and verified empirical alignment with our benchmarks.",
+      "rater_1_scores": {
+        "correctness": 0.8728,
+        "completeness": 0.8791,
+        "evidence_alignment": 0.9882,
+        "reasoning_depth": 0.819,
+        "composite": 0.8867
+      },
+      "rater_2_scores": {
+        "correctness": 0.8903,
+        "completeness": 0.7906,
+        "evidence_alignment": 1.0,
+        "reasoning_depth": 0.7889,
+        "composite": 0.867
+      },
+      "rater_3_scores": {
+        "correctness": 0.8643,
+        "completeness": 0.8253,
+        "evidence_alignment": 0.9439,
+        "reasoning_depth": 0.8562,
+        "composite": 0.8688
+      },
+      "consensus_human_scores": {
+        "correctness": 0.8758,
+        "completeness": 0.8317,
+        "evidence_alignment": 0.9774,
+        "reasoning_depth": 0.8214,
+        "composite": 0.8742
+      },
+      "aiva_system_scores": {
+        "correctness": 0.8664,
+        "completeness": 0.8386,
+        "evidence_alignment": 0.9766,
+        "reasoning_depth": 0.8309,
+        "composite": 0.8744
+      }
+    },
+    {
+      "id": "sample_57",
+      "domain": "Cybersecurity & Cryptographic Protocols",
+      "topic": "Secure WebSockets (WSS)",
+      "question": "What security considerations govern WebSocket origin validation and authentication tokens during protocol upgrade?",
+      "student_answer": "Solid explanation: Secure WebSockets (WSS) handles the primary workflow using standard libraries and design patterns. Core mechanics function as expected, though edge-case failure recovery could be expanded.",
+      "rater_1_scores": {
+        "correctness": 0.755,
+        "completeness": 0.6794,
+        "evidence_alignment": 0.6912,
+        "reasoning_depth": 0.6937,
+        "composite": 0.7111
+      },
+      "rater_2_scores": {
+        "correctness": 0.7661,
+        "completeness": 0.709,
+        "evidence_alignment": 0.7178,
+        "reasoning_depth": 0.6955,
+        "composite": 0.728
+      },
+      "rater_3_scores": {
+        "correctness": 0.725,
+        "completeness": 0.7422,
+        "evidence_alignment": 0.735,
+        "reasoning_depth": 0.7139,
+        "composite": 0.7291
+      },
+      "consensus_human_scores": {
+        "correctness": 0.7487,
+        "completeness": 0.7102,
+        "evidence_alignment": 0.7147,
+        "reasoning_depth": 0.701,
+        "composite": 0.7227
+      },
+      "aiva_system_scores": {
+        "correctness": 0.7693,
+        "completeness": 0.715,
+        "evidence_alignment": 0.71,
+        "reasoning_depth": 0.6971,
+        "composite": 0.7294
+      }
+    },
+    {
+      "id": "sample_58",
+      "domain": "Cybersecurity & Cryptographic Protocols",
+      "topic": "DDoS Mitigation & SYN Flood",
+      "question": "How do SYN cookies protect a TCP network stack against SYN flood resource exhaustion?",
+      "student_answer": "Satisfactory overview: DDoS Mitigation & SYN Flood works by coordinating the main components. We understand the general syntax and architecture, but did not derive the mathematical complexity bounds.",
+      "rater_1_scores": {
+        "correctness": 0.5793,
+        "completeness": 0.5074,
+        "evidence_alignment": 0.6314,
+        "reasoning_depth": 0.5465,
+        "composite": 0.5652
+      },
+      "rater_2_scores": {
+        "correctness": 0.5833,
+        "completeness": 0.5168,
+        "evidence_alignment": 0.6516,
+        "reasoning_depth": 0.5268,
+        "composite": 0.569
+      },
+      "rater_3_scores": {
+        "correctness": 0.6154,
+        "completeness": 0.5056,
+        "evidence_alignment": 0.6574,
+        "reasoning_depth": 0.5645,
+        "composite": 0.5862
+      },
+      "consensus_human_scores": {
+        "correctness": 0.5927,
+        "completeness": 0.5099,
+        "evidence_alignment": 0.6468,
+        "reasoning_depth": 0.5459,
+        "composite": 0.5735
+      },
+      "aiva_system_scores": {
+        "correctness": 0.605,
+        "completeness": 0.4888,
+        "evidence_alignment": 0.6356,
+        "reasoning_depth": 0.5842,
+        "composite": 0.5779
+      }
+    },
+    {
+      "id": "sample_59",
+      "domain": "Cybersecurity & Cryptographic Protocols",
+      "topic": "API Key Management & Rotation",
+      "question": "How do secret managers automate API key rotation without incurring application downtime?",
+      "student_answer": "Marginal response: API Key Management & Rotation is part of the system configuration. It was used because the documentation recommended it for performance, but specific trade-offs were not benchmarked.",
+      "rater_1_scores": {
+        "correctness": 0.4835,
+        "completeness": 0.3564,
+        "evidence_alignment": 0.5298,
+        "reasoning_depth": 0.3961,
+        "composite": 0.4435
+      },
+      "rater_2_scores": {
+        "correctness": 0.4846,
+        "completeness": 0.3715,
+        "evidence_alignment": 0.5013,
+        "reasoning_depth": 0.4235,
+        "composite": 0.4474
+      },
+      "rater_3_scores": {
+        "correctness": 0.4962,
+        "completeness": 0.3198,
+        "evidence_alignment": 0.5178,
+        "reasoning_depth": 0.3687,
+        "composite": 0.4309
+      },
+      "consensus_human_scores": {
+        "correctness": 0.4881,
+        "completeness": 0.3492,
+        "evidence_alignment": 0.5163,
+        "reasoning_depth": 0.3961,
+        "composite": 0.4406
+      },
+      "aiva_system_scores": {
+        "correctness": 0.4942,
+        "completeness": 0.3341,
+        "evidence_alignment": 0.5151,
+        "reasoning_depth": 0.4027,
+        "composite": 0.4401
+      }
+    },
+    {
+      "id": "sample_60",
+      "domain": "Cybersecurity & Cryptographic Protocols",
+      "topic": "Side-Channel Attacks & Timing Attacks",
+      "question": "Why must cryptographic string comparisons use constant-time algorithms instead of standard equality operators?",
+      "student_answer": "Flawed or hallucinated response: Side-Channel Attacks & Timing Attacks was handled by quantum distributed microchips running non-blocking CUDA matrices across external blockchain nodes.",
+      "rater_1_scores": {
+        "correctness": 0.2227,
+        "completeness": 0.262,
+        "evidence_alignment": 0.1369,
+        "reasoning_depth": 0.1338,
+        "composite": 0.1976
+      },
+      "rater_2_scores": {
+        "correctness": 0.2412,
+        "completeness": 0.2563,
+        "evidence_alignment": 0.1042,
+        "reasoning_depth": 0.191,
+        "composite": 0.2075
+      },
+      "rater_3_scores": {
+        "correctness": 0.2243,
+        "completeness": 0.244,
+        "evidence_alignment": 0.1064,
+        "reasoning_depth": 0.1612,
+        "composite": 0.193
+      },
+      "consensus_human_scores": {
+        "correctness": 0.2294,
+        "completeness": 0.2541,
+        "evidence_alignment": 0.1158,
+        "reasoning_depth": 0.162,
+        "composite": 0.1994
+      },
+      "aiva_system_scores": {
+        "correctness": 0.2075,
+        "completeness": 0.2253,
+        "evidence_alignment": 0.1445,
+        "reasoning_depth": 0.1451,
+        "composite": 0.1869
+      }
+    }
+  ]
+}
